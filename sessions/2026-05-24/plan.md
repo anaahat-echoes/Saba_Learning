@@ -19,6 +19,8 @@ Give her ear a target for /e/ before blending it. Then run the same finger-tap m
 | Vowel Sounds video | https://youtu.be/RUSCz41aDug?si=kN35ilN9B4w5nCtE&t=21 | A vs E segment only |
 | Word Ladders | `assets/WordLadders.pdf` | Page 3 (-et) and page 4 (-en) |
 | Match Words to Pictures | `assets/MatchWordsPictures.pdf` | Page 5 (pet, net, pen, peg) |
+| Word chain game | (oral — no sheet needed) | man→men, tan→ten, sat→set, pat→pet, pan→pen |
+| Alphablocks | YouTube: search "Alphablocks E" on CBeebies channel | Any short E episode, stop at 5 min |
 
 ---
 
@@ -33,6 +35,7 @@ Play the A vs E contrast segment. Pause after each vowel and ask:
 Goal is ear-training only. No writing yet.
 
 ### Word Ladders — page 3, -et family (5–13 min)
+
 
 Words: **net, jet, vet, pet**
 
@@ -72,6 +75,22 @@ This page is all short E, so it doubles as a Gate 2 check. Watch for:
 - Does she self-correct like last time?
 
 **End on a win:** whichever word she reads most cleanly, ask her to say it one more time on her own.
+
+### Word chain game — oral (25–30 min)
+
+No sheet needed. You say the prompt, she says the answer.
+
+> *"Change the /a/ in man to /e/. What do you get?"*
+
+Chains: **man→men, tan→ten, sat→set, pat→pet, pan→pen**
+
+Keep it fast and light — if she gets stuck, give the answer and move on. The momentum is the point.
+
+### Alphablocks — E episode (30–35 min)
+
+Search YouTube: **"Alphablocks E"** — CBeebies official channel. Any short E episode. Stop at 5 min.
+
+This is the closing treat, not a lesson. Let her enjoy it.
 
 ---
 
