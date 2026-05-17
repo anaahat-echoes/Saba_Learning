@@ -4,6 +4,7 @@ All Twinkl worksheets and printable resources. Files in session folders (`sessio
 
 | File | Description | Best used for |
 |------|-------------|--------------|
+| `HighFrequencyWords100.pdf` | First 100 high frequency words — handwriting practice sheet | Sight word memorisation from June onward; track in `words-known.md` |
 | `InitialSounds.pdf` | Circle the letter a word begins with | Warm-up / initial-sound awareness. Not a blending exercise. |
 | `MatchWordsPictures.pdf` | CVC word booklet — match word to picture (pages 1–5), then Read and Draw (pages 6–8) | Phase 1 and 2 core activity |
 | `WordLadders.pdf` | Rhyming families: -at, -an, -et, -en, -it, -in, -ot, -op, -ug | Blending practice — use one family per session |
