@@ -32,28 +32,24 @@ Informally gauge Gate 1 baseline.
 
 ## Lesson plan
 
-### 0–5 min: Warm-up
-- Play Jolly Phonics video, /a/ segment only (pause after it)
+### Warm-up — Jolly Phonics video (0–5 min)
+- Play /a/ segment only, pause after it
 - Ask: *"What sound is that?"* and *"Can you think of a word with that sound?"*
 - Keep it loose — just get her talking
 
-### 5–20 min: Core activity
+### Word Ladders — pages 1 and 2 (5–20 min)
 
-**Step 1 — I do (2 min)** — Word Ladders -at family
+**I do (2 min)** — -at family
 Model finger-tapping on **cat** and **hat**:
 > *"Watch my fingers. C — /c/ (tap) — A — /a/ (tap) — T — /t/ (tap). Now: caaaaat. CAT!"*
 
-**Step 2 — We do (3 min)**
+**We do (3 min)** — -at family
 Tap **bat** and **mat** together. Say sounds in unison, she says the word.
 
-**Step 3 — You do (5 min)**
-She taps **rat** and **sat** alone. Wait 5 seconds before helping.
+**You do (5 min)** — -at and -an families
+She taps **rat**, **sat**, **pan**, **man**, **ran**, **fan** alone. Wait 5 seconds before helping.
 
-**Step 4 — Match Words to Pictures, pages 1–2 (5 min)**
-Words: sat, tap, pan, nap, man, sad (skip run and tin — wrong vowel, don't draw attention)
-For each word: tap sounds first → match to picture.
-
-### 20–25 min: End on a win
+### End on a win (20–25 min)
 Pick whichever word she blended most confidently. One more time, alone.
 Say: *"You just read that word all by yourself."*
 
