@@ -55,36 +55,7 @@ Say: *"You just read that word all by yourself."*
 
 ---
 
-## Observations (fill in after class)
+## Observations
 
-**What went well:**
-Finger-tap blending clicked. She moved through both the -at and -an ladders and got almost all words correct. Most importantly, she could catch her own blending errors and self-correct without being told — that is the key skill at this stage.
-
-**What was hard:**
-Words containing R. She is uncomfortable with R because school has only covered letters A–I so far; R is unfamiliar territory. She was not expected to know it and it did not derail the session.
-
-**Blending observation:**
-Tapped independently by the end. Self-correction observed (blended incorrectly, noticed, re-tapped, got it right). No guessing from pictures detected.
-
-**Gate 1 words confirmed today:**
-- [x] cat
-- [x] hat
-- [x] pan
-- [x] bat
-- [x] ran  *(R uncomfortable but managed)*
-- [x] fan
-- [ ] map  *(not tested today)*
-- [ ] sad  *(not tested today)*
-
-**Probe word (cross-family transfer):**
-NET — blended independently on first attempt. Confirmed blending transfers beyond the drill words. Note: /e/ vowel pronunciation is non-target but was not corrected — focus today was mechanics of blending, not vowel accuracy.
-
-**End-of-session win:**
-NET read independently — a word she had never seen in the lesson, with a vowel not yet formally taught. She tapped, blended, and said it herself.
-
-**Next session priority:**
-1. Consolidate /e/ words (short E family: -et, -en) — she can blend them, now build familiarity with the sound.
-2. Gently introduce /e/ vowel pronunciation alongside blending (use Vowel Sounds video contrast A vs E as warm-up).
-3. Avoid R-words until school covers it; when it does appear, treat it as bonus not core.
-4. Gate 1 check: map and sad still untested — slot into warm-up next session.
+*Kept in `observations.md` — local only, not tracked in git.*
 
