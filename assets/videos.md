@@ -5,4 +5,5 @@ YouTube links used or planned across sessions. Can't be saved as files — keep 
 | Video | URL | Used in | Notes |
 |-------|-----|---------|-------|
 | Jolly Phonics — /a/ sound | https://youtu.be/ChqnN3cKzXQ?si=IV-jaed4M2hfXowi | Session 1 (warm-up, planned) | Play /a/ segment only |
-| Vowel Sounds — A vs E contrast | https://youtu.be/RUSCz41aDug?si=kN35ilN9B4w5nCtE&t=21 | Session 2 (warm-up) | Starts at 0:21 — A vs E segment |
+| Alphablocks — short E (E Words and Phonics) | https://www.youtube.com/watch?v=Du-gphJHbPM | Session 2 closer | 1:16 — single E block, consonants n/g/p/t, short /e/ words. Play twice if she loves it. |
+| Alphablocks — ee digraph (E for Summer) | https://www.youtube.com/watch?v=ycAZb-VmBO8 | October (vowel digraphs) | Two E blocks = long /ee/ sound. Save for Phase 5b. |

@@ -20,7 +20,7 @@ Give her ear a target for /e/ before blending it. Then run the same finger-tap m
 | Word Ladders | `assets/WordLadders.pdf` | Page 3 (-et) and page 4 (-en) |
 | Match Words to Pictures | `assets/MatchWordsPictures.pdf` | Page 5 (pet, net, pen, peg) |
 | Word chain game | (oral — no sheet needed) | man→men, tan→ten, sat→set, pat→pet, pan→pen |
-| Alphablocks | YouTube: search "Alphablocks E" on CBeebies channel | Any short E episode, stop at 5 min |
+| Alphablocks — E Words and Phonics | https://www.youtube.com/watch?v=Du-gphJHbPM | Full video — 1:16, play twice if she loves it |
 
 ---
 
