@@ -20,7 +20,7 @@ Introduce /i/ using the same familiar video, now extended to the I segment. The 
 | Word Ladders | `assets/WordLadders.pdf` | Page 5 (-it) and page 6 (-in) |
 | Three-vowel chain | (oral — no sheet needed) | sat/set/sit, pan/pen/pin, tan/ten/tin |
 | Vowel sort | (oral — no sheet needed) | pen/pin, pet/pit, peg/pig |
-| Match Words to Pictures | oral picture game (no sheet) | bin, pin, fin, sit, hit, kit |
+| Match Words to Pictures | `sessions/2026-05-31/assets/ShortI_MatchPictures.html` | sit, pin, bin, pig, six, ink |
 | Alphablocks — I | https://youtu.be/hDvWymWpUBY | Full video — short /i/ only |
 
 ---
@@ -90,15 +90,15 @@ Pairs: **pen/pin** &nbsp;|&nbsp; **pet/pit** &nbsp;|&nbsp; **peg/pig**
 
 If she's solid: add **net/nit, bed/bid** as stretch.
 
-### Match Words to Pictures — oral (31–34 min)
+### Match Words to Pictures — worksheet (31–34 min)
 
-No printed sheet. Show pictures on screen one at a time — she blends and says the word.
+Print: `sessions/2026-05-31/assets/ShortI_MatchPictures.html`
 
-Words: **bin, pin, fin, sit, hit, kit**
+Words: **sit, pin, bin, pig, six, ink**
 
-If she's fast, reverse: you say the word, she describes what the picture would show.
+She reads each word, taps it, then draws a line to the matching picture. Independent — no help unless completely stuck.
 
-> *If a Twinkl short I matching sheet is found before the session, use that here instead.*
+Watch: does she blend without the ladder scaffold?
 
 ### Alphablocks — I episode (34–35 min)
 
