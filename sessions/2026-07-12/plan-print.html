@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Session #4 — 2026-07-12</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    color: #111;
+    padding: 20px 28px;
+    max-width: 740px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 19px;
+    border-bottom: 2px solid #111;
+    padding-bottom: 5px;
+    margin-bottom: 4px;
+  }
+
+  .meta {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 14px;
+  }
+
+  .goal-box {
+    background: #f5f5f5;
+    border-left: 4px solid #333;
+    padding: 7px 10px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  .block {
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+
+  .block-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    background: #222;
+    color: #fff;
+    padding: 5px 9px;
+    margin-bottom: 7px;
+  }
+
+  .block-header h2 {
+    font-size: 15px;
+    font-weight: bold;
+    flex: 1;
+  }
+
+  .block-header .time {
+    font-size: 13px;
+    font-weight: normal;
+    white-space: nowrap;
+    color: #ccc;
+  }
+
+  .block-header.teaser {
+    background: #b85c00;
+  }
+
+  .step {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 6px;
+    padding: 0 4px;
+  }
+
+  .step-label {
+    font-weight: bold;
+    font-size: 13px;
+    min-width: 68px;
+    padding-top: 1px;
+    color: #444;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .step-body {
+    flex: 1;
+    line-height: 1.5;
+  }
+
+  .words {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    margin: 3px 0;
+  }
+
+  .prompt {
+    background: #fffbe6;
+    border-left: 3px solid #e6c200;
+    padding: 4px 8px;
+    font-style: italic;
+    margin: 4px 0;
+    font-size: 14px;
+  }
+
+  .teaser-box {
+    background: #fff4ec;
+    border-left: 3px solid #b85c00;
+    padding: 6px 10px;
+    margin: 4px 0;
+    font-size: 15px;
+  }
+
+  .teaser-answer {
+    font-weight: bold;
+    color: #b85c00;
+    margin-top: 3px;
+    font-size: 13px;
+  }
+
+  .note {
+    font-size: 13px;
+    color: #666;
+    margin: 3px 0;
+  }
+
+  .chain {
+    font-family: 'Courier New', monospace;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 4px 0;
+    letter-spacing: 0.04em;
+  }
+
+  .fallback {
+    font-size: 12px;
+    color: #888;
+    font-style: italic;
+    margin-top: 3px;
+  }
+
+  .obs-section {
+    border-top: 2px solid #111;
+    padding-top: 10px;
+    margin-top: 16px;
+    page-break-inside: avoid;
+  }
+
+  .obs-section h2 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .obs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .obs-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555;
+    margin-bottom: 3px;
+  }
+
+  .obs-field .lines {
+    border-bottom: 1px solid #bbb;
+    height: 18px;
+    margin-bottom: 5px;
+  }
+
+  .gate-section {
+    margin-top: 10px;
+  }
+
+  .gate-group {
+    margin-bottom: 8px;
+  }
+
+  .gate-group label {
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .gate-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .gate-word {
+    border: 1px solid #aaa;
+    padding: 2px 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    border-radius: 3px;
+  }
+
+  @media print {
+    body { padding: 14px 20px; }
+    .block { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Session #4 — Saba — 12 Jul 2026</h1>
+<div class="meta">Duration: 30–40 min (flex on energy) &nbsp;|&nbsp; Format: Video call &nbsp;|&nbsp; Focus: Reinforce /e/ + /i/ → introduce Short /o/</div>
+
+<div class="goal-box">
+  <strong>Session goal:</strong> After a 5-week gap, anchor /e/ and /i/ before introducing /o/. Brain teasers as energy bridge between the two halves. Four-vowel chains (hat→hit→hot) carry all three sounds in one activity.
+</div>
+
+<!-- BLOCK 1 -->
+<div class="block">
+  <div class="block-header">
+    <h2>Video — E and I segments</h2>
+    <span class="time">0–4 min</span>
+  </div>
+  <div class="step">
+    <div class="step-label">Play</div>
+    <div class="step-body">
+      <a href="https://youtu.be/RUSCz41aDug">youtu.be/RUSCz41aDug</a> — advance past A, pause at E and I.
+      <div class="fallback">Audio issues? Share link on WhatsApp — she watches, you ask "what sound did you hear?"</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-label">Check</div>
+    <div class="step-body">
+      <div class="prompt">"What sound is this?" — point to E, then I. Quick recall, no pressure.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCK 2 -->
+<div class="block">
+  <div class="block-header">
+    <h2>Reinforce /e/ and /i/</h2>
+    <span class="time">4–12 min</span>
+  </div>
+  <div class="step">
+    <div class="step-label">Vocab</div>
+    <div class="step-body">
+      Quick mime/check — any she's forgotten after the gap:
+      <div class="words">pen &nbsp; pin &nbsp; pet &nbsp; pit &nbsp; peg &nbsp; pig</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-label">Chains</div>
+    <div class="step-body">
+      <div class="prompt">"I'll say a word. Change the vowel — tell me what you get."</div>
+      <div class="chain">sat → set → sit &nbsp;|&nbsp; pan → pen → pin &nbsp;|&nbsp; tan → ten → tin</div>
+      <div class="note">Do each slowly, then pick one and repeat faster. Do at least 2 rounds — this is the main /e/ ear-training activity.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-label">Sort</div>
+    <div class="step-body">
+      1 finger = /e/ &nbsp;|&nbsp; 2 fingers = /i/
+      <div class="chain">pen / pin &nbsp;|&nbsp; pet / pit &nbsp;|&nbsp; peg / pig</div>
+      <div class="note">Stretch if solid: net/nit, bed/bid.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCK 3 -->
+<div class="block">
+  <div class="block-header teaser">
+    <h2>Brain Teasers ⚡</h2>
+    <span class="time">12–15 min</span>
+  </div>
+  <div class="step">
+    <div class="step-label">Teaser 1</div>
+    <div class="step-body">
+      <div class="teaser-box">
+        "I have hands but I cannot clap. What am I?"
+        <div class="teaser-answer">→ A clock</div>
+      </div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-label">Teaser 2</div>
+    <div class="step-body">
+      <div class="teaser-box">
+        "I am round. You cook soup in me. I sit on the stove. What am I?"
+        <div class="teaser-answer">→ A pot &nbsp;→&nbsp; "pot — /p/ /o/ /t/ — that's our new sound today! /o/."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCK 4 -->
+<div class="block">
+  <div class="block-header">
+    <h2>Video — O segment</h2>
+    <span class="time">15–19 min</span>
+  </div>
+  <div class="step">
+    <div class="step-label">Play</div>
+    <div class="step-body">
+      <a href="https://youtu.be/RUSCz41aDug">youtu.be/RUSCz41aDug</a> — continue to the O segment.
+      <div class="fallback">Alphablocks O: search "Alphablocks letter O" on YouTube — share link on WhatsApp before class as fallback.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-label">At O</div>
+    <div class="step-body">
+      <div class="prompt">"Listen — hot, pot, cot. Hear the /o/ in the middle?"</div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCK 5 -->
+<div class="block">
+  <div class="block-header">
+    <h2>Word Ladder — /o/ family</h2>
+    <span class="time">19–28 min</span>
+  </div>
+  <div class="step">
+    <div class="step-label">Vocab</div>
+    <div class="step-body">
+      Before blending, check meanings:
+      <div class="words">cot &nbsp; dot &nbsp; hot &nbsp; pot &nbsp; lot</div>
+      <div class="note">cot — baby's bed (show image). dot — small circle. hot — opposite of cold. pot — she just guessed it! lot — a lot means many.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-label">I do</div>
+    <div class="step-body">
+      Model <strong>cot</strong>:
+      <div class="prompt">"C — /k/ (tap) — O — /o/ (tap) — T — /t/ (tap). Kk-oo-tt. COT!"</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-label">We do</div>
+    <div class="step-body">Tap <strong>dot</strong> together. Say sounds in unison, she says the whole word.</div>
+  </div>
+  <div class="step">
+    <div class="step-label">You do</div>
+    <div class="step-body">She taps <strong>hot</strong>, <strong>pot</strong>, <strong>lot</strong> alone. Wait 5 seconds before helping.</div>
+  </div>
+</div>
+
+<!-- BLOCK 6 -->
+<div class="block">
+  <div class="block-header">
+    <h2>Four-Vowel Chains — A / E / I / O</h2>
+    <span class="time">28–36 min</span>
+  </div>
+  <div class="step">
+    <div class="step-label">How</div>
+    <div class="step-body">
+      <div class="prompt">"I'll say a word. Change just the vowel each time — tell me what you get."</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-label">Chains</div>
+    <div class="step-body">
+      <div class="chain">hat → hit → hot</div>
+      <div class="chain">pat → pit → pot</div>
+      <div class="note">Do each slowly first, then faster. Note if /e/ creeps in (hit → het?) — don't over-correct, just model the right sound and move on.</div>
+      <div class="note">If energy is high, add: hat → hit → hot → (hat again) as a loop.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCK 7 -->
+<div class="block">
+  <div class="block-header">
+    <h2>Oral Picture Match</h2>
+    <span class="time">36–40 min</span>
+  </div>
+  <div class="step">
+    <div class="step-label">Words</div>
+    <div class="step-body">
+      <div class="words">dot &nbsp; hot &nbsp; pot &nbsp; pin &nbsp; pen &nbsp; pig</div>
+      <div class="note">Show a picture — she blends and says the word. If fast: reverse — you say the word, she mimes or describes.</div>
+    </div>
+  </div>
+</div>
+
+<!-- OBSERVATIONS -->
+<div class="obs-section">
+  <h2>After Class — Observations</h2>
+
+  <div class="obs-grid">
+    <div class="obs-field">
+      <label>What went well</label>
+      <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+    </div>
+    <div class="obs-field">
+      <label>What was hard</label>
+      <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+    </div>
+    <div class="obs-field">
+      <label>/e/ elongation — better or same?</label>
+      <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+    </div>
+    <div class="obs-field">
+      <label>Four-vowel chains — which confused her?</label>
+      <div class="lines"></div><div class="lines"></div><div class="lines"></div>
+    </div>
+    <div class="obs-field">
+      <label>Brain teasers — did they land?</label>
+      <div class="lines"></div><div class="lines"></div>
+    </div>
+    <div class="obs-field">
+      <label>Next session priority</label>
+      <div class="lines"></div><div class="lines"></div>
+    </div>
+  </div>
+
+  <div class="gate-section">
+    <div class="gate-group">
+      <label>/e/ gate words — tick what she read independently</label>
+      <div class="gate-words">
+        <span class="gate-word">pen</span>
+        <span class="gate-word">pet</span>
+        <span class="gate-word">peg</span>
+        <span class="gate-word">ten</span>
+        <span class="gate-word">hen</span>
+        <span class="gate-word">set</span>
+        <span class="gate-word">bed</span>
+      </div>
+    </div>
+    <div class="gate-group" style="margin-top:8px;">
+      <label>/i/ gate words</label>
+      <div class="gate-words">
+        <span class="gate-word">pin</span>
+        <span class="gate-word">pit</span>
+        <span class="gate-word">pig</span>
+        <span class="gate-word">tin</span>
+        <span class="gate-word">sit</span>
+        <span class="gate-word">bin</span>
+        <span class="gate-word">fin</span>
+        <span class="gate-word">hit</span>
+        <span class="gate-word">kit</span>
+      </div>
+    </div>
+    <div class="gate-group" style="margin-top:8px;">
+      <label>/o/ gate words — new today</label>
+      <div class="gate-words">
+        <span class="gate-word">dot</span>
+        <span class="gate-word">hot</span>
+        <span class="gate-word">pot</span>
+        <span class="gate-word">cot</span>
+        <span class="gate-word">lot</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
