@@ -32,10 +32,10 @@ After a 5-week gap, anchor /e/ and /i/ before introducing /o/. Use brain teasers
 - pen / pin | pet / pit | peg / pig
 - Stretch if solid: net/nit, bed/bid
 
-### Block 3 — Brain Teasers (12–15 min)
-1. *"I have hands but I cannot clap. What am I?"* → a clock
-2. *"I'm round. You cook soup in me. I sit on the stove. What am I?"* → a **pot**
-   - After she gets it: "pot — /p/ /o/ /t/ — that's our new sound! /o/."
+### Block 3 — Math Teasers (12–15 min)
+1. Number series: **2, 4, ___, 8, 10** — skip counting by 2 (continuing from last time)
+2. **"Which is bigger — 47 or 74?"** — flips the digit order, trips kids up nicely
+   - Follow up: "Give me a number bigger than 5 but smaller than 8."
 
 ### Block 4 — Video: O segment (15–19 min)
 - Continue youtu.be/RUSCz41aDug to the O segment
