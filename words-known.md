@@ -21,12 +21,21 @@ Words Saba can read independently, confirmed in session. Update after every clas
 |------|------|
 
 ### Short I
-| Word | Date |
-|------|------|
+| Word | Date | Note |
+|------|------|------|
+| sit | 2026-08-10 | |
+| hit | 2026-08-10 | |
+| pin | 2026-08-10 | |
+| pig | 2026-08-10 | |
+| ink | 2026-08-10 | vowel onset — no CVC onset consonant |
 
 ### Short O
-| Word | Date |
-|------|------|
+| Word | Date | Note |
+|------|------|------|
+| pot | 2026-08-10 | |
+| hot | 2026-08-10 | |
+| cot | 2026-08-10 | |
+| stop | 2026-08-10 | 4-letter cluster onset |
 
 ### Short U
 | Word | Date |

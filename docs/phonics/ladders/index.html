@@ -131,6 +131,30 @@ body {
   flex-shrink: 0;
 }
 
+.family-btn.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.lock-badge {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.section-divider {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray);
+  padding: 16px 4px 8px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
 /* ── Game screen ─────────────────────────── */
 .game-header {
   display: flex;
@@ -468,6 +492,58 @@ const FAMILIES = {
       { onset: 'm', word: 'men', pic: '👥' },
     ],
   },
+
+  // ── Short I — locked until A and E are solid ──────────
+  '-it': {
+    label: '-it family',
+    rime: 'it',
+    color: '#1c7ed6',
+    locked: true,
+    words: [
+      { onset: 's', word: 'sit', pic: '🪑' },
+      { onset: 'h', word: 'hit', pic: '🥊' },
+      { onset: 'f', word: 'fit', pic: '💪' },
+      { onset: 'k', word: 'kit', pic: '🧰' },
+    ],
+  },
+  '-in': {
+    label: '-in family',
+    rime: 'in',
+    color: '#1c7ed6',
+    locked: true,
+    words: [
+      { onset: 'p', word: 'pin', pic: '📌' },
+      { onset: 'w', word: 'win', pic: '🏆' },
+      { onset: 'b', word: 'bin', pic: '🗑️' },
+      { onset: 'f', word: 'fin', pic: '🐟' },
+    ],
+  },
+
+  // ── Short O — locked until A and E are solid ──────────
+  '-ot': {
+    label: '-ot family',
+    rime: 'ot',
+    color: '#e03131',
+    locked: true,
+    words: [
+      { onset: 'p', word: 'pot', pic: '🍲' },
+      { onset: 'h', word: 'hot', pic: '🔥' },
+      { onset: 'c', word: 'cot', pic: '🛏️' },
+      { onset: 'd', word: 'dot', pic: '⚫' },
+    ],
+  },
+  '-op': {
+    label: '-op family',
+    rime: 'op',
+    color: '#e03131',
+    locked: true,
+    words: [
+      { onset: 'm', word: 'mop', pic: '🧹' },
+      { onset: 'p', word: 'pop', pic: '🎈' },
+      { onset: 'h', word: 'hop', pic: '🐇' },
+      { onset: 'c', word: 'cop', pic: '👮' },
+    ],
+  },
 };
 
 // ── State ─────────────────────────────────────────────────
@@ -510,23 +586,48 @@ function speakCurrentWord() {
 function buildPicker() {
   const list = document.getElementById('family-list');
   list.innerHTML = '';
+
+  let shownLockDivider = false;
+
   Object.entries(FAMILIES).forEach(([key, fam]) => {
+    // Insert a divider before the first locked family
+    if (fam.locked && !shownLockDivider) {
+      shownLockDivider = true;
+      const div = document.createElement('div');
+      div.className = 'section-divider';
+      div.textContent = 'Coming soon — Short I & O';
+      list.appendChild(div);
+    }
+
     const stored  = JSON.parse(localStorage.getItem('saba_ladders_' + key.slice(1)) || '{}');
     const preview = fam.words.slice(0, 4).map(w => w.word).join(' · ');
-    const bestTxt = stored.bestScore != null
-      ? `Best: ${stored.bestScore}/${fam.words.length} first try`
-      : '';
+
     const btn = document.createElement('button');
-    btn.className = 'family-btn';
+    btn.className = 'family-btn' + (fam.locked ? ' locked' : '');
     btn.style.borderLeftColor = fam.color;
-    btn.innerHTML = `
-      <div style="flex:1;min-width:0;">
-        <span class="family-name">${key}</span>
-        <span class="family-words">${preview}</span>
-      </div>
-      <span class="family-best">${bestTxt}</span>
-    `;
-    btn.addEventListener('click', () => startGame(key));
+
+    if (fam.locked) {
+      btn.innerHTML = `
+        <div style="flex:1;min-width:0;">
+          <span class="family-name">${key}</span>
+          <span class="family-words">${preview}</span>
+        </div>
+        <span class="lock-badge">🔒</span>
+      `;
+    } else {
+      const bestTxt = stored.bestScore != null
+        ? `Best: ${stored.bestScore}/${fam.words.length} first try`
+        : '';
+      btn.innerHTML = `
+        <div style="flex:1;min-width:0;">
+          <span class="family-name">${key}</span>
+          <span class="family-words">${preview}</span>
+        </div>
+        <span class="family-best">${bestTxt}</span>
+      `;
+      btn.addEventListener('click', () => startGame(key));
+    }
+
     list.appendChild(btn);
   });
 }
