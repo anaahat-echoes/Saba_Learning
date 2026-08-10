@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Word Ladders</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple:      #7048e8;
+  --purple-dark: #5f3dc4;
+  --purple-light:#F3F0FF;
+  --green:       #2f9e44;
+  --green-light: #d3f9d8;
+  --red:         #e03131;
+  --red-light:   #ffe3e3;
+  --orange:      #f08c00;
+  --gray:        #868e96;
+  --bg:          #F3F0FF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #1a1a2e;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── Header ──────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  flex-shrink: 0;
+  color: var(--purple-dark);
+  text-decoration: none;
+}
+
+.page-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+}
+
+/* ── Family Picker ───────────────────────── */
+#screen-pick {
+  padding: 0 20px 40px;
+}
+
+.pick-heading {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--purple-dark);
+  margin-bottom: 6px;
+  padding: 0 4px;
+}
+
+.pick-sub {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+
+.unlock-banner {
+  display: none;
+  background: #fff9db;
+  border: 2px solid #f08c00;
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #7c4700;
+  text-align: center;
+}
+
+.unlock-banner.show { display: block; }
+
+.family-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.section-divider {
+  grid-column: 1 / -1;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 4px 2px;
+}
+
+.family-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
+  text-align: center;
+}
+
+.family-card:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+
+.family-card.locked {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: default;
+}
+
+.family-rime {
+  font-size: 1.8rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  line-height: 1;
+}
+
+.family-words {
+  font-size: 0.72rem;
+  color: var(--gray);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.04em;
+}
+
+.family-best {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--purple);
+  min-height: 16px;
+}
+
+.lock-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 1rem;
+}
+
+/* ── Game Screen ──────────────────────────── */
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 10px;
+  flex-shrink: 0;
+}
+
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--orange);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.round-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gray);
+  white-space: nowrap;
+}
+
+/* Word display */
+.word-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 24px 20px 8px;
+  flex-shrink: 0;
+}
+
+.word-pic {
+  font-size: 4.5rem;
+  line-height: 1;
+  margin-right: 12px;
+}
+
+.onset-slot {
+  width: 60px;
+  height: 72px;
+  border-radius: 14px;
+  border: 3px dashed #ced4da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: #1a1a2e;
+  background: #fff;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.onset-slot.filled {
+  border-style: solid;
+  border-color: var(--green);
+  background: var(--green-light);
+  animation: pop-in 0.25s ease;
+}
+
+@keyframes pop-in {
+  0%   { transform: scale(0.8); opacity: 0.5; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.rime-part {
+  font-size: 2.2rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: #495057;
+}
+
+/* Letter buttons */
+.letter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.letter-btn {
+  background: #fff;
+  border: 3px solid transparent;
+  border-radius: 18px;
+  padding: 18px 8px;
+  font-size: 1.8rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: #1a1a2e;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  transition: transform 0.08s, box-shadow 0.08s, opacity 0.15s;
+}
+
+.letter-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+
+.letter-btn.correct-flash {
+  background: var(--green-light);
+  border-color: var(--green);
+}
+
+.letter-btn.wrong-shake {
+  animation: shake 0.35s ease;
+  background: var(--red-light);
+  border-color: var(--red);
+}
+
+.letter-btn.dimmed {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.hint-text {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gray);
+  min-height: 32px;
+  padding: 4px 20px;
+}
+
+/* ── Result Screen ──────────────────────── */
+#screen-result {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.result-stars {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  letter-spacing: 4px;
+}
+
+.result-score {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--purple-dark);
+  margin-bottom: 8px;
+}
+
+.result-msg {
+  font-size: 1rem;
+  color: var(--gray);
+  margin-bottom: 32px;
+}
+
+.unlock-notice {
+  display: none;
+  background: #fff9db;
+  border: 2px solid #f08c00;
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #7c4700;
+}
+
+.unlock-notice.show { display: block; }
+
+.result-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn-primary {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--purple-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--purple-dark);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--purple);
+  border: 2px solid var(--purple);
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-secondary:active { background: var(--purple-light); }
+</style>
+</head>
+<body>
+
+<!-- ── SCREEN 1: Family Picker ────────────── -->
+<div id="screen-pick" class="screen active">
+  <div class="page-header">
+    <a href="../" class="back-btn" aria-label="Back">←</a>
+    <span class="page-title">Word Ladders</span>
+  </div>
+
+  <div style="padding: 4px 24px 0;">
+    <div class="pick-heading">Pick a word family</div>
+    <div class="pick-sub">Fill in the missing letter!</div>
+    <div class="unlock-banner" id="unlock-banner"></div>
+  </div>
+
+  <div class="family-grid" id="family-grid">
+    <!-- rendered by JS -->
+  </div>
+</div>
+
+<!-- ── SCREEN 2: Game ──────────────────────── -->
+<div id="screen-game" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="goToPicker()" aria-label="Back">←</button>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="round-label" id="round-label">1 / 4</div>
+  </div>
+
+  <div class="word-display">
+    <span class="word-pic" id="word-pic">🐱</span>
+    <div class="onset-slot" id="onset-slot">?</div>
+    <div class="rime-part" id="rime-part">at</div>
+  </div>
+
+  <div class="hint-text" id="hint-text"></div>
+
+  <div class="letter-grid" id="letter-grid">
+    <!-- rendered by JS -->
+  </div>
+</div>
+
+<!-- ── SCREEN 3: Result ────────────────────── -->
+<div id="screen-result" class="screen">
+  <div class="result-stars" id="result-stars">⭐⭐⭐</div>
+  <div class="result-score" id="result-score"></div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="unlock-notice" id="unlock-notice"></div>
+  <div class="result-btns">
+    <button class="btn-primary" onclick="playAgain()">Play again</button>
+    <button class="btn-secondary" onclick="goToPicker()">Choose family</button>
+  </div>
+</div>
+
+<script>
+// ── Family data ───────────────────────────────────────────
+
+const FAMILIES = {
+  '-at': {
+    rime: 'at', color: '#f08c00',
+    words: [
+      { word: 'cat', pic: '🐱', onset: 'c' },
+      { word: 'hat', pic: '🎩', onset: 'h' },
+      { word: 'bat', pic: '🏏', onset: 'b' },
+      { word: 'rat', pic: '🐀', onset: 'r' },
+    ],
+  },
+  '-an': {
+    rime: 'an', color: '#2f9e44',
+    words: [
+      { word: 'pan', pic: '🍳', onset: 'p' },
+      { word: 'man', pic: '👨', onset: 'm' },
+      { word: 'van', pic: '🚐', onset: 'v' },
+      { word: 'fan', pic: '🪭', onset: 'f' },
+    ],
+  },
+  '-et': {
+    rime: 'et', color: '#1971c2',
+    words: [
+      { word: 'net', pic: '🕸️', onset: 'n' },
+      { word: 'pet', pic: '🐕', onset: 'p' },
+      { word: 'jet', pic: '✈️', onset: 'j' },
+      { word: 'vet', pic: '🐄', onset: 'v' },
+    ],
+  },
+  '-en': {
+    rime: 'en', color: '#9c36b5',
+    words: [
+      { word: 'hen', pic: '🐔', onset: 'h' },
+      { word: 'pen', pic: '✏️', onset: 'p' },
+      { word: 'ten', pic: '🔟', onset: 't' },
+      { word: 'men', pic: '👥', onset: 'm' },
+    ],
+  },
+  // Short I — locked until Short A + Short E both played
+  '-it': {
+    rime: 'it', color: '#1c7ed6', locked: true,
+    words: [
+      { word: 'sit', pic: '🪑', onset: 's' },
+      { word: 'hit', pic: '🥊', onset: 'h' },
+      { word: 'fit', pic: '💪', onset: 'f' },
+      { word: 'kit', pic: '🧰', onset: 'k' },
+    ],
+  },
+  '-in': {
+    rime: 'in', color: '#1c7ed6', locked: true,
+    words: [
+      { word: 'pin', pic: '📌', onset: 'p' },
+      { word: 'win', pic: '🏆', onset: 'w' },
+      { word: 'bin', pic: '🗑️', onset: 'b' },
+      { word: 'fin', pic: '🐟', onset: 'f' },
+    ],
+  },
+  // Short O — locked until Short A + Short E both played
+  '-ot': {
+    rime: 'ot', color: '#e03131', locked: true,
+    words: [
+      { word: 'pot', pic: '🍲', onset: 'p' },
+      { word: 'hot', pic: '🔥', onset: 'h' },
+      { word: 'cot', pic: '🛏️', onset: 'c' },
+      { word: 'dot', pic: '⚫', onset: 'd' },
+    ],
+  },
+  '-op': {
+    rime: 'op', color: '#e03131', locked: true,
+    words: [
+      { word: 'mop', pic: '🧹', onset: 'm' },
+      { word: 'pop', pic: '🎈', onset: 'p' },
+      { word: 'hop', pic: '🐇', onset: 'h' },
+      { word: 'cop', pic: '👮', onset: 'c' },
+    ],
+  },
+};
+
+const LOCKED_KEYS = ['-it', '-in', '-ot', '-op'];
+const I_KEYS      = ['-it', '-in'];
+const O_KEYS      = ['-ot', '-op'];
+
+// ── Quest unlock check ────────────────────────────────────
+
+function isIOUnlocked() {
+  const a = JSON.parse(localStorage.getItem('saba_phonics_short-a') || '{}');
+  const e = JSON.parse(localStorage.getItem('saba_phonics_short-e') || '{}');
+  return (a.played || 0) >= 1 && (e.played || 0) >= 1;
+}
+
+// ── Game state ────────────────────────────────────────────
+
+let currentFamilyKey = null;
+let currentWords     = [];
+let wordIndex        = 0;
+let perWordFirstTry  = [];
+let triedWrong       = false;
+let waitingAdvance   = false;
+
+// ── Utils ─────────────────────────────────────────────────
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── TTS ───────────────────────────────────────────────────
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang  = 'en-GB';
+  utt.rate  = 0.82;
+  utt.pitch = 1.05;
+  window.speechSynthesis.speak(utt);
+}
+
+// ── Screens ───────────────────────────────────────────────
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── Picker ────────────────────────────────────────────────
+
+function goToPicker() {
+  renderPicker();
+  showScreen('screen-pick');
+}
+
+function renderPicker() {
+  const unlocked = isIOUnlocked();
+  const grid     = document.getElementById('family-grid');
+  grid.innerHTML = '';
+
+  // Unlock banner
+  const banner = document.getElementById('unlock-banner');
+  if (unlocked) {
+    banner.textContent = '🎉 Short I & Short O unlocked! Explore new word families!';
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+
+  // Short A & E section
+  const aeLabel = document.createElement('div');
+  aeLabel.className = 'section-divider';
+  aeLabel.textContent = 'Short A & E';
+  grid.appendChild(aeLabel);
+
+  ['-at', '-an', '-et', '-en'].forEach(key => renderFamilyCard(grid, key, false));
+
+  // Short I & O section
+  const ioLabel = document.createElement('div');
+  ioLabel.className = 'section-divider';
+  ioLabel.textContent = unlocked
+    ? 'Short I & O — unlocked!'
+    : 'Short I & O — play A & E games to unlock 🔒';
+  grid.appendChild(ioLabel);
+
+  LOCKED_KEYS.forEach(key => renderFamilyCard(grid, key, !unlocked));
+}
+
+function renderFamilyCard(grid, key, forcelock) {
+  const fam    = FAMILIES[key];
+  const locked = forcelock;
+
+  const card = document.createElement('button');
+  card.className = 'family-card' + (locked ? ' locked' : '');
+  card.style.borderTop = `4px solid ${fam.color}`;
+
+  if (!locked) {
+    card.onclick = () => startGame(key);
+  }
+
+  const storageKey = 'saba_ladders_' + key.slice(1); // '-at' → 'at'
+  const saved      = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  const bestStr    = saved.bestScore > 0
+    ? `Best: ${saved.bestScore}/${fam.words.length}`
+    : '';
+
+  card.innerHTML = `
+    ${locked ? '<span class="lock-badge">🔒</span>' : ''}
+    <div class="family-rime" style="color:${fam.color}">${key}</div>
+    <div class="family-words">${fam.words.map(w => w.word).join(' · ')}</div>
+    <div class="family-best">${bestStr}</div>
+  `;
+
+  grid.appendChild(card);
+}
+
+// ── Game ──────────────────────────────────────────────────
+
+function getOptions(familyKey, correctOnset) {
+  const family      = FAMILIES[familyKey];
+  const otherOnsets = shuffle(
+    family.words.map(w => w.onset).filter(o => o !== correctOnset)
+  ).slice(0, 3);
+  return shuffle([correctOnset, ...otherOnsets]);
+}
+
+function startGame(familyKey) {
+  currentFamilyKey = familyKey;
+  currentWords     = shuffle([...FAMILIES[familyKey].words]);
+  wordIndex        = 0;
+  perWordFirstTry  = [];
+  triedWrong       = false;
+  waitingAdvance   = false;
+
+  document.getElementById('rime-part').textContent = FAMILIES[familyKey].rime;
+  showScreen('screen-game');
+  renderWord();
+}
+
+function renderWord() {
+  triedWrong   = false;
+  waitingAdvance = false;
+
+  const word   = currentWords[wordIndex];
+  const total  = currentWords.length;
+  const fam    = FAMILIES[currentFamilyKey];
+
+  // Progress
+  document.getElementById('progress-fill').style.width =
+    `${(wordIndex / total) * 100}%`;
+  document.getElementById('progress-fill').style.background = fam.color;
+  document.getElementById('round-label').textContent = `${wordIndex + 1} / ${total}`;
+
+  // Pic + slot reset
+  document.getElementById('word-pic').textContent = word.pic;
+  const slot = document.getElementById('onset-slot');
+  slot.textContent = '';
+  slot.className   = 'onset-slot';
+
+  // Rime
+  document.getElementById('rime-part').textContent = fam.rime;
+
+  // Hint
+  document.getElementById('hint-text').textContent = '';
+
+  // Letter buttons
+  const opts = getOptions(currentFamilyKey, word.onset);
+  const grid = document.getElementById('letter-grid');
+  grid.innerHTML = '';
+  opts.forEach(letter => {
+    const btn = document.createElement('button');
+    btn.className   = 'letter-btn';
+    btn.textContent = letter;
+    btn.onclick     = () => handleLetter(letter, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function handleLetter(letter, btn) {
+  if (waitingAdvance) return;
+
+  const word = currentWords[wordIndex];
+
+  if (letter === word.onset) {
+    // Correct
+    waitingAdvance = true;
+    perWordFirstTry.push(!triedWrong);
+
+    btn.classList.add('correct-flash');
+
+    const slot = document.getElementById('onset-slot');
+    slot.textContent = letter;
+    slot.classList.add('filled');
+
+    document.getElementById('hint-text').textContent = '';
+
+    // Disable all buttons
+    document.querySelectorAll('.letter-btn').forEach(b => {
+      b.style.pointerEvents = 'none';
+    });
+
+    speak(word.word);
+
+    setTimeout(() => {
+      wordIndex++;
+      if (wordIndex >= currentWords.length) {
+        showResult();
+      } else {
+        renderWord();
+      }
+    }, 1700);
+
+  } else {
+    // Wrong
+    triedWrong = true;
+    btn.classList.add('wrong-shake', 'dimmed');
+    document.getElementById('hint-text').textContent = 'Try another letter!';
+    setTimeout(() => {
+      btn.classList.remove('wrong-shake');
+    }, 400);
+  }
+}
+
+// ── Result ────────────────────────────────────────────────
+
+const MESSAGES = [
+  ['🌟 Perfect! Every one first try!', '⭐⭐⭐'],
+  ['Great work — nearly perfect!',     '⭐⭐☆'],
+  ['Good try — keep climbing!',        '⭐☆☆'],
+  ["Let's try again!",                 '☆☆☆'],
+];
+
+function showResult() {
+  showScreen('screen-result');
+
+  const total = currentWords.length;
+  const score = perWordFirstTry.filter(Boolean).length;
+
+  const pct  = score / total;
+  const tier = pct >= 1 ? 0 : pct >= 0.75 ? 1 : pct >= 0.5 ? 2 : 3;
+  const [msg, stars] = MESSAGES[tier];
+
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score').textContent = `${score} out of ${total} first try`;
+  document.getElementById('result-msg').textContent   = msg;
+
+  // Save progress
+  const storageKey = 'saba_ladders_' + currentFamilyKey.slice(1);
+  const prev       = JSON.parse(localStorage.getItem(storageKey) || '{"played":0,"bestScore":0}');
+  prev.played++;
+  prev.bestScore  = Math.max(prev.bestScore || 0, score);
+  prev.totalWords = total;
+  prev.lastPlayed = new Date().toISOString().slice(0, 10);
+  prev.lastMissed = currentWords
+    .filter((_, i) => !perWordFirstTry[i])
+    .map(w => w.word);
+  localStorage.setItem(storageKey, JSON.stringify(prev));
+
+  // Check if I/O unlock threshold just reached
+  const unlockNotice = document.getElementById('unlock-notice');
+  if (isIOUnlocked() &&
+      ['-at', '-an', '-et', '-en'].includes(currentFamilyKey)) {
+    // Show unlock notice only if all locked families have 0 plays
+    const anyIOPlayed = LOCKED_KEYS.some(k => {
+      const d = JSON.parse(localStorage.getItem('saba_ladders_' + k.slice(1)) || '{}');
+      return (d.played || 0) > 0;
+    });
+    if (!anyIOPlayed) {
+      unlockNotice.textContent = '🎉 You unlocked Short I & Short O families! Check the picker!';
+      unlockNotice.classList.add('show');
+    } else {
+      unlockNotice.classList.remove('show');
+    }
+  } else {
+    unlockNotice.classList.remove('show');
+  }
+}
+
+function playAgain() { startGame(currentFamilyKey); }
+
+// ── Init ──────────────────────────────────────────────────
+
+renderPicker();
+</script>
+
+</body>
+</html>

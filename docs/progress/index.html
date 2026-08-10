@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Saba's Progress</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple:      #7048e8;
+  --purple-dark: #5f3dc4;
+  --purple-light:#F3F0FF;
+  --green:       #2f9e44;
+  --green-light: #d3f9d8;
+  --orange:      #f08c00;
+  --gray:        #868e96;
+  --bg:          #F3F0FF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #1a1a2e;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: 40px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.back-btn {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  flex-shrink: 0;
+  color: var(--purple-dark);
+  text-decoration: none;
+}
+
+.page-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+}
+
+.section-heading {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 20px 20px 10px;
+}
+
+.activity-card {
+  background: #fff;
+  border-radius: 18px;
+  margin: 0 16px 12px;
+  padding: 14px 16px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.08);
+}
+
+.card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.card-name {
+  font-size: 0.95rem;
+  font-weight: 800;
+  flex: 1;
+  color: #1a1a2e;
+}
+
+.card-score {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.card-meta {
+  font-size: 0.78rem;
+  color: var(--gray);
+  padding-left: 22px;
+  margin-bottom: 8px;
+}
+
+.missed-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-left: 22px;
+  margin-top: 4px;
+}
+
+.missed-label {
+  font-size: 0.72rem;
+  color: var(--gray);
+  margin-bottom: 4px;
+  padding-left: 22px;
+}
+
+.missed-pill {
+  background: #fff9db;
+  border: 1px solid #f08c00;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #7c4700;
+}
+
+.empty-msg {
+  font-size: 0.85rem;
+  color: var(--gray);
+  font-style: italic;
+  padding: 8px 20px 0;
+}
+
+/* Copy button */
+.copy-wrap {
+  padding: 28px 16px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.copy-btn {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--purple-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.copy-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--purple-dark);
+}
+
+.copy-btn.copied {
+  background: var(--green);
+  box-shadow: 0 5px 0 #1a7431;
+}
+
+.copy-note {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--gray);
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="../" class="back-btn" aria-label="Home">←</a>
+  <span class="page-title">📊 Progress</span>
+</div>
+
+<div id="pairs-section"></div>
+<div id="ladders-section"></div>
+
+<div class="copy-wrap">
+  <button class="copy-btn" id="copy-btn" onclick="copyForTeacher()">
+    <span>📋</span> Copy for teacher
+  </button>
+</div>
+<div class="copy-note">Paste into WhatsApp</div>
+
+<script>
+// ── Date formatting ───────────────────────────────────────
+
+function fmtDate(iso) {
+  if (!iso) return 'not yet';
+  const d    = new Date(iso + 'T00:00:00');
+  const now  = new Date();
+  const diff = Math.round((now - d) / 86400000);
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'yesterday';
+  if (diff < 7)  return d.toLocaleDateString('en-GB', { weekday: 'short' });
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
+// ── Pairs data ────────────────────────────────────────────
+
+const PAIRS_ACTIVITIES = [
+  { key: 'short-a', name: 'Short A words',           color: '#f08c00', total: 10 },
+  { key: 'short-e', name: 'Short E words',           color: '#2f9e44', total: 10 },
+  { key: 'a-vs-e',  name: 'A vs E — hear the diff', color: '#7048e8', total: 10 },
+];
+
+// ── Ladders data ──────────────────────────────────────────
+
+const LADDER_FAMILIES = [
+  { key: 'at', name: '-at family',  color: '#f08c00' },
+  { key: 'an', name: '-an family',  color: '#2f9e44' },
+  { key: 'et', name: '-et family',  color: '#1971c2' },
+  { key: 'en', name: '-en family',  color: '#9c36b5' },
+  { key: 'it', name: '-it family',  color: '#1c7ed6', locked: true },
+  { key: 'in', name: '-in family',  color: '#1c7ed6', locked: true },
+  { key: 'ot', name: '-ot family',  color: '#e03131', locked: true },
+  { key: 'op', name: '-op family',  color: '#e03131', locked: true },
+];
+
+// ── Render helpers ────────────────────────────────────────
+
+function buildRow(name, color, data, total) {
+  const played  = data.played || 0;
+  const best    = data.bestScore || 0;
+  const missed  = data.lastMissed || [];
+
+  const card = document.createElement('div');
+  card.className = 'activity-card';
+
+  const scoreStr = played > 0 ? `Best: ${best}/${total}` : '—';
+  const metaStr  = played > 0
+    ? `${played} session${played !== 1 ? 's' : ''} · last ${fmtDate(data.lastPlayed)}`
+    : 'Not played yet';
+
+  let missedHTML = '';
+  if (missed.length > 0) {
+    missedHTML = `
+      <div class="missed-label">Needed extra tries last session:</div>
+      <div class="missed-row">
+        ${missed.map(w => `<span class="missed-pill">${w}</span>`).join('')}
+      </div>`;
+  }
+
+  card.innerHTML = `
+    <div class="card-top">
+      <div class="color-dot" style="background:${color}"></div>
+      <span class="card-name">${name}</span>
+      <span class="card-score">${scoreStr}</span>
+    </div>
+    <div class="card-meta">${metaStr}</div>
+    ${missedHTML}
+  `;
+
+  return card;
+}
+
+// ── Render sections ───────────────────────────────────────
+
+function renderPairs() {
+  const section = document.getElementById('pairs-section');
+  const heading = document.createElement('div');
+  heading.className   = 'section-heading';
+  heading.textContent = 'Phonics — Listen & Match';
+  section.appendChild(heading);
+
+  let anyPlayed = false;
+  PAIRS_ACTIVITIES.forEach(({ key, name, color, total }) => {
+    const data = JSON.parse(localStorage.getItem('saba_phonics_' + key) || '{}');
+    if ((data.played || 0) > 0) anyPlayed = true;
+    section.appendChild(buildRow(name, color, data, total));
+  });
+
+  if (!anyPlayed) {
+    const msg = document.createElement('div');
+    msg.className   = 'empty-msg';
+    msg.textContent = 'No sessions recorded yet — start playing!';
+    section.appendChild(msg);
+  }
+}
+
+function renderLadders() {
+  const section = document.getElementById('ladders-section');
+  const heading = document.createElement('div');
+  heading.className   = 'section-heading';
+  heading.textContent = 'Phonics — Word Ladders';
+  section.appendChild(heading);
+
+  let anyPlayed = false;
+  LADDER_FAMILIES.forEach(({ key, name, color, locked }) => {
+    const data = JSON.parse(localStorage.getItem('saba_ladders_' + key) || '{}');
+    if ((data.played || 0) === 0 && locked) return; // hide unplayed locked families
+    if ((data.played || 0) > 0) anyPlayed = true;
+    const total = data.totalWords || 4;
+    section.appendChild(buildRow(name, color, data, total));
+  });
+
+  if (!anyPlayed) {
+    const msg = document.createElement('div');
+    msg.className   = 'empty-msg';
+    msg.textContent = 'No ladder sessions yet — try Word Ladders!';
+    section.appendChild(msg);
+  }
+}
+
+// ── Copy for teacher ──────────────────────────────────────
+
+function buildTeacherText() {
+  const lines = ['📊 Saba — Phonics Progress', `Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`, ''];
+
+  lines.push('Listen & Match:');
+  PAIRS_ACTIVITIES.forEach(({ key, name, total }) => {
+    const data = JSON.parse(localStorage.getItem('saba_phonics_' + key) || '{}');
+    if ((data.played || 0) === 0) return;
+    let line = `  ${name}: ${data.played} sessions, best ${data.bestScore}/${total}`;
+    if (data.lastPlayed) line += `, last ${fmtDate(data.lastPlayed)}`;
+    lines.push(line);
+    if ((data.lastMissed || []).length > 0) {
+      lines.push(`    Missed: ${data.lastMissed.join(', ')}`);
+    }
+  });
+
+  lines.push('');
+  lines.push('Word Ladders:');
+  LADDER_FAMILIES.forEach(({ key, name }) => {
+    const data = JSON.parse(localStorage.getItem('saba_ladders_' + key) || '{}');
+    if ((data.played || 0) === 0) return;
+    let line = `  ${name}: ${data.played} sessions, best ${data.bestScore}/${data.totalWords || 4}`;
+    if (data.lastPlayed) line += `, last ${fmtDate(data.lastPlayed)}`;
+    lines.push(line);
+    if ((data.lastMissed || []).length > 0) {
+      lines.push(`    Missed: ${data.lastMissed.join(', ')}`);
+    }
+  });
+
+  return lines.join('\n');
+}
+
+function copyForTeacher() {
+  const text = buildTeacherText();
+  const btn  = document.getElementById('copy-btn');
+
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity  = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  };
+
+  const markCopied = () => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<span>✓</span> Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<span>📋</span> Copy for teacher';
+    }, 2500);
+  };
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(markCopied).catch(fallback);
+    markCopied();
+  } else {
+    fallback();
+    markCopied();
+  }
+}
+
+// ── Init ──────────────────────────────────────────────────
+
+renderPairs();
+renderLadders();
+</script>
+
+</body>
+</html>
