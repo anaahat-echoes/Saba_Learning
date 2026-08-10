@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Saba's English</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #F3F0FF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  color: #1a1a2e;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.hero-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #5f3dc4;
+  letter-spacing: -0.5px;
+}
+
+.hero p {
+  font-size: 1.05rem;
+  color: #7048e8;
+  margin-top: 6px;
+}
+
+.subjects {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: 36px;
+}
+
+.subject-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px 16px;
+  border: none;
+  border-radius: 24px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.05rem;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.18);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.subject-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.18);
+}
+
+.subject-icon {
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.subject-name {
+  color: inherit;
+}
+
+.phonics-btn {
+  background: #7048e8;
+  color: #fff;
+}
+
+.locked-btn {
+  background: #dee2e6;
+  color: #adb5bd;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.locked-btn .subject-icon { opacity: 0.4; }
+
+.coming-badge {
+  font-size: 0.65rem;
+  background: #adb5bd;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.stats {
+  font-size: 0.9rem;
+  color: #868e96;
+  text-align: center;
+}
+
+.stats strong {
+  color: #5f3dc4;
+  font-weight: 800;
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-icon">📚</span>
+  <h1>Saba's English</h1>
+  <p>Let's practise together!</p>
+</div>
+
+<div class="subjects">
+  <a href="phonics/" class="subject-btn phonics-btn">
+    <span class="subject-icon">🔤</span>
+    <span class="subject-name">Phonics</span>
+  </a>
+  <div class="subject-btn locked-btn">
+    <span class="subject-icon">🔢</span>
+    <span class="subject-name">Maths</span>
+    <span class="coming-badge">soon</span>
+  </div>
+</div>
+
+<div class="stats">
+  <strong id="total-sessions">0</strong> sessions practised
+</div>
+
+<script>
+const keys = ['short-a', 'short-e', 'a-vs-e'];
+const total = keys.reduce((n, k) => {
+  const d = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{"played":0}');
+  return n + (d.played || 0);
+}, 0);
+document.getElementById('total-sessions').textContent = total;
+</script>
+
+</body>
+</html>

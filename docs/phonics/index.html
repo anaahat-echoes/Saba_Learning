@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Saba's Phonics</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple: #7048e8;
+  --purple-dark: #5f3dc4;
+  --purple-light: #F3F0FF;
+  --green: #2f9e44;
+  --green-light: #d3f9d8;
+  --red: #e03131;
+  --red-light: #ffe3e3;
+  --orange: #f08c00;
+  --gray: #868e96;
+  --bg: #F3F0FF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #1a1a2e;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Screens ─────────────────────────────── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── Shared layout ───────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.back-btn {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  flex-shrink: 0;
+  color: var(--purple-dark);
+}
+
+.page-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+}
+
+/* ── Activity Picker ─────────────────────── */
+#screen-pick {
+  padding: 0 20px 32px;
+}
+
+#screen-pick .page-header {
+  margin-bottom: 8px;
+}
+
+.pick-heading {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--purple-dark);
+  margin-bottom: 6px;
+  padding: 0 4px;
+}
+
+.pick-sub {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 28px;
+  padding: 0 4px;
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.act-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border: none;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.1s, box-shadow 0.1s;
+  width: 100%;
+}
+
+.act-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+}
+
+.act-emoji {
+  font-size: 2.4rem;
+  line-height: 1;
+  min-width: 48px;
+  text-align: center;
+}
+
+.act-info { flex: 1; }
+
+.act-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1a1a2e;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.act-words {
+  font-size: 0.8rem;
+  color: var(--gray);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.03em;
+}
+
+.act-best {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--purple);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.act-btn.level-a { border-left: 5px solid #f08c00; }
+.act-btn.level-e { border-left: 5px solid #2f9e44; }
+.act-btn.level-ae { border-left: 5px solid var(--purple); }
+
+/* ── Game Screen ─────────────────────────── */
+#screen-game {
+  padding-bottom: 24px;
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 10px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--purple);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.round-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gray);
+  white-space: nowrap;
+}
+
+.set-label {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 20px 16px;
+}
+
+/* Hear button */
+.hear-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0 20px 24px;
+}
+
+.hear-btn {
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 36px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #b56a00;
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hear-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #b56a00;
+}
+
+.hear-btn.replaying {
+  background: #e8590c;
+}
+
+/* Cards */
+.cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 0 20px;
+  margin: 0 auto;
+  max-width: 480px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 24px;
+  border: 3px solid transparent;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, border-color 0.2s, background 0.2s;
+  min-height: 150px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card:active {
+  transform: scale(0.96);
+}
+
+.card-pic {
+  font-size: 3.5rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.card-word {
+  font-family: 'Courier New', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #333;
+  letter-spacing: 0.08em;
+}
+
+/* Card states */
+.card.correct {
+  border-color: var(--green);
+  background: var(--green-light);
+  box-shadow: 0 4px 0 #1a7431;
+}
+
+.card.wrong {
+  border-color: var(--red);
+  background: var(--red-light);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+/* Feedback */
+.feedback {
+  text-align: center;
+  padding: 16px 20px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  min-height: 52px;
+}
+
+.feedback.correct-msg { color: var(--green); }
+.feedback.wrong-msg   { color: var(--red); }
+.feedback.hidden      { visibility: hidden; }
+
+/* ── Result Screen ───────────────────────── */
+#screen-result {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.result-stars {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  letter-spacing: 4px;
+}
+
+.result-score {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--purple-dark);
+  margin-bottom: 8px;
+}
+
+.result-msg {
+  font-size: 1rem;
+  color: var(--gray);
+  margin-bottom: 40px;
+}
+
+.result-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn-primary {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--purple-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--purple-dark);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--purple);
+  border: 2px solid var(--purple);
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-secondary:active {
+  background: var(--purple-light);
+}
+</style>
+</head>
+<body>
+
+<!-- ── SCREEN 1: Activity Picker ─────────── -->
+<div id="screen-pick" class="screen active">
+  <div class="page-header">
+    <a href="../" class="back-btn" aria-label="Home">←</a>
+    <span class="page-title">Phonics</span>
+  </div>
+
+  <div style="padding: 8px 24px 0;">
+    <div class="pick-heading">What shall we practise?</div>
+    <div class="pick-sub">Tap an activity to start</div>
+  </div>
+
+  <div class="activity-list">
+    <button class="act-btn level-a" onclick="startGame('short-a')" aria-label="Short A words">
+      <span class="act-emoji">🎩</span>
+      <span class="act-info">
+        <span class="act-name">Short A words</span>
+        <span class="act-words">cat · hat · pan · bag · van</span>
+      </span>
+      <span class="act-best" id="best-short-a"></span>
+    </button>
+
+    <button class="act-btn level-e" onclick="startGame('short-e')" aria-label="Short E words">
+      <span class="act-emoji">🐔</span>
+      <span class="act-info">
+        <span class="act-name">Short E words</span>
+        <span class="act-words">hen · net · pen · bed · egg</span>
+      </span>
+      <span class="act-best" id="best-short-e"></span>
+    </button>
+
+    <button class="act-btn level-ae" onclick="startGame('a-vs-e')" aria-label="A versus E contrast">
+      <span class="act-emoji">🎯</span>
+      <span class="act-info">
+        <span class="act-name">A vs E — hear the difference</span>
+        <span class="act-words">pan vs pen · hat vs hen · bat vs bed</span>
+      </span>
+      <span class="act-best" id="best-a-vs-e"></span>
+    </button>
+  </div>
+</div>
+
+<!-- ── SCREEN 2: Game ─────────────────────── -->
+<div id="screen-game" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="goToPicker()" aria-label="Back to activities">←</button>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="round-label" id="round-label">1 / 10</div>
+  </div>
+
+  <div class="set-label" id="set-label"></div>
+
+  <div class="hear-wrap">
+    <button class="hear-btn" id="hear-btn" onclick="playWord()">
+      <span>🔊</span>
+      <span id="hear-text">Tap to hear</span>
+    </button>
+  </div>
+
+  <div class="cards-row">
+    <div class="card" id="card-0" onclick="handleTap(0)" role="button" aria-label="Choice 1">
+      <div class="card-pic" id="pic-0"></div>
+      <div class="card-word" id="word-0"></div>
+    </div>
+    <div class="card" id="card-1" onclick="handleTap(1)" role="button" aria-label="Choice 2">
+      <div class="card-pic" id="pic-1"></div>
+      <div class="card-word" id="word-1"></div>
+    </div>
+  </div>
+
+  <div class="feedback hidden" id="feedback" aria-live="polite"></div>
+</div>
+
+<!-- ── SCREEN 3: Result ───────────────────── -->
+<div id="screen-result" class="screen">
+  <div class="result-stars" id="result-stars">⭐⭐⭐</div>
+  <div class="result-score" id="result-score"></div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="result-btns">
+    <button class="btn-primary" onclick="playAgain()">Play again</button>
+    <button class="btn-secondary" onclick="goToPicker()">Choose activity</button>
+  </div>
+</div>
+
+<script>
+// ── Word data ─────────────────────────────────────────────
+
+const WORDS = {
+  'short-a': [
+    { word: 'cat', pic: '🐱' },
+    { word: 'bat', pic: '🦇' },
+    { word: 'hat', pic: '🎩' },
+    { word: 'pan', pic: '🍳' },
+    { word: 'man', pic: '👨' },
+    { word: 'rat', pic: '🐀' },
+    { word: 'bag', pic: '👜' },
+    { word: 'van', pic: '🚐' },
+    { word: 'can', pic: '🥫' },
+    { word: 'cap', pic: '🧢' },
+  ],
+  'short-e': [
+    { word: 'net', pic: '🕸️' },
+    { word: 'pet', pic: '🐕' },
+    { word: 'pen', pic: '✏️' },
+    { word: 'hen', pic: '🐔' },
+    { word: 'ten', pic: '🔟' },
+    { word: 'bed', pic: '🛏️' },
+    { word: 'jet', pic: '✈️' },
+    { word: 'leg', pic: '🦵' },
+    { word: 'red', pic: '🔴' },
+    { word: 'egg', pic: '🥚' },
+  ],
+};
+
+// Pairs for A vs E — each pair is [a-word, e-word]
+// Either side can be the target in any given round
+const AE_PAIRS = [
+  [{ word: 'pan', pic: '🍳' },  { word: 'pen', pic: '✏️' }],   // true minimal pair
+  [{ word: 'man', pic: '👨' },  { word: 'men', pic: '👥' }],   // true minimal pair
+  [{ word: 'bat', pic: '🦇' },  { word: 'bed', pic: '🛏️' }],
+  [{ word: 'hat', pic: '🎩' },  { word: 'hen', pic: '🐔' }],
+  [{ word: 'cat', pic: '🐱' },  { word: 'net', pic: '🕸️' }],
+  [{ word: 'rat', pic: '🐀' },  { word: 'red', pic: '🔴' }],
+  [{ word: 'can', pic: '🥫' },  { word: 'pet', pic: '🐕' }],
+  [{ word: 'bag', pic: '👜' },  { word: 'leg', pic: '🦵' }],
+  [{ word: 'van', pic: '🚐' },  { word: 'ten', pic: '🔟' }],
+  [{ word: 'cap', pic: '🧢' },  { word: 'egg', pic: '🥚' }],
+];
+
+const SET_LABELS = {
+  'short-a': 'Short A words',
+  'short-e': 'Short E words',
+  'a-vs-e':  'A vs E — hear the difference',
+};
+
+const ROUNDS_PER_GAME = 10;
+
+// ── Game state ────────────────────────────────────────────
+
+let currentSet = null;
+let rounds     = [];
+let roundIndex = 0;
+let score      = 0;
+let correctCard = 0;
+let answered   = false;
+let wordPlayed = false;
+
+// ── Utils ─────────────────────────────────────────────────
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function rand(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// ── TTS ───────────────────────────────────────────────────
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang  = 'en-GB';
+  utt.rate  = 0.82;
+  utt.pitch = 1.05;
+  window.speechSynthesis.speak(utt);
+}
+
+// ── Round building ────────────────────────────────────────
+
+function buildRounds(setKey) {
+  if (setKey === 'a-vs-e') {
+    return shuffle(AE_PAIRS).slice(0, ROUNDS_PER_GAME).map(pair => {
+      const flip = Math.random() < 0.5;
+      return { target: pair[flip ? 1 : 0], distractor: pair[flip ? 0 : 1] };
+    });
+  }
+
+  const pool = shuffle(WORDS[setKey]);
+  return pool.slice(0, ROUNDS_PER_GAME).map((target, i) => {
+    // Pick a distractor: different word from same pool
+    const others = pool.filter((_, j) => j !== i);
+    return { target, distractor: rand(others) };
+  });
+}
+
+// ── Screens ───────────────────────────────────────────────
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── Picker ────────────────────────────────────────────────
+
+function goToPicker() {
+  loadBestScores();
+  showScreen('screen-pick');
+}
+
+function loadBestScores() {
+  ['short-a', 'short-e', 'a-vs-e'].forEach(k => {
+    const d = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
+    const el = document.getElementById('best-' + k);
+    if (d.bestScore > 0) {
+      el.textContent = `Best: ${d.bestScore}/${ROUNDS_PER_GAME}`;
+    } else {
+      el.textContent = '';
+    }
+  });
+}
+
+// ── Game start ────────────────────────────────────────────
+
+function startGame(setKey) {
+  currentSet  = setKey;
+  rounds      = buildRounds(setKey);
+  roundIndex  = 0;
+  score       = 0;
+  answered    = false;
+  wordPlayed  = false;
+
+  document.getElementById('set-label').textContent = SET_LABELS[setKey];
+  showScreen('screen-game');
+  renderRound();
+}
+
+function renderRound() {
+  answered   = false;
+  wordPlayed = false;
+
+  const { target, distractor } = rounds[roundIndex];
+
+  // Assign target to card 0 or 1 randomly
+  correctCard = Math.random() < 0.5 ? 0 : 1;
+  const items = correctCard === 0
+    ? [target, distractor]
+    : [distractor, target];
+
+  // Progress
+  document.getElementById('progress-fill').style.width =
+    `${(roundIndex / ROUNDS_PER_GAME) * 100}%`;
+  document.getElementById('round-label').textContent =
+    `${roundIndex + 1} / ${ROUNDS_PER_GAME}`;
+
+  // Cards
+  for (let i = 0; i < 2; i++) {
+    document.getElementById(`pic-${i}`).textContent  = items[i].pic;
+    document.getElementById(`word-${i}`).textContent = items[i].word;
+    const card = document.getElementById(`card-${i}`);
+    card.className         = 'card';
+    card.style.pointerEvents = 'auto';
+  }
+
+  // Hear button
+  document.getElementById('hear-text').textContent = 'Tap to hear';
+  document.getElementById('hear-btn').classList.remove('replaying');
+
+  // Feedback
+  const fb = document.getElementById('feedback');
+  fb.textContent = '';
+  fb.className   = 'feedback hidden';
+}
+
+// ── Hear button ───────────────────────────────────────────
+
+function playWord() {
+  const target = rounds[roundIndex].target;
+  speak(target.word);
+
+  if (!wordPlayed) {
+    wordPlayed = true;
+    document.getElementById('hear-text').textContent = 'Hear it again';
+    document.getElementById('hear-btn').classList.add('replaying');
+  }
+}
+
+// ── Card tap ──────────────────────────────────────────────
+
+function handleTap(cardIndex) {
+  if (answered) return;
+  answered = true;
+
+  // Disable both cards
+  document.getElementById('card-0').style.pointerEvents = 'none';
+  document.getElementById('card-1').style.pointerEvents = 'none';
+
+  const correct = cardIndex === correctCard;
+  const fb      = document.getElementById('feedback');
+
+  if (correct) {
+    score++;
+    document.getElementById(`card-${cardIndex}`).classList.add('correct');
+    fb.textContent = '✓ Well done!';
+    fb.className   = 'feedback correct-msg';
+  } else {
+    document.getElementById(`card-${cardIndex}`).classList.add('wrong');
+    document.getElementById(`card-${correctCard}`).classList.add('correct');
+    fb.textContent = 'Not quite — look at the green one!';
+    fb.className   = 'feedback wrong-msg';
+  }
+
+  setTimeout(() => {
+    roundIndex++;
+    if (roundIndex >= rounds.length) {
+      showResult();
+    } else {
+      renderRound();
+    }
+  }, 1800);
+}
+
+// ── Result screen ─────────────────────────────────────────
+
+const MESSAGES = [
+  ['🌟 Amazing! Every single one!', '⭐⭐⭐'],
+  ['Great job — nearly there!',     '⭐⭐☆'],
+  ['Good try — keep practising!',   '⭐☆☆'],
+  ["Let's try again!",               '☆☆☆'],
+];
+
+function showResult() {
+  showScreen('screen-result');
+
+  const pct  = score / ROUNDS_PER_GAME;
+  const tier = pct >= 0.9 ? 0 : pct >= 0.7 ? 1 : pct >= 0.5 ? 2 : 3;
+  const [msg, stars] = MESSAGES[tier];
+
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score').textContent = `${score} out of ${ROUNDS_PER_GAME}`;
+  document.getElementById('result-msg').textContent   = msg;
+
+  // Persist
+  const key  = 'saba_phonics_' + currentSet;
+  const prev = JSON.parse(localStorage.getItem(key) || '{"played":0,"bestScore":0}');
+  prev.played++;
+  prev.bestScore  = Math.max(prev.bestScore || 0, score);
+  prev.lastPlayed = new Date().toISOString().slice(0, 10);
+  localStorage.setItem(key, JSON.stringify(prev));
+}
+
+function playAgain() {
+  startGame(currentSet);
+}
+
+// ── Initialise ────────────────────────────────────────────
+
+loadBestScores();
+</script>
+
+</body>
+</html>
