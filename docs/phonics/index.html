@@ -146,7 +146,9 @@ body {
 
 .act-btn.level-a { border-left: 5px solid #f08c00; }
 .act-btn.level-e { border-left: 5px solid #2f9e44; }
-.act-btn.level-ae { border-left: 5px solid var(--purple); }
+.act-btn.level-ae     { border-left: 5px solid var(--purple); }
+.act-btn.level-ladder { border-left: 5px solid #1971c2; text-decoration: none; }
+.act-btn.level-ladder .act-name { color: #1a1a2e; }
 
 /* ── Game Screen ─────────────────────────── */
 #screen-game {
@@ -437,6 +439,14 @@ body {
       </span>
       <span class="act-best" id="best-a-vs-e"></span>
     </button>
+
+    <a href="ladders/" class="act-btn level-ladder" aria-label="Word Ladders">
+      <span class="act-emoji">🪜</span>
+      <span class="act-info">
+        <span class="act-name">Word Ladders</span>
+        <span class="act-words">-at · -an · -et · -en</span>
+      </span>
+    </a>
   </div>
 </div>
 
@@ -797,6 +807,7 @@ function showResult() {
   prev.played++;
   prev.bestScore  = Math.max(prev.bestScore || 0, score);
   prev.lastPlayed = new Date().toISOString().slice(0, 10);
+  prev.lastMissed = missedRounds.map(r => r.target.word);
   localStorage.setItem(key, JSON.stringify(prev));
 }
 

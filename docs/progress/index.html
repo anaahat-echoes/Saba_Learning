@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Saba's Progress</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple:       #7048e8;
+  --purple-dark:  #5f3dc4;
+  --purple-light: #F3F0FF;
+  --green:        #2f9e44;
+  --green-light:  #d3f9d8;
+  --orange:       #f08c00;
+  --gray:         #868e96;
+  --bg:           #F3F0FF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #1a1a2e;
+  padding-bottom: 40px;
+}
+
+/* ── Header ──────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.back-btn {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  text-decoration: none;
+  color: var(--purple-dark);
+  flex-shrink: 0;
+}
+
+.page-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+}
+
+.summary-bar {
+  padding: 4px 24px 20px;
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+.summary-bar strong {
+  color: var(--purple-dark);
+  font-weight: 800;
+}
+
+/* ── Sections ────────────────────────────── */
+.section {
+  padding: 0 20px 24px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.section-heading {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+
+/* ── Activity rows ───────────────────────── */
+.activity-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 4px;
+}
+
+.act-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  gap: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.act-row:last-child { border-bottom: none; }
+
+.act-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.act-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex: 1;
+  font-family: 'Courier New', monospace;
+}
+
+.act-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.act-score {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--purple-dark);
+}
+
+.act-score.none {
+  font-weight: 400;
+  color: #ccc;
+}
+
+.act-sub {
+  font-size: 0.72rem;
+  color: var(--gray);
+  text-align: right;
+}
+
+.missed-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 16px 12px 38px;
+}
+
+.missed-pill {
+  font-size: 0.72rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffc107;
+  border-radius: 20px;
+  padding: 2px 8px;
+}
+
+.missed-label {
+  font-size: 0.72rem;
+  color: var(--orange);
+  font-weight: 600;
+  padding: 0 16px 10px 38px;
+}
+
+/* ── Empty state ─────────────────────────── */
+.empty-state {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  text-align: center;
+  color: var(--gray);
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+
+/* ── Copy button ─────────────────────────── */
+.copy-wrap {
+  padding: 8px 20px 0;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.copy-btn {
+  width: 100%;
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--purple-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.copy-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--purple-dark);
+}
+
+.copy-btn.copied {
+  background: var(--green);
+  box-shadow: 0 5px 0 #1a7431;
+}
+
+.copy-note {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--gray);
+  margin-top: 10px;
+  padding: 0 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="../" class="back-btn" aria-label="Home">←</a>
+  <span class="page-title">📊 Saba's Progress</span>
+</div>
+
+<div class="summary-bar" id="summary-bar"></div>
+
+<div class="section">
+  <div class="section-heading">Phonics — Minimal Pairs</div>
+  <div class="activity-card" id="pairs-card"></div>
+</div>
+
+<div class="section">
+  <div class="section-heading">Phonics — Word Ladders</div>
+  <div class="activity-card" id="ladders-card"></div>
+</div>
+
+<div class="copy-wrap">
+  <button class="copy-btn" id="copy-btn" onclick="copyReport()">
+    <span>📋</span>
+    <span id="copy-label">Copy for teacher</span>
+  </button>
+  <div class="copy-note">Paste into WhatsApp for your teacher to see</div>
+</div>
+
+<script>
+// ── Data sources ──────────────────────────────────────────
+
+const PAIRS_ACTIVITIES = [
+  { key: 'short-a', label: 'Short A words',           total: 10, dot: '#f08c00' },
+  { key: 'short-e', label: 'Short E words',           total: 10, dot: '#2f9e44' },
+  { key: 'a-vs-e',  label: 'A vs E — hear the diff', total: 10, dot: '#7048e8' },
+];
+
+const LADDER_FAMILIES = [
+  { key: 'at', label: '-at family', total: 6, dot: '#f08c00' },
+  { key: 'an', label: '-an family', total: 6, dot: '#2f9e44' },
+  { key: 'et', label: '-et family', total: 5, dot: '#1971c2' },
+  { key: 'en', label: '-en family', total: 4, dot: '#9c36b5' },
+];
+
+// ── Date formatting ───────────────────────────────────────
+
+function fmtDate(isoStr) {
+  if (!isoStr) return null;
+  const d     = new Date(isoStr + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const diff  = Math.round((today - d) / 86400000);
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'yesterday';
+  if (diff < 7)  return d.toLocaleDateString('en-GB', { weekday: 'short' });
+  if (d.getFullYear() === today.getFullYear())
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' });
+}
+
+function fmtDateLong(isoStr) {
+  if (!isoStr) return '—';
+  const d = new Date(isoStr + 'T00:00:00');
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+// ── Build UI ──────────────────────────────────────────────
+
+function loadData(storageKey) {
+  return JSON.parse(localStorage.getItem(storageKey) || '{}');
+}
+
+function buildRow(name, dot, data, total, showMissed) {
+  const played    = data.played || 0;
+  const best      = data.bestScore;
+  const lastDate  = fmtDate(data.lastPlayed);
+  const missed    = data.lastMissed || [];
+
+  const scoreHtml = played > 0
+    ? `<span class="act-score">${best}/${total}</span>`
+    : `<span class="act-score none">—</span>`;
+
+  const subLines = [];
+  if (played > 0) subLines.push(`${played} session${played > 1 ? 's' : ''}`);
+  if (lastDate)   subLines.push(`last: ${lastDate}`);
+
+  let html = `
+    <div class="act-row">
+      <div class="act-dot" style="background:${dot}"></div>
+      <div class="act-name">${name}</div>
+      <div class="act-stats">
+        ${scoreHtml}
+        <div class="act-sub">${subLines.join(' · ') || 'not yet played'}</div>
+      </div>
+    </div>
+  `;
+
+  if (showMissed && missed.length > 0) {
+    html += `<div class="missed-label">Needed extra tries last session:</div>
+      <div class="missed-pills">
+        ${missed.map(w => `<span class="missed-pill">${w}</span>`).join('')}
+      </div>`;
+  }
+
+  return html;
+}
+
+function renderProgress() {
+  // ── Summary bar ──
+  const allKeys  = [
+    ...PAIRS_ACTIVITIES.map(a => 'saba_phonics_' + a.key),
+    ...LADDER_FAMILIES.map(f => 'saba_ladders_' + f.key),
+  ];
+  let totalSessions = 0;
+  let latestDate    = null;
+  allKeys.forEach(k => {
+    const d = loadData(k);
+    totalSessions += d.played || 0;
+    if (d.lastPlayed && (!latestDate || d.lastPlayed > latestDate)) {
+      latestDate = d.lastPlayed;
+    }
+  });
+
+  const summaryEl = document.getElementById('summary-bar');
+  if (totalSessions === 0) {
+    summaryEl.innerHTML = 'No sessions yet — start practising!';
+  } else {
+    summaryEl.innerHTML =
+      `<strong>${totalSessions}</strong> total session${totalSessions > 1 ? 's' : ''} &nbsp;·&nbsp; ` +
+      `Last practice: <strong>${fmtDate(latestDate)}</strong>`;
+  }
+
+  // ── Pairs card ──
+  const pairsCard = document.getElementById('pairs-card');
+  pairsCard.innerHTML = PAIRS_ACTIVITIES.map(a => {
+    const d = loadData('saba_phonics_' + a.key);
+    return buildRow(a.label, a.dot, d, a.total, true);
+  }).join('');
+
+  // ── Ladders card ──
+  const laddersCard = document.getElementById('ladders-card');
+  laddersCard.innerHTML = LADDER_FAMILIES.map(f => {
+    const d     = loadData('saba_ladders_' + f.key);
+    const total = d.totalWords || f.total;
+    return buildRow(f.label, f.dot, d, total, true);
+  }).join('');
+}
+
+// ── Copy report ───────────────────────────────────────────
+
+function copyReport() {
+  const today = new Date().toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  });
+  const lines = [`Saba's phonics progress — ${today}`, ''];
+
+  lines.push('MINIMAL PAIRS');
+  PAIRS_ACTIVITIES.forEach(a => {
+    const d    = loadData('saba_phonics_' + a.key);
+    const played = d.played || 0;
+    const best   = d.bestScore;
+    const last   = fmtDate(d.lastPlayed);
+    if (played === 0) {
+      lines.push(`  ${a.label}: not yet played`);
+    } else {
+      const missed = (d.lastMissed || []);
+      let row = `  ${a.label}: ${played} session${played > 1 ? 's' : ''}, best ${best}/${a.total}, last ${last}`;
+      if (missed.length > 0) row += ` (needed retry: ${missed.join(', ')})`;
+      lines.push(row);
+    }
+  });
+
+  lines.push('');
+  lines.push('WORD LADDERS');
+  LADDER_FAMILIES.forEach(f => {
+    const d      = loadData('saba_ladders_' + f.key);
+    const played = d.played || 0;
+    const best   = d.bestScore;
+    const total  = d.totalWords || f.total;
+    const last   = fmtDate(d.lastPlayed);
+    const missed = (d.lastMissed || []);
+    if (played === 0) {
+      lines.push(`  ${f.label}: not yet played`);
+    } else {
+      let row = `  ${f.label}: ${played} session${played > 1 ? 's' : ''}, best ${best}/${total} first try, last ${last}`;
+      if (missed.length > 0) row += ` (needed extra tries: ${missed.join(', ')})`;
+      lines.push(row);
+    }
+  });
+
+  const allKeys  = [
+    ...PAIRS_ACTIVITIES.map(a => 'saba_phonics_' + a.key),
+    ...LADDER_FAMILIES.map(f => 'saba_ladders_' + f.key),
+  ];
+  let totalSessions = 0;
+  let latestDate    = null;
+  allKeys.forEach(k => {
+    const d = loadData(k);
+    totalSessions += d.played || 0;
+    if (d.lastPlayed && (!latestDate || d.lastPlayed > latestDate)) latestDate = d.lastPlayed;
+  });
+
+  lines.push('');
+  lines.push(`Total sessions: ${totalSessions}`);
+  if (latestDate) lines.push(`Last practice: ${fmtDateLong(latestDate)}`);
+
+  const text = lines.join('\n');
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn   = document.getElementById('copy-btn');
+    const label = document.getElementById('copy-label');
+    btn.classList.add('copied');
+    label.textContent = 'Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      label.textContent = 'Copy for teacher';
+    }, 2500);
+  }).catch(() => {
+    // Fallback for browsers where clipboard API fails
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity  = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const label = document.getElementById('copy-label');
+    label.textContent = 'Copied!';
+    setTimeout(() => { label.textContent = 'Copy for teacher'; }, 2500);
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────
+
+renderProgress();
+</script>
+
+</body>
+</html>

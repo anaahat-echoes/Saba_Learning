@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Saba's Word Ladders</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple:       #7048e8;
+  --purple-dark:  #5f3dc4;
+  --purple-light: #F3F0FF;
+  --green:        #2f9e44;
+  --green-light:  #d3f9d8;
+  --red:          #e03131;
+  --orange:       #f08c00;
+  --gray:         #868e96;
+  --bg:           #F3F0FF;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #1a1a2e;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.back-btn {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  flex-shrink: 0;
+  color: var(--purple-dark);
+  text-decoration: none;
+}
+
+.page-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+}
+
+/* ── Family picker ───────────────────────── */
+#screen-pick { padding: 0 20px 32px; }
+
+.pick-heading {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--purple-dark);
+  margin-bottom: 6px;
+  padding: 0 4px;
+}
+
+.pick-sub {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+
+.family-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.family-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 18px;
+  border: none;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.1s, box-shadow 0.1s;
+  width: 100%;
+  border-left: 5px solid;
+}
+
+.family-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+}
+
+.family-name {
+  font-size: 1.4rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  display: block;
+  color: #1a1a2e;
+}
+
+.family-words {
+  font-size: 0.78rem;
+  color: var(--gray);
+  font-family: 'Courier New', monospace;
+  display: block;
+  margin-top: 3px;
+  letter-spacing: 0.02em;
+}
+
+.family-best {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--purple);
+  margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Game screen ─────────────────────────── */
+.game-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 10px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--purple);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.round-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gray);
+  white-space: nowrap;
+}
+
+.family-label-game {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 20px 20px;
+}
+
+/* Word display */
+.word-display-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px 28px;
+  gap: 18px;
+}
+
+.word-pic {
+  font-size: 5rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.word-structure {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.onset-blank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 76px;
+  border: 3px dashed #bbb;
+  border-radius: 14px;
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: #bbb;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.onset-blank.filled {
+  border-style: solid;
+  border-color: var(--green);
+  background: var(--green-light);
+  color: var(--green);
+}
+
+.rime-display {
+  font-size: 2.5rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: #333;
+  letter-spacing: 5px;
+  padding-bottom: 6px;
+}
+
+/* Letter options — 2×2 grid */
+.letter-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 0 24px;
+  max-width: 340px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.letter-btn {
+  background: #fff;
+  border: 3px solid #e9ecef;
+  border-radius: 20px;
+  font-size: 2.2rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: #333;
+  padding: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+  transition: transform 0.1s, box-shadow 0.1s;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  text-transform: uppercase;
+}
+
+.letter-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+}
+
+.letter-btn.dimmed {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+@keyframes wrong-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-10px); }
+  40%       { transform: translateX(10px); }
+  60%       { transform: translateX(-7px); }
+  80%       { transform: translateX(6px); }
+}
+
+.letter-btn.shake {
+  animation: wrong-shake 0.4s ease;
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Hear button — small, under word */
+.hear-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 0 20px 20px;
+}
+
+.hear-btn {
+  background: none;
+  border: 2px solid #ddd;
+  border-radius: 50px;
+  padding: 8px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray);
+  cursor: pointer;
+  gap: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.hear-btn:active { background: #f0f0f0; }
+
+.game-feedback {
+  text-align: center;
+  padding: 12px 20px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  min-height: 44px;
+  color: var(--gray);
+}
+
+.game-feedback.correct { color: var(--green); }
+.game-feedback.wrong   { color: var(--red); }
+
+/* ── Result screen ───────────────────────── */
+#screen-result {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.result-stars { font-size: 3rem; margin-bottom: 16px; letter-spacing: 4px; }
+.result-score { font-size: 1.8rem; font-weight: 900; color: var(--purple-dark); margin-bottom: 6px; }
+.result-msg   { font-size: 1rem; color: var(--gray); margin-bottom: 36px; }
+
+.result-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn-primary {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--purple-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--purple-dark);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--purple);
+  border: 2px solid var(--purple);
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-secondary:active { background: var(--purple-light); }
+</style>
+</head>
+<body>
+
+<!-- ── SCREEN 1: Family picker ────────────── -->
+<div id="screen-pick" class="screen active">
+  <div class="page-header">
+    <a href="../" class="back-btn" aria-label="Back to Phonics">←</a>
+    <span class="page-title">Word Ladders</span>
+  </div>
+  <div style="padding: 8px 24px 0;">
+    <div class="pick-heading">Pick a word family</div>
+    <div class="pick-sub">Tap the right starting letter for each picture</div>
+  </div>
+  <div class="family-list" id="family-list"></div>
+</div>
+
+<!-- ── SCREEN 2: Game ─────────────────────── -->
+<div id="screen-game" class="screen">
+  <div class="game-header">
+    <button class="back-btn" onclick="goToPicker()" aria-label="Back to families">←</button>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="round-label" id="round-label">1 / 6</div>
+  </div>
+
+  <div class="family-label-game" id="family-label-game"></div>
+
+  <div class="word-display-wrap">
+    <div class="word-pic" id="word-pic" aria-hidden="true"></div>
+    <div class="word-structure">
+      <span class="onset-blank" id="onset-blank">_</span>
+      <span class="rime-display" id="rime-display"></span>
+    </div>
+  </div>
+
+  <div class="hear-wrap">
+    <button class="hear-btn" onclick="speakCurrentWord()">🔊 Say the word</button>
+  </div>
+
+  <div class="letter-options" id="letter-options" role="group" aria-label="Choose the starting letter"></div>
+
+  <div class="game-feedback" id="game-feedback"></div>
+</div>
+
+<!-- ── SCREEN 3: Result ───────────────────── -->
+<div id="screen-result" class="screen">
+  <div class="result-stars" id="result-stars"></div>
+  <div class="result-score" id="result-score"></div>
+  <div class="result-msg"   id="result-msg"></div>
+  <div class="result-btns">
+    <button class="btn-primary"   onclick="playAgain()">Play again</button>
+    <button class="btn-secondary" onclick="goToPicker()">Choose family</button>
+  </div>
+</div>
+
+<script>
+// ── Family data ───────────────────────────────────────────
+
+const FAMILIES = {
+  '-at': {
+    label: '-at family',
+    rime: 'at',
+    color: '#f08c00',
+    words: [
+      { onset: 'c', word: 'cat', pic: '🐱' },
+      { onset: 'h', word: 'hat', pic: '🎩' },
+      { onset: 'b', word: 'bat', pic: '🦇' },
+      { onset: 'r', word: 'rat', pic: '🐀' },
+      { onset: 's', word: 'sat', pic: '🪑' },
+      { onset: 'p', word: 'pat', pic: '🤚' },
+    ],
+  },
+  '-an': {
+    label: '-an family',
+    rime: 'an',
+    color: '#2f9e44',
+    words: [
+      { onset: 'p', word: 'pan', pic: '🍳' },
+      { onset: 'm', word: 'man', pic: '👨' },
+      { onset: 'v', word: 'van', pic: '🚐' },
+      { onset: 'c', word: 'can', pic: '🥫' },
+      { onset: 'f', word: 'fan', pic: '🪭' },
+      { onset: 'r', word: 'ran', pic: '🏃' },
+    ],
+  },
+  '-et': {
+    label: '-et family',
+    rime: 'et',
+    color: '#1971c2',
+    words: [
+      { onset: 'n', word: 'net', pic: '🕸️' },
+      { onset: 'p', word: 'pet', pic: '🐕' },
+      { onset: 'j', word: 'jet', pic: '✈️' },
+      { onset: 'v', word: 'vet', pic: '🩺' },
+      { onset: 'w', word: 'wet', pic: '💧' },
+    ],
+  },
+  '-en': {
+    label: '-en family',
+    rime: 'en',
+    color: '#9c36b5',
+    words: [
+      { onset: 'h', word: 'hen', pic: '🐔' },
+      { onset: 'p', word: 'pen', pic: '✏️' },
+      { onset: 't', word: 'ten', pic: '🔟' },
+      { onset: 'm', word: 'men', pic: '👥' },
+    ],
+  },
+};
+
+// ── State ─────────────────────────────────────────────────
+
+let currentFamily   = null;
+let rounds          = [];
+let roundIndex      = 0;
+let firstAttempts   = 0;
+let perWordFirstTry = [];   // true = got it first try
+let triedWrong      = false;
+let locked          = false;
+
+// ── Utils ─────────────────────────────────────────────────
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang  = 'en-GB';
+  utt.rate  = 0.82;
+  utt.pitch = 1.05;
+  window.speechSynthesis.speak(utt);
+}
+
+function speakCurrentWord() {
+  if (rounds[roundIndex]) speak(rounds[roundIndex].word);
+}
+
+// ── Picker ────────────────────────────────────────────────
+
+function buildPicker() {
+  const list = document.getElementById('family-list');
+  list.innerHTML = '';
+  Object.entries(FAMILIES).forEach(([key, fam]) => {
+    const stored  = JSON.parse(localStorage.getItem('saba_ladders_' + key.slice(1)) || '{}');
+    const preview = fam.words.slice(0, 4).map(w => w.word).join(' · ');
+    const bestTxt = stored.bestScore != null
+      ? `Best: ${stored.bestScore}/${fam.words.length} first try`
+      : '';
+    const btn = document.createElement('button');
+    btn.className = 'family-btn';
+    btn.style.borderLeftColor = fam.color;
+    btn.innerHTML = `
+      <div style="flex:1;min-width:0;">
+        <span class="family-name">${key}</span>
+        <span class="family-words">${preview}</span>
+      </div>
+      <span class="family-best">${bestTxt}</span>
+    `;
+    btn.addEventListener('click', () => startGame(key));
+    list.appendChild(btn);
+  });
+}
+
+function goToPicker() {
+  buildPicker();
+  showScreen('screen-pick');
+}
+
+// ── Game ──────────────────────────────────────────────────
+
+function getOptions(familyKey, correctOnset) {
+  const all    = FAMILIES[familyKey].words.map(w => w.onset);
+  const others = shuffle(all.filter(o => o !== correctOnset)).slice(0, 3);
+  return shuffle([correctOnset, ...others]);
+}
+
+function startGame(familyKey) {
+  currentFamily   = familyKey;
+  rounds          = shuffle([...FAMILIES[familyKey].words]);
+  roundIndex      = 0;
+  firstAttempts   = 0;
+  perWordFirstTry = [];
+  triedWrong      = false;
+  locked          = false;
+
+  document.getElementById('family-label-game').textContent =
+    FAMILIES[familyKey].label.toUpperCase();
+  document.getElementById('progress-fill').style.width = '0%';
+
+  showScreen('screen-game');
+  renderRound();
+}
+
+function renderRound() {
+  triedWrong = false;
+  locked     = false;
+
+  const fam   = FAMILIES[currentFamily];
+  const round = rounds[roundIndex];
+
+  document.getElementById('progress-fill').style.width =
+    `${(roundIndex / rounds.length) * 100}%`;
+  document.getElementById('round-label').textContent =
+    `${roundIndex + 1} / ${rounds.length}`;
+
+  document.getElementById('word-pic').textContent      = round.pic;
+  document.getElementById('rime-display').textContent  = fam.rime;
+
+  const blank = document.getElementById('onset-blank');
+  blank.textContent = '_';
+  blank.classList.remove('filled');
+
+  // Render letter buttons
+  const options   = getOptions(currentFamily, round.onset);
+  const container = document.getElementById('letter-options');
+  container.innerHTML = '';
+  options.forEach(letter => {
+    const btn = document.createElement('button');
+    btn.className   = 'letter-btn';
+    btn.textContent = letter.toUpperCase();
+    btn.addEventListener('click', () => handleLetter(letter, btn));
+    container.appendChild(btn);
+  });
+
+  const fb = document.getElementById('game-feedback');
+  fb.textContent = '';
+  fb.className   = 'game-feedback';
+}
+
+function handleLetter(letter, btn) {
+  if (locked) return;
+
+  const correct = letter === rounds[roundIndex].onset;
+
+  if (correct) {
+    locked = true;
+    const wasFirst = !triedWrong;
+    if (wasFirst) firstAttempts++;
+    perWordFirstTry.push(wasFirst);
+
+    // Fill blank
+    const blank = document.getElementById('onset-blank');
+    blank.textContent = letter.toUpperCase();
+    blank.classList.add('filled');
+
+    // Dim all buttons
+    document.querySelectorAll('.letter-btn').forEach(b => b.classList.add('dimmed'));
+
+    // Feedback + TTS
+    const fb = document.getElementById('game-feedback');
+    fb.textContent = `✓ ${rounds[roundIndex].word.toUpperCase()}!`;
+    fb.className   = 'game-feedback correct';
+    setTimeout(() => speak(rounds[roundIndex].word), 280);
+
+    setTimeout(() => {
+      roundIndex++;
+      if (roundIndex >= rounds.length) {
+        showResult();
+      } else {
+        renderRound();
+      }
+    }, 1700);
+
+  } else {
+    triedWrong = true;
+    // Shake then briefly block that button
+    btn.classList.add('shake');
+    btn.addEventListener('animationend', () => btn.classList.remove('shake'), { once: true });
+    btn.classList.add('dimmed');
+    setTimeout(() => btn.classList.remove('dimmed'), 900);
+
+    const fb = document.getElementById('game-feedback');
+    fb.textContent = 'Try again!';
+    fb.className   = 'game-feedback wrong';
+  }
+}
+
+// ── Result ────────────────────────────────────────────────
+
+function showResult() {
+  showScreen('screen-result');
+
+  const total = rounds.length;
+  const pct   = firstAttempts / total;
+  const tier  = pct >= 0.9 ? 0 : pct >= 0.6 ? 1 : pct >= 0.3 ? 2 : 3;
+  const stars = ['⭐⭐⭐', '⭐⭐☆', '⭐☆☆', '☆☆☆'][tier];
+  const msg   = [
+    'Amazing — first time every time!',
+    'Really good — nearly all first try!',
+    'Good effort — keep practising!',
+    "Let's try again!",
+  ][tier];
+
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score').textContent = `${firstAttempts} / ${total} first try`;
+  document.getElementById('result-msg').textContent   = msg;
+
+  // Persist to localStorage
+  const storKey    = 'saba_ladders_' + currentFamily.slice(1);
+  const prev       = JSON.parse(localStorage.getItem(storKey) || '{"played":0}');
+  prev.played      = (prev.played  || 0) + 1;
+  prev.bestScore   = Math.max(prev.bestScore || 0, firstAttempts);
+  prev.totalWords  = total;
+  prev.lastPlayed  = new Date().toISOString().slice(0, 10);
+  // Store words that needed more than one try (useful for teacher report)
+  prev.lastMissed  = rounds
+    .filter((_, i) => !perWordFirstTry[i])
+    .map(r => r.word);
+  localStorage.setItem(storKey, JSON.stringify(prev));
+}
+
+function playAgain() {
+  startGame(currentFamily);
+}
+
+// ── Screens ───────────────────────────────────────────────
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── Init ──────────────────────────────────────────────────
+
+buildPicker();
+</script>
+</body>
+</html>
