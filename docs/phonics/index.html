@@ -372,6 +372,28 @@ body {
 .btn-secondary:active {
   background: var(--purple-light);
 }
+
+/* Remediation mode */
+.progress-fill.remediation {
+  background: var(--orange);
+}
+
+.set-label.remediation {
+  color: var(--orange);
+}
+
+.result-remediation {
+  font-size: 0.95rem;
+  color: var(--green);
+  font-weight: 600;
+  margin-bottom: 28px;
+  padding: 10px 16px;
+  background: var(--green-light);
+  border-radius: 12px;
+  max-width: 300px;
+  text-align: center;
+  display: none;
+}
 </style>
 </head>
 <body>
@@ -456,6 +478,7 @@ body {
   <div class="result-stars" id="result-stars">⭐⭐⭐</div>
   <div class="result-score" id="result-score"></div>
   <div class="result-msg" id="result-msg"></div>
+  <div class="result-remediation" id="result-remediation"></div>
   <div class="result-btns">
     <button class="btn-primary" onclick="playAgain()">Play again</button>
     <button class="btn-secondary" onclick="goToPicker()">Choose activity</button>
@@ -517,13 +540,16 @@ const ROUNDS_PER_GAME = 10;
 
 // ── Game state ────────────────────────────────────────────
 
-let currentSet = null;
-let rounds     = [];
-let roundIndex = 0;
-let score      = 0;
-let correctCard = 0;
-let answered   = false;
-let wordPlayed = false;
+let currentSet       = null;
+let rounds           = [];
+let roundIndex       = 0;
+let score            = 0;
+let correctCard      = 0;
+let answered         = false;
+let wordPlayed       = false;
+let missedRounds     = [];
+let inRemediation    = false;
+let remediationScore = 0;
 
 // ── Utils ─────────────────────────────────────────────────
 
@@ -600,14 +626,21 @@ function loadBestScores() {
 // ── Game start ────────────────────────────────────────────
 
 function startGame(setKey) {
-  currentSet  = setKey;
-  rounds      = buildRounds(setKey);
-  roundIndex  = 0;
-  score       = 0;
-  answered    = false;
-  wordPlayed  = false;
+  currentSet       = setKey;
+  rounds           = buildRounds(setKey);
+  roundIndex       = 0;
+  score            = 0;
+  missedRounds     = [];
+  inRemediation    = false;
+  remediationScore = 0;
+  answered         = false;
+  wordPlayed       = false;
 
-  document.getElementById('set-label').textContent = SET_LABELS[setKey];
+  const label = document.getElementById('set-label');
+  label.textContent = SET_LABELS[setKey];
+  label.classList.remove('remediation');
+  document.getElementById('progress-fill').classList.remove('remediation');
+
   showScreen('screen-game');
   renderRound();
 }
@@ -624,11 +657,11 @@ function renderRound() {
     ? [target, distractor]
     : [distractor, target];
 
-  // Progress
+  // Progress (uses rounds.length so remediation arc is shown correctly)
   document.getElementById('progress-fill').style.width =
-    `${(roundIndex / ROUNDS_PER_GAME) * 100}%`;
+    `${(roundIndex / rounds.length) * 100}%`;
   document.getElementById('round-label').textContent =
-    `${roundIndex + 1} / ${ROUNDS_PER_GAME}`;
+    `${roundIndex + 1} / ${rounds.length}`;
 
   // Cards
   for (let i = 0; i < 2; i++) {
@@ -676,11 +709,13 @@ function handleTap(cardIndex) {
   const fb      = document.getElementById('feedback');
 
   if (correct) {
-    score++;
+    if (inRemediation) remediationScore++;
+    else score++;
     document.getElementById(`card-${cardIndex}`).classList.add('correct');
     fb.textContent = '✓ Well done!';
     fb.className   = 'feedback correct-msg';
   } else {
+    if (!inRemediation) missedRounds.push(rounds[roundIndex]);
     document.getElementById(`card-${cardIndex}`).classList.add('wrong');
     document.getElementById(`card-${correctCard}`).classList.add('correct');
     fb.textContent = 'Not quite — look at the green one!';
@@ -690,11 +725,37 @@ function handleTap(cardIndex) {
   setTimeout(() => {
     roundIndex++;
     if (roundIndex >= rounds.length) {
-      showResult();
+      inRemediation ? showResult() : endMainGame();
     } else {
       renderRound();
     }
   }, 1800);
+}
+
+// ── End-of-main / remediation ────────────────────────────
+
+function endMainGame() {
+  if (missedRounds.length === 0) {
+    showResult();
+  } else {
+    startRemediation();
+  }
+}
+
+function startRemediation() {
+  inRemediation    = true;
+  remediationScore = 0;
+  rounds           = [...missedRounds];
+  roundIndex       = 0;
+  answered         = false;
+  wordPlayed       = false;
+
+  const label = document.getElementById('set-label');
+  label.textContent = "Let's try the tricky ones again! 🎯";
+  label.classList.add('remediation');
+  document.getElementById('progress-fill').classList.add('remediation');
+
+  renderRound();
 }
 
 // ── Result screen ─────────────────────────────────────────
@@ -716,6 +777,19 @@ function showResult() {
   document.getElementById('result-stars').textContent = stars;
   document.getElementById('result-score').textContent = `${score} out of ${ROUNDS_PER_GAME}`;
   document.getElementById('result-msg').textContent   = msg;
+
+  // Remediation summary
+  const remEl = document.getElementById('result-remediation');
+  if (inRemediation) {
+    const n = missedRounds.length;
+    const word = n === 1 ? 'word' : 'words';
+    remEl.textContent = remediationScore === n
+      ? `And you got all ${n} tricky ${word} on the second try! 🎉`
+      : `You got ${remediationScore} of ${n} tricky ${word} on the second try.`;
+    remEl.style.display = 'block';
+  } else {
+    remEl.style.display = 'none';
+  }
 
   // Persist
   const key  = 'saba_phonics_' + currentSet;
