@@ -2,30 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Saba's English</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #F3F0FF;
+  background: #1a1a2e;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 20px;
-  color: #1a1a2e;
+  padding: 32px 20px;
+  color: #fff;
 }
 
 .hero {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 44px;
 }
 
 .hero-icon {
-  font-size: 4rem;
+  font-size: 3.8rem;
   display: block;
   margin-bottom: 12px;
 }
@@ -33,126 +33,275 @@ body {
 .hero h1 {
   font-size: 2rem;
   font-weight: 900;
-  color: #5f3dc4;
+  color: #fff;
   letter-spacing: -0.5px;
 }
 
 .hero p {
-  font-size: 1.05rem;
-  color: #7048e8;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
   margin-top: 6px;
 }
 
-.subjects {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+/* ── World cards ─────────────────────────── */
+.worlds {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   margin-bottom: 36px;
 }
 
-.subject-btn {
+.world-card {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 28px 16px;
+  gap: 16px;
+  padding: 22px 20px;
   border: none;
   border-radius: 24px;
   text-decoration: none;
-  font-weight: 800;
-  font-size: 1.05rem;
+  cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
-  box-shadow: 0 5px 0 rgba(0,0,0,0.18);
   -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
 }
 
-.subject-btn:active {
+.world-card:active {
   transform: translateY(4px);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.18);
 }
 
-.subject-icon {
-  font-size: 2.8rem;
-  line-height: 1;
-}
-
-.subject-name {
-  color: inherit;
-}
-
-.phonics-btn {
-  background: #7048e8;
+/* Word World — purple */
+.world-phonics {
+  background: linear-gradient(135deg, #7048e8 0%, #5f3dc4 100%);
+  box-shadow: 0 6px 0 #3d249c;
   color: #fff;
 }
 
-.locked-btn {
-  background: #dee2e6;
-  color: #adb5bd;
-  cursor: not-allowed;
-  pointer-events: none;
+.world-phonics:active {
+  box-shadow: 0 2px 0 #3d249c;
 }
 
-.locked-btn .subject-icon { opacity: 0.4; }
+/* Story World — amber */
+.world-stories {
+  background: linear-gradient(135deg, #f08c00 0%, #e67700 100%);
+  box-shadow: 0 6px 0 #b85c00;
+  color: #fff;
+}
 
-.coming-badge {
+.world-stories:active {
+  box-shadow: 0 2px 0 #b85c00;
+}
+
+/* Class World — green */
+.world-class {
+  background: linear-gradient(135deg, #2f9e44 0%, #1a7431 100%);
+  box-shadow: 0 6px 0 #0d5a1e;
+  color: #fff;
+}
+
+.world-class:active {
+  box-shadow: 0 2px 0 #0d5a1e;
+}
+
+.class-tag {
   font-size: 0.65rem;
-  background: #adb5bd;
-  color: #fff;
+  background: rgba(255,255,255,0.25);
   padding: 2px 8px;
   border-radius: 20px;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
 }
 
+/* Locked world */
+.world-locked {
+  background: rgba(255,255,255,0.08);
+  box-shadow: none;
+  border: 2px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.45);
+  cursor: default;
+  pointer-events: none;
+}
+
+.world-icon {
+  font-size: 3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.world-info { flex: 1; }
+
+.world-name {
+  font-size: 1.2rem;
+  font-weight: 900;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.world-desc {
+  font-size: 0.82rem;
+  opacity: 0.85;
+  line-height: 1.35;
+}
+
+.lock-badge {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+/* ── Quest hint ──────────────────────────── */
+.quest-hint {
+  font-size: 0.78rem;
+  text-align: center;
+  color: rgba(255,255,255,0.45);
+  max-width: 300px;
+  line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+/* ── Stats ───────────────────────────────── */
 .stats {
   font-size: 0.9rem;
-  color: #868e96;
+  color: rgba(255,255,255,0.45);
   text-align: center;
 }
 
 .stats strong {
-  color: #5f3dc4;
+  color: #a78bfa;
   font-weight: 800;
+}
+
+.stats a {
+  color: rgba(255,255,255,0.45);
+  text-decoration: underline;
+  margin-left: 10px;
 }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <span class="hero-icon">📚</span>
+  <span class="hero-icon">⭐</span>
   <h1>Saba's English</h1>
-  <p>Let's practise together!</p>
+  <p>Let's learn together!</p>
 </div>
 
-<div class="subjects">
-  <a href="phonics/" class="subject-btn phonics-btn">
-    <span class="subject-icon">🔤</span>
-    <span class="subject-name">Phonics</span>
+<div class="worlds">
+  <!-- Word World — always available -->
+  <a href="phonics/" class="world-card world-phonics">
+    <span class="world-icon">🔤</span>
+    <div class="world-info">
+      <span class="world-name">Word World</span>
+      <span class="world-desc">Listen, match and build words</span>
+    </div>
   </a>
-  <div class="subject-btn locked-btn">
-    <span class="subject-icon">🔢</span>
-    <span class="subject-name">Maths</span>
-    <span class="coming-badge">soon</span>
-  </div>
+
+  <!-- Today's Class -->
+  <a href="classes/2026-08-30/" class="world-card world-class">
+    <span class="world-icon">📅</span>
+    <div class="world-info">
+      <span class="world-name">Today's Class</span>
+      <span class="world-desc">Let's learn our vowels!</span>
+    </div>
+    <span class="class-tag">30 Aug</span>
+  </a>
+
+  <!-- Story World — locked or unlocked based on quest -->
+  <div id="story-world-slot"></div>
 </div>
+
+<div class="quest-hint" id="quest-hint"></div>
 
 <div class="stats">
-  <strong id="total-sessions">0</strong> sessions practised
+  <strong id="total-sessions">0</strong> sessions played
   &nbsp;·&nbsp;
-  <a href="progress/" style="color:var(--purple-dark);font-weight:800;text-decoration:none;">📊 Progress</a>
+  <a href="progress/">📊 Progress</a>
 </div>
 
 <script>
-const keys = ['short-a', 'short-e', 'a-vs-e'];
-const total = keys.reduce((n, k) => {
-  const d = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{"played":0}');
-  return n + (d.played || 0);
-}, 0);
-document.getElementById('total-sessions').textContent = total;
+// ── Quest unlock check ────────────────────────────────────
+
+function storyUnlocked() {
+  const a = JSON.parse(localStorage.getItem('saba_phonics_short-a') || '{}');
+  const e = JSON.parse(localStorage.getItem('saba_phonics_short-e') || '{}');
+  const ladderKeys = ['at','an','et','en','it','in','ot','op'];
+  const anyLadder  = ladderKeys.some(k => {
+    const d = JSON.parse(localStorage.getItem('saba_ladders_' + k) || '{}');
+    return (d.played || 0) > 0;
+  });
+  return (a.played || 0) >= 1 && (e.played || 0) >= 1 && anyLadder;
+}
+
+function questHint() {
+  const a = JSON.parse(localStorage.getItem('saba_phonics_short-a') || '{}');
+  const e = JSON.parse(localStorage.getItem('saba_phonics_short-e') || '{}');
+  const aPlayed = (a.played || 0) >= 1;
+  const ePlayed = (e.played || 0) >= 1;
+  const ladderKeys = ['at','an','et','en','it','in','ot','op'];
+  const anyLadder  = ladderKeys.some(k => {
+    const d = JSON.parse(localStorage.getItem('saba_ladders_' + k) || '{}');
+    return (d.played || 0) > 0;
+  });
+
+  if (!aPlayed || !ePlayed) {
+    const missing = [];
+    if (!aPlayed) missing.push('Short A');
+    if (!ePlayed) missing.push('Short E');
+    return `Play ${missing.join(' & ')} to start unlocking Story World`;
+  }
+  if (!anyLadder) {
+    return 'Play a Word Ladder to unlock Story World';
+  }
+  return '';
+}
+
+// ── Total sessions counter ────────────────────────────────
+
+function totalSessions() {
+  const pairKeys   = ['short-a', 'short-e', 'a-vs-e'];
+  const ladderKeys = ['at','an','et','en','it','in','ot','op'];
+  let n = 0;
+  pairKeys.forEach(k => {
+    const d = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
+    n += d.played || 0;
+  });
+  ladderKeys.forEach(k => {
+    const d = JSON.parse(localStorage.getItem('saba_ladders_' + k) || '{}');
+    n += d.played || 0;
+  });
+  return n;
+}
+
+// ── Render ────────────────────────────────────────────────
+
+const slot = document.getElementById('story-world-slot');
+
+if (storyUnlocked()) {
+  slot.innerHTML = `
+    <a href="book/" class="world-card world-stories">
+      <span class="world-icon">📖</span>
+      <div class="world-info">
+        <span class="world-name">Story World</span>
+        <span class="world-desc">Make your own book!</span>
+      </div>
+    </a>`;
+  document.getElementById('quest-hint').textContent = '';
+} else {
+  slot.innerHTML = `
+    <div class="world-card world-locked">
+      <span class="world-icon">📖</span>
+      <div class="world-info">
+        <span class="world-name">Story World</span>
+        <span class="world-desc">Make your own book</span>
+      </div>
+      <span class="lock-badge">🔒</span>
+    </div>`;
+  document.getElementById('quest-hint').textContent = questHint();
+}
+
+document.getElementById('total-sessions').textContent = totalSessions();
 </script>
 
 </body>

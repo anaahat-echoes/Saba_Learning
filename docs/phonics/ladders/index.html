@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Saba's Word Ladders</title>
+<title>Word Ladders</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --purple:       #7048e8;
-  --purple-dark:  #5f3dc4;
-  --purple-light: #F3F0FF;
-  --green:        #2f9e44;
-  --green-light:  #d3f9d8;
-  --red:          #e03131;
-  --orange:       #f08c00;
-  --gray:         #868e96;
-  --bg:           #F3F0FF;
+  --purple:      #7048e8;
+  --purple-dark: #5f3dc4;
+  --purple-light:#F3F0FF;
+  --green:       #2f9e44;
+  --green-light: #d3f9d8;
+  --red:         #e03131;
+  --red-light:   #ffe3e3;
+  --orange:      #f08c00;
+  --gray:        #868e96;
+  --bg:          #F3F0FF;
 }
 
 body {
@@ -27,14 +28,16 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.screen { display: none; min-height: 100vh; flex-direction: column; }
-.screen.active { display: flex; }
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
 
+/* ── Header ──────────────────────────────── */
 .page-header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 16px 20px 12px;
+  flex-shrink: 0;
 }
 
 .back-btn {
@@ -57,8 +60,10 @@ body {
   color: var(--purple-dark);
 }
 
-/* ── Family picker ───────────────────────── */
-#screen-pick { padding: 0 20px 32px; }
+/* ── Family Picker ───────────────────────── */
+#screen-pick {
+  padding: 0 20px 40px;
+}
 
 .pick-heading {
   font-size: 1.5rem;
@@ -75,92 +80,101 @@ body {
   padding: 0 4px;
 }
 
-.family-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.unlock-banner {
+  display: none;
+  background: #fff9db;
+  border: 2px solid #f08c00;
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #7c4700;
+  text-align: center;
+}
+
+.unlock-banner.show { display: block; }
+
+.family-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
   max-width: 480px;
   margin: 0 auto;
-  width: 100%;
-}
-
-.family-btn {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 18px 18px;
-  border: none;
-  border-radius: 20px;
-  background: #fff;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
-  cursor: pointer;
-  text-align: left;
-  transition: transform 0.1s, box-shadow 0.1s;
-  width: 100%;
-  border-left: 5px solid;
-}
-
-.family-btn:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.1);
-}
-
-.family-name {
-  font-size: 1.4rem;
-  font-weight: 900;
-  font-family: 'Courier New', monospace;
-  display: block;
-  color: #1a1a2e;
-}
-
-.family-words {
-  font-size: 0.78rem;
-  color: var(--gray);
-  font-family: 'Courier New', monospace;
-  display: block;
-  margin-top: 3px;
-  letter-spacing: 0.02em;
-}
-
-.family-best {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--purple);
-  margin-left: auto;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.family-btn.locked {
-  opacity: 0.45;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.lock-badge {
-  font-size: 1.1rem;
-  flex-shrink: 0;
-  margin-left: auto;
 }
 
 .section-divider {
-  font-size: 0.7rem;
+  grid-column: 1 / -1;
+  font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--gray);
-  padding: 16px 4px 8px;
-  max-width: 480px;
-  margin: 0 auto;
-  width: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 8px 4px 2px;
 }
 
-/* ── Game screen ─────────────────────────── */
+.family-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
+  text-align: center;
+}
+
+.family-card:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+
+.family-card.locked {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: default;
+}
+
+.family-rime {
+  font-size: 1.8rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  line-height: 1;
+}
+
+.family-words {
+  font-size: 0.72rem;
+  color: var(--gray);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.04em;
+}
+
+.family-best {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--purple);
+  min-height: 16px;
+}
+
+.lock-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 1rem;
+}
+
+/* ── Game Screen ──────────────────────────── */
 .game-header {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 14px 20px 10px;
+  flex-shrink: 0;
 }
 
 .progress-track {
@@ -173,7 +187,7 @@ body {
 
 .progress-fill {
   height: 100%;
-  background: var(--purple);
+  background: var(--orange);
   border-radius: 4px;
   transition: width 0.4s ease;
   width: 0%;
@@ -186,156 +200,122 @@ body {
   white-space: nowrap;
 }
 
-.family-label-game {
-  text-align: center;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--purple);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 4px 20px 20px;
-}
-
 /* Word display */
-.word-display-wrap {
+.word-display {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 0 20px 28px;
-  gap: 18px;
+  justify-content: center;
+  gap: 4px;
+  padding: 24px 20px 8px;
+  flex-shrink: 0;
 }
 
 .word-pic {
-  font-size: 5rem;
+  font-size: 4.5rem;
   line-height: 1;
-  user-select: none;
+  margin-right: 12px;
 }
 
-.word-structure {
+.onset-slot {
+  width: 60px;
+  height: 72px;
+  border-radius: 14px;
+  border: 3px dashed #ced4da;
   display: flex;
-  align-items: flex-end;
-  gap: 4px;
-}
-
-.onset-blank {
-  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 68px;
-  height: 76px;
-  border: 3px dashed #bbb;
-  border-radius: 14px;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 900;
   font-family: 'Courier New', monospace;
-  color: #bbb;
-  transition: background 0.25s, color 0.25s, border-color 0.25s;
+  color: #1a1a2e;
+  background: #fff;
+  transition: border-color 0.2s, background 0.2s;
 }
 
-.onset-blank.filled {
+.onset-slot.filled {
   border-style: solid;
   border-color: var(--green);
   background: var(--green-light);
-  color: var(--green);
+  animation: pop-in 0.25s ease;
 }
 
-.rime-display {
-  font-size: 2.5rem;
+@keyframes pop-in {
+  0%   { transform: scale(0.8); opacity: 0.5; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.rime-part {
+  font-size: 2.2rem;
   font-weight: 900;
   font-family: 'Courier New', monospace;
-  color: #333;
-  letter-spacing: 5px;
-  padding-bottom: 6px;
+  color: #495057;
 }
 
-/* Letter options — 2×2 grid */
-.letter-options {
+/* Letter buttons */
+.letter-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  padding: 0 24px;
-  max-width: 340px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px 24px;
+  max-width: 480px;
   margin: 0 auto;
   width: 100%;
 }
 
 .letter-btn {
   background: #fff;
-  border: 3px solid #e9ecef;
-  border-radius: 20px;
-  font-size: 2.2rem;
+  border: 3px solid transparent;
+  border-radius: 18px;
+  padding: 18px 8px;
+  font-size: 1.8rem;
   font-weight: 900;
   font-family: 'Courier New', monospace;
-  color: #333;
-  padding: 22px;
+  color: #1a1a2e;
   cursor: pointer;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
-  transition: transform 0.1s, box-shadow 0.1s;
-  line-height: 1;
-  -webkit-tap-highlight-color: transparent;
-  text-transform: uppercase;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  transition: transform 0.08s, box-shadow 0.08s, opacity 0.15s;
 }
 
 .letter-btn:active {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+
+.letter-btn.correct-flash {
+  background: var(--green-light);
+  border-color: var(--green);
+}
+
+.letter-btn.wrong-shake {
+  animation: shake 0.35s ease;
+  background: var(--red-light);
+  border-color: var(--red);
 }
 
 .letter-btn.dimmed {
-  opacity: 0.3;
+  opacity: 0.35;
   pointer-events: none;
 }
 
-@keyframes wrong-shake {
+@keyframes shake {
   0%, 100% { transform: translateX(0); }
-  20%       { transform: translateX(-10px); }
-  40%       { transform: translateX(10px); }
-  60%       { transform: translateX(-7px); }
-  80%       { transform: translateX(6px); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
 }
 
-.letter-btn.shake {
-  animation: wrong-shake 0.4s ease;
-  border-color: var(--red);
-  color: var(--red);
-}
-
-/* Hear button — small, under word */
-.hear-wrap {
-  display: flex;
-  justify-content: center;
-  padding: 0 20px 20px;
-}
-
-.hear-btn {
-  background: none;
-  border: 2px solid #ddd;
-  border-radius: 50px;
-  padding: 8px 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--gray);
-  cursor: pointer;
-  gap: 6px;
-  display: flex;
-  align-items: center;
-}
-
-.hear-btn:active { background: #f0f0f0; }
-
-.game-feedback {
+.hint-text {
   text-align: center;
-  padding: 12px 20px 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
-  min-height: 44px;
   color: var(--gray);
+  min-height: 32px;
+  padding: 4px 20px;
 }
 
-.game-feedback.correct { color: var(--green); }
-.game-feedback.wrong   { color: var(--red); }
-
-/* ── Result screen ───────────────────────── */
+/* ── Result Screen ──────────────────────── */
 #screen-result {
   align-items: center;
   justify-content: center;
@@ -343,9 +323,38 @@ body {
   text-align: center;
 }
 
-.result-stars { font-size: 3rem; margin-bottom: 16px; letter-spacing: 4px; }
-.result-score { font-size: 1.8rem; font-weight: 900; color: var(--purple-dark); margin-bottom: 6px; }
-.result-msg   { font-size: 1rem; color: var(--gray); margin-bottom: 36px; }
+.result-stars {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  letter-spacing: 4px;
+}
+
+.result-score {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--purple-dark);
+  margin-bottom: 8px;
+}
+
+.result-msg {
+  font-size: 1rem;
+  color: var(--gray);
+  margin-bottom: 32px;
+}
+
+.unlock-notice {
+  display: none;
+  background: #fff9db;
+  border: 2px solid #f08c00;
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #7c4700;
+}
+
+.unlock-notice.show { display: block; }
 
 .result-btns {
   display: flex;
@@ -382,6 +391,7 @@ body {
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
+  transition: background 0.15s;
 }
 
 .btn-secondary:active { background: var(--purple-light); }
@@ -389,55 +399,55 @@ body {
 </head>
 <body>
 
-<!-- ── SCREEN 1: Family picker ────────────── -->
+<!-- ── SCREEN 1: Family Picker ────────────── -->
 <div id="screen-pick" class="screen active">
   <div class="page-header">
-    <a href="../" class="back-btn" aria-label="Back to Phonics">←</a>
+    <a href="../" class="back-btn" aria-label="Back">←</a>
     <span class="page-title">Word Ladders</span>
   </div>
-  <div style="padding: 8px 24px 0;">
+
+  <div style="padding: 4px 24px 0;">
     <div class="pick-heading">Pick a word family</div>
-    <div class="pick-sub">Tap the right starting letter for each picture</div>
+    <div class="pick-sub">Fill in the missing letter!</div>
+    <div class="unlock-banner" id="unlock-banner"></div>
   </div>
-  <div class="family-list" id="family-list"></div>
+
+  <div class="family-grid" id="family-grid">
+    <!-- rendered by JS -->
+  </div>
 </div>
 
-<!-- ── SCREEN 2: Game ─────────────────────── -->
+<!-- ── SCREEN 2: Game ──────────────────────── -->
 <div id="screen-game" class="screen">
   <div class="game-header">
-    <button class="back-btn" onclick="goToPicker()" aria-label="Back to families">←</button>
+    <button class="back-btn" onclick="goToPicker()" aria-label="Back">←</button>
     <div class="progress-track">
       <div class="progress-fill" id="progress-fill"></div>
     </div>
-    <div class="round-label" id="round-label">1 / 6</div>
+    <div class="round-label" id="round-label">1 / 4</div>
   </div>
 
-  <div class="family-label-game" id="family-label-game"></div>
-
-  <div class="word-display-wrap">
-    <div class="word-pic" id="word-pic" aria-hidden="true"></div>
-    <div class="word-structure">
-      <span class="onset-blank" id="onset-blank">_</span>
-      <span class="rime-display" id="rime-display"></span>
-    </div>
+  <div class="word-display">
+    <span class="word-pic" id="word-pic">🐱</span>
+    <div class="onset-slot" id="onset-slot">?</div>
+    <div class="rime-part" id="rime-part">at</div>
   </div>
 
-  <div class="hear-wrap">
-    <button class="hear-btn" onclick="speakCurrentWord()">🔊 Say the word</button>
+  <div class="hint-text" id="hint-text"></div>
+
+  <div class="letter-grid" id="letter-grid">
+    <!-- rendered by JS -->
   </div>
-
-  <div class="letter-options" id="letter-options" role="group" aria-label="Choose the starting letter"></div>
-
-  <div class="game-feedback" id="game-feedback"></div>
 </div>
 
-<!-- ── SCREEN 3: Result ───────────────────── -->
+<!-- ── SCREEN 3: Result ────────────────────── -->
 <div id="screen-result" class="screen">
-  <div class="result-stars" id="result-stars"></div>
+  <div class="result-stars" id="result-stars">⭐⭐⭐</div>
   <div class="result-score" id="result-score"></div>
-  <div class="result-msg"   id="result-msg"></div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="unlock-notice" id="unlock-notice"></div>
   <div class="result-btns">
-    <button class="btn-primary"   onclick="playAgain()">Play again</button>
+    <button class="btn-primary" onclick="playAgain()">Play again</button>
     <button class="btn-secondary" onclick="goToPicker()">Choose family</button>
   </div>
 </div>
@@ -447,114 +457,101 @@ body {
 
 const FAMILIES = {
   '-at': {
-    label: '-at family',
-    rime: 'at',
-    color: '#f08c00',
+    rime: 'at', color: '#f08c00',
     words: [
-      { onset: 'c', word: 'cat', pic: '🐱' },
-      { onset: 'h', word: 'hat', pic: '🎩' },
-      { onset: 'b', word: 'bat', pic: '🏏' },
-      { onset: 'r', word: 'rat', pic: '🐀' },
+      { word: 'cat', pic: '🐱', onset: 'c' },
+      { word: 'hat', pic: '🎩', onset: 'h' },
+      { word: 'bat', pic: '🏏', onset: 'b' },
+      { word: 'rat', pic: '🐀', onset: 'r' },
     ],
   },
   '-an': {
-    label: '-an family',
-    rime: 'an',
-    color: '#2f9e44',
+    rime: 'an', color: '#2f9e44',
     words: [
-      { onset: 'p', word: 'pan', pic: '🍳' },
-      { onset: 'm', word: 'man', pic: '👨' },
-      { onset: 'v', word: 'van', pic: '🚐' },
-      { onset: 'f', word: 'fan', pic: '🪭' },
-      { onset: 'r', word: 'ran', pic: '🏃' },
+      { word: 'pan', pic: '🍳', onset: 'p' },
+      { word: 'man', pic: '👨', onset: 'm' },
+      { word: 'van', pic: '🚐', onset: 'v' },
+      { word: 'fan', pic: '🪭', onset: 'f' },
     ],
   },
   '-et': {
-    label: '-et family',
-    rime: 'et',
-    color: '#1971c2',
+    rime: 'et', color: '#1971c2',
     words: [
-      { onset: 'n', word: 'net', pic: '🕸️' },
-      { onset: 'p', word: 'pet', pic: '🐕' },
-      { onset: 'j', word: 'jet', pic: '✈️' },
-      { onset: 'v', word: 'vet', pic: '🐄' },
-      { onset: 'w', word: 'wet', pic: '💧' },
+      { word: 'net', pic: '🕸️', onset: 'n' },
+      { word: 'pet', pic: '🐕', onset: 'p' },
+      { word: 'jet', pic: '✈️', onset: 'j' },
+      { word: 'vet', pic: '🐄', onset: 'v' },
     ],
   },
   '-en': {
-    label: '-en family',
-    rime: 'en',
-    color: '#9c36b5',
+    rime: 'en', color: '#9c36b5',
     words: [
-      { onset: 'h', word: 'hen', pic: '🐔' },
-      { onset: 'p', word: 'pen', pic: '✏️' },
-      { onset: 't', word: 'ten', pic: '🔟' },
-      { onset: 'm', word: 'men', pic: '👥' },
+      { word: 'hen', pic: '🐔', onset: 'h' },
+      { word: 'pen', pic: '✏️', onset: 'p' },
+      { word: 'ten', pic: '🔟', onset: 't' },
+      { word: 'men', pic: '👥', onset: 'm' },
     ],
   },
-
-  // ── Short I — locked until A and E are solid ──────────
+  // Short I — locked until Short A + Short E both played
   '-it': {
-    label: '-it family',
-    rime: 'it',
-    color: '#1c7ed6',
-    locked: true,
+    rime: 'it', color: '#1c7ed6', locked: true,
     words: [
-      { onset: 's', word: 'sit', pic: '🪑' },
-      { onset: 'h', word: 'hit', pic: '🥊' },
-      { onset: 'f', word: 'fit', pic: '💪' },
-      { onset: 'k', word: 'kit', pic: '🧰' },
+      { word: 'sit', pic: '🪑', onset: 's' },
+      { word: 'hit', pic: '🥊', onset: 'h' },
+      { word: 'fit', pic: '💪', onset: 'f' },
+      { word: 'kit', pic: '🧰', onset: 'k' },
     ],
   },
   '-in': {
-    label: '-in family',
-    rime: 'in',
-    color: '#1c7ed6',
-    locked: true,
+    rime: 'in', color: '#1c7ed6', locked: true,
     words: [
-      { onset: 'p', word: 'pin', pic: '📌' },
-      { onset: 'w', word: 'win', pic: '🏆' },
-      { onset: 'b', word: 'bin', pic: '🗑️' },
-      { onset: 'f', word: 'fin', pic: '🐟' },
+      { word: 'pin', pic: '📌', onset: 'p' },
+      { word: 'win', pic: '🏆', onset: 'w' },
+      { word: 'bin', pic: '🗑️', onset: 'b' },
+      { word: 'fin', pic: '🐟', onset: 'f' },
     ],
   },
-
-  // ── Short O — locked until A and E are solid ──────────
+  // Short O — locked until Short A + Short E both played
   '-ot': {
-    label: '-ot family',
-    rime: 'ot',
-    color: '#e03131',
-    locked: true,
+    rime: 'ot', color: '#e03131', locked: true,
     words: [
-      { onset: 'p', word: 'pot', pic: '🍲' },
-      { onset: 'h', word: 'hot', pic: '🔥' },
-      { onset: 'c', word: 'cot', pic: '🛏️' },
-      { onset: 'd', word: 'dot', pic: '⚫' },
+      { word: 'pot', pic: '🍲', onset: 'p' },
+      { word: 'hot', pic: '🔥', onset: 'h' },
+      { word: 'cot', pic: '🛏️', onset: 'c' },
+      { word: 'dot', pic: '⚫', onset: 'd' },
     ],
   },
   '-op': {
-    label: '-op family',
-    rime: 'op',
-    color: '#e03131',
-    locked: true,
+    rime: 'op', color: '#e03131', locked: true,
     words: [
-      { onset: 'm', word: 'mop', pic: '🧹' },
-      { onset: 'p', word: 'pop', pic: '🎈' },
-      { onset: 'h', word: 'hop', pic: '🐇' },
-      { onset: 'c', word: 'cop', pic: '👮' },
+      { word: 'mop', pic: '🧹', onset: 'm' },
+      { word: 'pop', pic: '🎈', onset: 'p' },
+      { word: 'hop', pic: '🐇', onset: 'h' },
+      { word: 'cop', pic: '👮', onset: 'c' },
     ],
   },
 };
 
-// ── State ─────────────────────────────────────────────────
+const LOCKED_KEYS = ['-it', '-in', '-ot', '-op'];
+const I_KEYS      = ['-it', '-in'];
+const O_KEYS      = ['-ot', '-op'];
 
-let currentFamily   = null;
-let rounds          = [];
-let roundIndex      = 0;
-let firstAttempts   = 0;
-let perWordFirstTry = [];   // true = got it first try
-let triedWrong      = false;
-let locked          = false;
+// ── Quest unlock check ────────────────────────────────────
+
+function isIOUnlocked() {
+  const a = JSON.parse(localStorage.getItem('saba_phonics_short-a') || '{}');
+  const e = JSON.parse(localStorage.getItem('saba_phonics_short-e') || '{}');
+  return (a.played || 0) >= 1 && (e.played || 0) >= 1;
+}
+
+// ── Game state ────────────────────────────────────────────
+
+let currentFamilyKey = null;
+let currentWords     = [];
+let wordIndex        = 0;
+let perWordFirstTry  = [];
+let triedWrong       = false;
+let waitingAdvance   = false;
 
 // ── Utils ─────────────────────────────────────────────────
 
@@ -567,6 +564,8 @@ function shuffle(arr) {
   return a;
 }
 
+// ── TTS ───────────────────────────────────────────────────
+
 function speak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
@@ -577,213 +576,6 @@ function speak(text) {
   window.speechSynthesis.speak(utt);
 }
 
-function speakCurrentWord() {
-  if (rounds[roundIndex]) speak(rounds[roundIndex].word);
-}
-
-// ── Picker ────────────────────────────────────────────────
-
-function buildPicker() {
-  const list = document.getElementById('family-list');
-  list.innerHTML = '';
-
-  let shownLockDivider = false;
-
-  Object.entries(FAMILIES).forEach(([key, fam]) => {
-    // Insert a divider before the first locked family
-    if (fam.locked && !shownLockDivider) {
-      shownLockDivider = true;
-      const div = document.createElement('div');
-      div.className = 'section-divider';
-      div.textContent = 'Coming soon — Short I & O';
-      list.appendChild(div);
-    }
-
-    const stored  = JSON.parse(localStorage.getItem('saba_ladders_' + key.slice(1)) || '{}');
-    const preview = fam.words.slice(0, 4).map(w => w.word).join(' · ');
-
-    const btn = document.createElement('button');
-    btn.className = 'family-btn' + (fam.locked ? ' locked' : '');
-    btn.style.borderLeftColor = fam.color;
-
-    if (fam.locked) {
-      btn.innerHTML = `
-        <div style="flex:1;min-width:0;">
-          <span class="family-name">${key}</span>
-          <span class="family-words">${preview}</span>
-        </div>
-        <span class="lock-badge">🔒</span>
-      `;
-    } else {
-      const bestTxt = stored.bestScore != null
-        ? `Best: ${stored.bestScore}/${fam.words.length} first try`
-        : '';
-      btn.innerHTML = `
-        <div style="flex:1;min-width:0;">
-          <span class="family-name">${key}</span>
-          <span class="family-words">${preview}</span>
-        </div>
-        <span class="family-best">${bestTxt}</span>
-      `;
-      btn.addEventListener('click', () => startGame(key));
-    }
-
-    list.appendChild(btn);
-  });
-}
-
-function goToPicker() {
-  buildPicker();
-  showScreen('screen-pick');
-}
-
-// ── Game ──────────────────────────────────────────────────
-
-function getOptions(familyKey, correctOnset) {
-  const all    = FAMILIES[familyKey].words.map(w => w.onset);
-  const others = shuffle(all.filter(o => o !== correctOnset)).slice(0, 3);
-  return shuffle([correctOnset, ...others]);
-}
-
-function startGame(familyKey) {
-  currentFamily   = familyKey;
-  rounds          = shuffle([...FAMILIES[familyKey].words]);
-  roundIndex      = 0;
-  firstAttempts   = 0;
-  perWordFirstTry = [];
-  triedWrong      = false;
-  locked          = false;
-
-  document.getElementById('family-label-game').textContent =
-    FAMILIES[familyKey].label.toUpperCase();
-  document.getElementById('progress-fill').style.width = '0%';
-
-  showScreen('screen-game');
-  renderRound();
-}
-
-function renderRound() {
-  triedWrong = false;
-  locked     = false;
-
-  const fam   = FAMILIES[currentFamily];
-  const round = rounds[roundIndex];
-
-  document.getElementById('progress-fill').style.width =
-    `${(roundIndex / rounds.length) * 100}%`;
-  document.getElementById('round-label').textContent =
-    `${roundIndex + 1} / ${rounds.length}`;
-
-  document.getElementById('word-pic').textContent      = round.pic;
-  document.getElementById('rime-display').textContent  = fam.rime;
-
-  const blank = document.getElementById('onset-blank');
-  blank.textContent = '_';
-  blank.classList.remove('filled');
-
-  // Render letter buttons
-  const options   = getOptions(currentFamily, round.onset);
-  const container = document.getElementById('letter-options');
-  container.innerHTML = '';
-  options.forEach(letter => {
-    const btn = document.createElement('button');
-    btn.className   = 'letter-btn';
-    btn.textContent = letter.toUpperCase();
-    btn.addEventListener('click', () => handleLetter(letter, btn));
-    container.appendChild(btn);
-  });
-
-  const fb = document.getElementById('game-feedback');
-  fb.textContent = '';
-  fb.className   = 'game-feedback';
-}
-
-function handleLetter(letter, btn) {
-  if (locked) return;
-
-  const correct = letter === rounds[roundIndex].onset;
-
-  if (correct) {
-    locked = true;
-    const wasFirst = !triedWrong;
-    if (wasFirst) firstAttempts++;
-    perWordFirstTry.push(wasFirst);
-
-    // Fill blank
-    const blank = document.getElementById('onset-blank');
-    blank.textContent = letter.toUpperCase();
-    blank.classList.add('filled');
-
-    // Dim all buttons
-    document.querySelectorAll('.letter-btn').forEach(b => b.classList.add('dimmed'));
-
-    // Feedback + TTS
-    const fb = document.getElementById('game-feedback');
-    fb.textContent = `✓ ${rounds[roundIndex].word.toUpperCase()}!`;
-    fb.className   = 'game-feedback correct';
-    setTimeout(() => speak(rounds[roundIndex].word), 280);
-
-    setTimeout(() => {
-      roundIndex++;
-      if (roundIndex >= rounds.length) {
-        showResult();
-      } else {
-        renderRound();
-      }
-    }, 1700);
-
-  } else {
-    triedWrong = true;
-    // Shake then briefly block that button
-    btn.classList.add('shake');
-    btn.addEventListener('animationend', () => btn.classList.remove('shake'), { once: true });
-    btn.classList.add('dimmed');
-    setTimeout(() => btn.classList.remove('dimmed'), 900);
-
-    const fb = document.getElementById('game-feedback');
-    fb.textContent = 'Try again!';
-    fb.className   = 'game-feedback wrong';
-  }
-}
-
-// ── Result ────────────────────────────────────────────────
-
-function showResult() {
-  showScreen('screen-result');
-
-  const total = rounds.length;
-  const pct   = firstAttempts / total;
-  const tier  = pct >= 0.9 ? 0 : pct >= 0.6 ? 1 : pct >= 0.3 ? 2 : 3;
-  const stars = ['⭐⭐⭐', '⭐⭐☆', '⭐☆☆', '☆☆☆'][tier];
-  const msg   = [
-    'Amazing — first time every time!',
-    'Really good — nearly all first try!',
-    'Good effort — keep practising!',
-    "Let's try again!",
-  ][tier];
-
-  document.getElementById('result-stars').textContent = stars;
-  document.getElementById('result-score').textContent = `${firstAttempts} / ${total} first try`;
-  document.getElementById('result-msg').textContent   = msg;
-
-  // Persist to localStorage
-  const storKey    = 'saba_ladders_' + currentFamily.slice(1);
-  const prev       = JSON.parse(localStorage.getItem(storKey) || '{"played":0}');
-  prev.played      = (prev.played  || 0) + 1;
-  prev.bestScore   = Math.max(prev.bestScore || 0, firstAttempts);
-  prev.totalWords  = total;
-  prev.lastPlayed  = new Date().toISOString().slice(0, 10);
-  // Store words that needed more than one try (useful for teacher report)
-  prev.lastMissed  = rounds
-    .filter((_, i) => !perWordFirstTry[i])
-    .map(r => r.word);
-  localStorage.setItem(storKey, JSON.stringify(prev));
-}
-
-function playAgain() {
-  startGame(currentFamily);
-}
-
 // ── Screens ───────────────────────────────────────────────
 
 function showScreen(id) {
@@ -792,9 +584,242 @@ function showScreen(id) {
   window.scrollTo(0, 0);
 }
 
+// ── Picker ────────────────────────────────────────────────
+
+function goToPicker() {
+  renderPicker();
+  showScreen('screen-pick');
+}
+
+function renderPicker() {
+  const unlocked = isIOUnlocked();
+  const grid     = document.getElementById('family-grid');
+  grid.innerHTML = '';
+
+  // Unlock banner
+  const banner = document.getElementById('unlock-banner');
+  if (unlocked) {
+    banner.textContent = '🎉 Short I & Short O unlocked! Explore new word families!';
+    banner.classList.add('show');
+  } else {
+    banner.classList.remove('show');
+  }
+
+  // Short A & E section
+  const aeLabel = document.createElement('div');
+  aeLabel.className = 'section-divider';
+  aeLabel.textContent = 'Short A & E';
+  grid.appendChild(aeLabel);
+
+  ['-at', '-an', '-et', '-en'].forEach(key => renderFamilyCard(grid, key, false));
+
+  // Short I & O section
+  const ioLabel = document.createElement('div');
+  ioLabel.className = 'section-divider';
+  ioLabel.textContent = unlocked
+    ? 'Short I & O — unlocked!'
+    : 'Short I & O — play A & E games to unlock 🔒';
+  grid.appendChild(ioLabel);
+
+  LOCKED_KEYS.forEach(key => renderFamilyCard(grid, key, !unlocked));
+}
+
+function renderFamilyCard(grid, key, forcelock) {
+  const fam    = FAMILIES[key];
+  const locked = forcelock;
+
+  const card = document.createElement('button');
+  card.className = 'family-card' + (locked ? ' locked' : '');
+  card.style.borderTop = `4px solid ${fam.color}`;
+
+  if (!locked) {
+    card.onclick = () => startGame(key);
+  }
+
+  const storageKey = 'saba_ladders_' + key.slice(1); // '-at' → 'at'
+  const saved      = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  const bestStr    = saved.bestScore > 0
+    ? `Best: ${saved.bestScore}/${fam.words.length}`
+    : '';
+
+  card.innerHTML = `
+    ${locked ? '<span class="lock-badge">🔒</span>' : ''}
+    <div class="family-rime" style="color:${fam.color}">${key}</div>
+    <div class="family-words">${fam.words.map(w => w.word).join(' · ')}</div>
+    <div class="family-best">${bestStr}</div>
+  `;
+
+  grid.appendChild(card);
+}
+
+// ── Game ──────────────────────────────────────────────────
+
+function getOptions(familyKey, correctOnset) {
+  const family      = FAMILIES[familyKey];
+  const otherOnsets = shuffle(
+    family.words.map(w => w.onset).filter(o => o !== correctOnset)
+  ).slice(0, 3);
+  return shuffle([correctOnset, ...otherOnsets]);
+}
+
+function startGame(familyKey) {
+  currentFamilyKey = familyKey;
+  currentWords     = shuffle([...FAMILIES[familyKey].words]);
+  wordIndex        = 0;
+  perWordFirstTry  = [];
+  triedWrong       = false;
+  waitingAdvance   = false;
+
+  document.getElementById('rime-part').textContent = FAMILIES[familyKey].rime;
+  showScreen('screen-game');
+  renderWord();
+}
+
+function renderWord() {
+  triedWrong   = false;
+  waitingAdvance = false;
+
+  const word   = currentWords[wordIndex];
+  const total  = currentWords.length;
+  const fam    = FAMILIES[currentFamilyKey];
+
+  // Progress
+  document.getElementById('progress-fill').style.width =
+    `${(wordIndex / total) * 100}%`;
+  document.getElementById('progress-fill').style.background = fam.color;
+  document.getElementById('round-label').textContent = `${wordIndex + 1} / ${total}`;
+
+  // Pic + slot reset
+  document.getElementById('word-pic').textContent = word.pic;
+  const slot = document.getElementById('onset-slot');
+  slot.textContent = '';
+  slot.className   = 'onset-slot';
+
+  // Rime
+  document.getElementById('rime-part').textContent = fam.rime;
+
+  // Hint
+  document.getElementById('hint-text').textContent = '';
+
+  // Letter buttons
+  const opts = getOptions(currentFamilyKey, word.onset);
+  const grid = document.getElementById('letter-grid');
+  grid.innerHTML = '';
+  opts.forEach(letter => {
+    const btn = document.createElement('button');
+    btn.className   = 'letter-btn';
+    btn.textContent = letter;
+    btn.onclick     = () => handleLetter(letter, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function handleLetter(letter, btn) {
+  if (waitingAdvance) return;
+
+  const word = currentWords[wordIndex];
+
+  if (letter === word.onset) {
+    // Correct
+    waitingAdvance = true;
+    perWordFirstTry.push(!triedWrong);
+
+    btn.classList.add('correct-flash');
+
+    const slot = document.getElementById('onset-slot');
+    slot.textContent = letter;
+    slot.classList.add('filled');
+
+    document.getElementById('hint-text').textContent = '';
+
+    // Disable all buttons
+    document.querySelectorAll('.letter-btn').forEach(b => {
+      b.style.pointerEvents = 'none';
+    });
+
+    speak(word.word);
+
+    setTimeout(() => {
+      wordIndex++;
+      if (wordIndex >= currentWords.length) {
+        showResult();
+      } else {
+        renderWord();
+      }
+    }, 1700);
+
+  } else {
+    // Wrong
+    triedWrong = true;
+    btn.classList.add('wrong-shake', 'dimmed');
+    document.getElementById('hint-text').textContent = 'Try another letter!';
+    setTimeout(() => {
+      btn.classList.remove('wrong-shake');
+    }, 400);
+  }
+}
+
+// ── Result ────────────────────────────────────────────────
+
+const MESSAGES = [
+  ['🌟 Perfect! Every one first try!', '⭐⭐⭐'],
+  ['Great work — nearly perfect!',     '⭐⭐☆'],
+  ['Good try — keep climbing!',        '⭐☆☆'],
+  ["Let's try again!",                 '☆☆☆'],
+];
+
+function showResult() {
+  showScreen('screen-result');
+
+  const total = currentWords.length;
+  const score = perWordFirstTry.filter(Boolean).length;
+
+  const pct  = score / total;
+  const tier = pct >= 1 ? 0 : pct >= 0.75 ? 1 : pct >= 0.5 ? 2 : 3;
+  const [msg, stars] = MESSAGES[tier];
+
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score').textContent = `${score} out of ${total} first try`;
+  document.getElementById('result-msg').textContent   = msg;
+
+  // Save progress
+  const storageKey = 'saba_ladders_' + currentFamilyKey.slice(1);
+  const prev       = JSON.parse(localStorage.getItem(storageKey) || '{"played":0,"bestScore":0}');
+  prev.played++;
+  prev.bestScore  = Math.max(prev.bestScore || 0, score);
+  prev.totalWords = total;
+  prev.lastPlayed = new Date().toISOString().slice(0, 10);
+  prev.lastMissed = currentWords
+    .filter((_, i) => !perWordFirstTry[i])
+    .map(w => w.word);
+  localStorage.setItem(storageKey, JSON.stringify(prev));
+
+  // Check if I/O unlock threshold just reached
+  const unlockNotice = document.getElementById('unlock-notice');
+  if (isIOUnlocked() &&
+      ['-at', '-an', '-et', '-en'].includes(currentFamilyKey)) {
+    // Show unlock notice only if all locked families have 0 plays
+    const anyIOPlayed = LOCKED_KEYS.some(k => {
+      const d = JSON.parse(localStorage.getItem('saba_ladders_' + k.slice(1)) || '{}');
+      return (d.played || 0) > 0;
+    });
+    if (!anyIOPlayed) {
+      unlockNotice.textContent = '🎉 You unlocked Short I & Short O families! Check the picker!';
+      unlockNotice.classList.add('show');
+    } else {
+      unlockNotice.classList.remove('show');
+    }
+  } else {
+    unlockNotice.classList.remove('show');
+  }
+}
+
+function playAgain() { startGame(currentFamilyKey); }
+
 // ── Init ──────────────────────────────────────────────────
 
-buildPicker();
+renderPicker();
 </script>
+
 </body>
 </html>

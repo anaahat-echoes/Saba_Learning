@@ -8,16 +8,17 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --purple: #7048e8;
-  --purple-dark: #5f3dc4;
+  --purple:       #7048e8;
+  --purple-dark:  #5f3dc4;
   --purple-light: #F3F0FF;
-  --green: #2f9e44;
-  --green-light: #d3f9d8;
-  --red: #e03131;
-  --red-light: #ffe3e3;
-  --orange: #f08c00;
-  --gray: #868e96;
-  --bg: #F3F0FF;
+  --green:        #2f9e44;
+  --green-light:  #d3f9d8;
+  --red:          #e03131;
+  --red-light:    #ffe3e3;
+  --orange:       #f08c00;
+  --orange-dark:  #b56a00;
+  --gray:         #868e96;
+  --bg:           #F3F0FF;
 }
 
 body {
@@ -28,11 +29,10 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ── Screens ─────────────────────────────── */
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: flex; flex-direction: column; }
 
-/* ── Shared layout ───────────────────────── */
+/* ── Shared layout ─────────────────────────── */
 .page-header {
   display: flex;
   align-items: center;
@@ -51,21 +51,19 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
   flex-shrink: 0;
   color: var(--purple-dark);
+  text-decoration: none;
 }
 
 .page-title {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--purple-dark);
+  flex: 1;
 }
 
-/* ── Activity Picker ─────────────────────── */
+/* ── Activity Picker ──────────────────────── */
 #screen-pick {
   padding: 0 20px 32px;
-}
-
-#screen-pick .page-header {
-  margin-bottom: 8px;
 }
 
 .pick-heading {
@@ -79,14 +77,24 @@ body {
 .pick-sub {
   font-size: 0.9rem;
   color: var(--gray);
-  margin-bottom: 28px;
+  margin-bottom: 22px;
   padding: 0 4px;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 4px;
+  margin: 18px 0 10px;
 }
 
 .activity-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
@@ -96,7 +104,7 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 18px 20px;
+  padding: 16px 20px;
   border: none;
   border-radius: 20px;
   background: #fff;
@@ -105,6 +113,8 @@ body {
   text-align: left;
   transition: transform 0.1s, box-shadow 0.1s;
   width: 100%;
+  text-decoration: none;
+  color: inherit;
 }
 
 .act-btn:active {
@@ -144,13 +154,22 @@ body {
   white-space: nowrap;
 }
 
-.act-btn.level-a { border-left: 5px solid #f08c00; }
-.act-btn.level-e { border-left: 5px solid #2f9e44; }
-.act-btn.level-ae     { border-left: 5px solid var(--purple); }
-.act-btn.level-ladder { border-left: 5px solid #1971c2; text-decoration: none; }
-.act-btn.level-ladder .act-name { color: #1a1a2e; }
+.act-btn.level-a  { border-left: 5px solid #f08c00; }
+.act-btn.level-e  { border-left: 5px solid #2f9e44; }
+.act-btn.level-ae { border-left: 5px solid var(--purple); }
+.act-btn.level-ladder { border-left: 5px solid #1971c2; }
 
-/* ── Game Screen ─────────────────────────── */
+.progress-link {
+  display: block;
+  text-align: center;
+  margin-top: 28px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--purple);
+  text-decoration: none;
+}
+
+/* ── Game Screen ──────────────────────────── */
 #screen-game {
   padding-bottom: 24px;
 }
@@ -195,7 +214,6 @@ body {
   padding: 4px 20px 16px;
 }
 
-/* Hear button */
 .hear-wrap {
   display: flex;
   justify-content: center;
@@ -211,7 +229,7 @@ body {
   font-size: 1.15rem;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 5px 0 #b56a00;
+  box-shadow: 0 5px 0 var(--orange-dark);
   transition: transform 0.1s, box-shadow 0.1s;
   display: flex;
   align-items: center;
@@ -220,14 +238,11 @@ body {
 
 .hear-btn:active {
   transform: translateY(4px);
-  box-shadow: 0 1px 0 #b56a00;
+  box-shadow: 0 1px 0 var(--orange-dark);
 }
 
-.hear-btn.replaying {
-  background: #e8590c;
-}
+.hear-btn.replaying { background: #e8590c; }
 
-/* Cards */
 .cards-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -254,9 +269,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.card:active {
-  transform: scale(0.96);
-}
+.card:active { transform: scale(0.96); }
 
 .card-pic {
   font-size: 3.5rem;
@@ -272,7 +285,6 @@ body {
   letter-spacing: 0.08em;
 }
 
-/* Card states */
 .card.correct {
   border-color: var(--green);
   background: var(--green-light);
@@ -293,7 +305,6 @@ body {
   80% { transform: translateX(6px); }
 }
 
-/* Feedback */
 .feedback {
   text-align: center;
   padding: 16px 20px 0;
@@ -330,7 +341,18 @@ body {
 .result-msg {
   font-size: 1rem;
   color: var(--gray);
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+}
+
+.rem-result {
+  display: none;
+  background: var(--green-light);
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a7431;
 }
 
 .result-btns {
@@ -371,31 +393,7 @@ body {
   transition: background 0.15s;
 }
 
-.btn-secondary:active {
-  background: var(--purple-light);
-}
-
-/* Remediation mode */
-.progress-fill.remediation {
-  background: var(--orange);
-}
-
-.set-label.remediation {
-  color: var(--orange);
-}
-
-.result-remediation {
-  font-size: 0.95rem;
-  color: var(--green);
-  font-weight: 600;
-  margin-bottom: 28px;
-  padding: 10px 16px;
-  background: var(--green-light);
-  border-radius: 12px;
-  max-width: 300px;
-  text-align: center;
-  display: none;
-}
+.btn-secondary:active { background: var(--purple-light); }
 </style>
 </head>
 <body>
@@ -404,7 +402,7 @@ body {
 <div id="screen-pick" class="screen active">
   <div class="page-header">
     <a href="../" class="back-btn" aria-label="Home">←</a>
-    <span class="page-title">Phonics</span>
+    <span class="page-title">Word World</span>
   </div>
 
   <div style="padding: 8px 24px 0;">
@@ -412,7 +410,9 @@ body {
     <div class="pick-sub">Tap an activity to start</div>
   </div>
 
-  <div class="activity-list">
+  <div class="activity-list" style="padding: 0 4px;">
+    <div class="section-label" style="margin-top:4px;">Listen &amp; Match</div>
+
     <button class="act-btn level-a" onclick="startGame('short-a')" aria-label="Short A words">
       <span class="act-emoji">🎩</span>
       <span class="act-info">
@@ -440,17 +440,22 @@ body {
       <span class="act-best" id="best-a-vs-e"></span>
     </button>
 
-    <a href="ladders/" class="act-btn level-ladder" aria-label="Word Ladders">
+    <div class="section-label">Word Ladders</div>
+
+    <a href="ladders/" class="act-btn level-ladder" aria-label="Word Ladders game">
       <span class="act-emoji">🪜</span>
       <span class="act-info">
         <span class="act-name">Word Ladders</span>
         <span class="act-words">-at · -an · -et · -en</span>
       </span>
+      <span class="act-best">▶</span>
     </a>
   </div>
+
+  <a href="../progress/" class="progress-link">📊 See progress</a>
 </div>
 
-<!-- ── SCREEN 2: Game ─────────────────────── -->
+<!-- ── SCREEN 2: Game ──────────────────────── -->
 <div id="screen-game" class="screen">
   <div class="game-header">
     <button class="back-btn" onclick="goToPicker()" aria-label="Back to activities">←</button>
@@ -483,12 +488,14 @@ body {
   <div class="feedback hidden" id="feedback" aria-live="polite"></div>
 </div>
 
-<!-- ── SCREEN 3: Result ───────────────────── -->
+<!-- ── SCREEN 3: Result ────────────────────── -->
 <div id="screen-result" class="screen">
   <div class="result-stars" id="result-stars">⭐⭐⭐</div>
   <div class="result-score" id="result-score"></div>
   <div class="result-msg" id="result-msg"></div>
-  <div class="result-remediation" id="result-remediation"></div>
+  <div class="rem-result" id="rem-result">
+    <span id="rem-score-text"></span>
+  </div>
   <div class="result-btns">
     <button class="btn-primary" onclick="playAgain()">Play again</button>
     <button class="btn-secondary" onclick="goToPicker()">Choose activity</button>
@@ -525,40 +532,39 @@ const WORDS = {
 };
 
 // Pairs for A vs E — each pair is [a-word, e-word]
-// Either side can be the target in any given round
 const AE_PAIRS = [
-  [{ word: 'pan', pic: '🍳' },  { word: 'pen', pic: '✏️' }],   // true minimal pair
-  [{ word: 'man', pic: '👨' },  { word: 'men', pic: '👥' }],   // true minimal pair
+  [{ word: 'pan', pic: '🍳' },  { word: 'pen', pic: '✏️' }],
+  [{ word: 'man', pic: '👨' },  { word: 'men', pic: '👥' }],
   [{ word: 'bat', pic: '🏏' },  { word: 'bed', pic: '🛏️' }],
   [{ word: 'hat', pic: '🎩' },  { word: 'hen', pic: '🐔' }],
   [{ word: 'cat', pic: '🐱' },  { word: 'net', pic: '🕸️' }],
   [{ word: 'rat', pic: '🐀' },  { word: 'red', pic: '🔴' }],
-  [{ word: 'cap', pic: '🧢' },  { word: 'egg', pic: '🥚' }],
   [{ word: 'bag', pic: '👜' },  { word: 'leg', pic: '🦵' }],
   [{ word: 'van', pic: '🚐' },  { word: 'ten', pic: '🔟' }],
   [{ word: 'cap', pic: '🧢' },  { word: 'egg', pic: '🥚' }],
+  [{ word: 'rat', pic: '🐀' },  { word: 'pet', pic: '🐕' }],
 ];
 
 const SET_LABELS = {
-  'short-a': 'Short A words',
-  'short-e': 'Short E words',
-  'a-vs-e':  'A vs E — hear the difference',
+  'short-a': 'SHORT A WORDS',
+  'short-e': 'SHORT E WORDS',
+  'a-vs-e':  'A VS E — HEAR THE DIFFERENCE',
 };
 
 const ROUNDS_PER_GAME = 10;
 
 // ── Game state ────────────────────────────────────────────
 
-let currentSet       = null;
-let rounds           = [];
-let roundIndex       = 0;
-let score            = 0;
-let correctCard      = 0;
-let answered         = false;
-let wordPlayed       = false;
-let missedRounds     = [];
-let inRemediation    = false;
-let remediationScore = 0;
+let currentSet    = null;
+let rounds        = [];
+let roundIndex    = 0;
+let score         = 0;
+let correctCard   = 0;
+let answered      = false;
+let wordPlayed    = false;
+let missedRounds  = [];
+let inRemediation = false;
+let remScore      = 0;
 
 // ── Utils ─────────────────────────────────────────────────
 
@@ -598,9 +604,9 @@ function buildRounds(setKey) {
   }
 
   const pool = shuffle(WORDS[setKey]);
-  return pool.slice(0, ROUNDS_PER_GAME).map((target, i) => {
-    // Pick a distractor: different word from same pool
-    const others = pool.filter((_, j) => j !== i);
+  const used = pool.slice(0, ROUNDS_PER_GAME);
+  return used.map((target, i) => {
+    const others = used.filter((_, j) => j !== i);
     return { target, distractor: rand(others) };
   });
 }
@@ -622,70 +628,62 @@ function goToPicker() {
 
 function loadBestScores() {
   ['short-a', 'short-e', 'a-vs-e'].forEach(k => {
-    const d = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
+    const d  = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
     const el = document.getElementById('best-' + k);
-    if (d.bestScore > 0) {
-      el.textContent = `Best: ${d.bestScore}/${ROUNDS_PER_GAME}`;
-    } else {
-      el.textContent = '';
-    }
+    if (el) el.textContent = d.bestScore > 0 ? `Best: ${d.bestScore}/${ROUNDS_PER_GAME}` : '';
   });
 }
 
 // ── Game start ────────────────────────────────────────────
 
 function startGame(setKey) {
-  currentSet       = setKey;
-  rounds           = buildRounds(setKey);
-  roundIndex       = 0;
-  score            = 0;
-  missedRounds     = [];
-  inRemediation    = false;
-  remediationScore = 0;
-  answered         = false;
-  wordPlayed       = false;
+  currentSet    = setKey;
+  rounds        = buildRounds(setKey);
+  roundIndex    = 0;
+  score         = 0;
+  missedRounds  = [];
+  inRemediation = false;
+  remScore      = 0;
+  answered      = false;
+  wordPlayed    = false;
 
-  const label = document.getElementById('set-label');
-  label.textContent = SET_LABELS[setKey];
-  label.classList.remove('remediation');
-  document.getElementById('progress-fill').classList.remove('remediation');
-
+  document.getElementById('progress-fill').style.background = 'var(--purple)';
+  document.getElementById('set-label').textContent = SET_LABELS[setKey];
   showScreen('screen-game');
   renderRound();
 }
+
+// ── Render round ──────────────────────────────────────────
 
 function renderRound() {
   answered   = false;
   wordPlayed = false;
 
-  const { target, distractor } = rounds[roundIndex];
+  const source = inRemediation ? missedRounds : rounds;
+  const { target, distractor } = source[roundIndex];
 
-  // Assign target to card 0 or 1 randomly
   correctCard = Math.random() < 0.5 ? 0 : 1;
   const items = correctCard === 0
     ? [target, distractor]
     : [distractor, target];
 
-  // Progress (uses rounds.length so remediation arc is shown correctly)
+  const total = source.length;
   document.getElementById('progress-fill').style.width =
-    `${(roundIndex / rounds.length) * 100}%`;
+    `${(roundIndex / total) * 100}%`;
   document.getElementById('round-label').textContent =
-    `${roundIndex + 1} / ${rounds.length}`;
+    `${roundIndex + 1} / ${total}`;
 
-  // Cards
   for (let i = 0; i < 2; i++) {
     document.getElementById(`pic-${i}`).textContent  = items[i].pic;
     document.getElementById(`word-${i}`).textContent = items[i].word;
     const card = document.getElementById(`card-${i}`);
-    card.className         = 'card';
-    card.style.pointerEvents = 'auto';
+    card.className            = 'card';
+    card.style.pointerEvents  = 'auto';
   }
 
-  // Hear button
   document.getElementById('hear-text').textContent = 'Tap to hear';
   document.getElementById('hear-btn').classList.remove('replaying');
 
-  // Feedback
   const fb = document.getElementById('feedback');
   fb.textContent = '';
   fb.className   = 'feedback hidden';
@@ -694,9 +692,8 @@ function renderRound() {
 // ── Hear button ───────────────────────────────────────────
 
 function playWord() {
-  const target = rounds[roundIndex].target;
-  speak(target.word);
-
+  const source = inRemediation ? missedRounds : rounds;
+  speak(source[roundIndex].target.word);
   if (!wordPlayed) {
     wordPlayed = true;
     document.getElementById('hear-text').textContent = 'Hear it again';
@@ -710,7 +707,6 @@ function handleTap(cardIndex) {
   if (answered) return;
   answered = true;
 
-  // Disable both cards
   document.getElementById('card-0').style.pointerEvents = 'none';
   document.getElementById('card-1').style.pointerEvents = 'none';
 
@@ -718,7 +714,7 @@ function handleTap(cardIndex) {
   const fb      = document.getElementById('feedback');
 
   if (correct) {
-    if (inRemediation) remediationScore++;
+    if (inRemediation) remScore++;
     else score++;
     document.getElementById(`card-${cardIndex}`).classList.add('correct');
     fb.textContent = '✓ Well done!';
@@ -733,7 +729,8 @@ function handleTap(cardIndex) {
 
   setTimeout(() => {
     roundIndex++;
-    if (roundIndex >= rounds.length) {
+    const source = inRemediation ? missedRounds : rounds;
+    if (roundIndex >= source.length) {
       inRemediation ? showResult() : endMainGame();
     } else {
       renderRound();
@@ -741,39 +738,43 @@ function handleTap(cardIndex) {
   }, 1800);
 }
 
-// ── End-of-main / remediation ────────────────────────────
+// ── End of main game ──────────────────────────────────────
 
 function endMainGame() {
-  if (missedRounds.length === 0) {
-    showResult();
-  } else {
+  const key  = 'saba_phonics_' + currentSet;
+  const prev = JSON.parse(localStorage.getItem(key) || '{"played":0,"bestScore":0}');
+  prev.played++;
+  prev.bestScore  = Math.max(prev.bestScore || 0, score);
+  prev.lastPlayed = new Date().toISOString().slice(0, 10);
+  prev.lastMissed = missedRounds.map(r => r.target.word);
+  localStorage.setItem(key, JSON.stringify(prev));
+
+  if (missedRounds.length > 0) {
     startRemediation();
+  } else {
+    showResult();
   }
 }
 
+// ── Remediation ───────────────────────────────────────────
+
 function startRemediation() {
-  inRemediation    = true;
-  remediationScore = 0;
-  rounds           = [...missedRounds];
-  roundIndex       = 0;
-  answered         = false;
-  wordPlayed       = false;
-
-  const label = document.getElementById('set-label');
-  label.textContent = "Let's try the tricky ones again! 🎯";
-  label.classList.add('remediation');
-  document.getElementById('progress-fill').classList.add('remediation');
-
+  inRemediation = true;
+  remScore      = 0;
+  roundIndex    = 0;
+  document.getElementById('progress-fill').style.background = 'var(--orange)';
+  document.getElementById('set-label').textContent = "LET'S TRY THE TRICKY ONES AGAIN! 💪";
+  showScreen('screen-game');
   renderRound();
 }
 
-// ── Result screen ─────────────────────────────────────────
+// ── Result ────────────────────────────────────────────────
 
 const MESSAGES = [
   ['🌟 Amazing! Every single one!', '⭐⭐⭐'],
   ['Great job — nearly there!',     '⭐⭐☆'],
   ['Good try — keep practising!',   '⭐☆☆'],
-  ["Let's try again!",               '☆☆☆'],
+  ["Let's try again!",              '☆☆☆'],
 ];
 
 function showResult() {
@@ -787,34 +788,22 @@ function showResult() {
   document.getElementById('result-score').textContent = `${score} out of ${ROUNDS_PER_GAME}`;
   document.getElementById('result-msg').textContent   = msg;
 
-  // Remediation summary
-  const remEl = document.getElementById('result-remediation');
-  if (inRemediation) {
-    const n = missedRounds.length;
-    const word = n === 1 ? 'word' : 'words';
-    remEl.textContent = remediationScore === n
-      ? `And you got all ${n} tricky ${word} on the second try! 🎉`
-      : `You got ${remediationScore} of ${n} tricky ${word} on the second try.`;
-    remEl.style.display = 'block';
+  const remBox = document.getElementById('rem-result');
+  if (missedRounds.length > 0) {
+    remBox.style.display = 'block';
+    const t = missedRounds.length;
+    document.getElementById('rem-score-text').textContent =
+      remScore === t
+        ? `Second try: got all ${t}! 🎉`
+        : `Second try: ${remScore} out of ${t}`;
   } else {
-    remEl.style.display = 'none';
+    remBox.style.display = 'none';
   }
-
-  // Persist
-  const key  = 'saba_phonics_' + currentSet;
-  const prev = JSON.parse(localStorage.getItem(key) || '{"played":0,"bestScore":0}');
-  prev.played++;
-  prev.bestScore  = Math.max(prev.bestScore || 0, score);
-  prev.lastPlayed = new Date().toISOString().slice(0, 10);
-  prev.lastMissed = missedRounds.map(r => r.target.word);
-  localStorage.setItem(key, JSON.stringify(prev));
 }
 
-function playAgain() {
-  startGame(currentSet);
-}
+function playAgain() { startGame(currentSet); }
 
-// ── Initialise ────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────
 
 loadBestScores();
 </script>

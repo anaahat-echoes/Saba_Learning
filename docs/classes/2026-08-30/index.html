@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Class — 30 August</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple: #7048e8;
+  --purple-dark: #5f3dc4;
+  --purple-light: #F3F0FF;
+  --green: #2f9e44;
+  --green-light: #d3f9d8;
+  --red: #e03131;
+  --red-light: #ffe3e3;
+  --orange: #f08c00;
+  --gold: #f59f00;
+  --diamond: #22b8cf;
+  --gray: #868e96;
+  --bg: #1a1a2e;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Screens ─────────────────────────────── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── Header bar ──────────────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px 10px;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.top-title {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+}
+
+.score-badge {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.score-stars { color: var(--gold); }
+.score-diamonds { color: var(--diamond); }
+
+/* ── Class overview (screen-plan) ────────── */
+#screen-plan {
+  padding-bottom: 40px;
+}
+
+.class-hero {
+  text-align: center;
+  padding: 20px 24px 28px;
+}
+
+.class-date {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.class-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.class-sub {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.4;
+}
+
+.score-hero {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 20px;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+/* Activity cards */
+.act-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.act-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.2s;
+}
+
+.act-card:active { transform: translateY(2px); }
+
+.act-card.locked {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+.act-card.done {
+  border-color: var(--green);
+  background: rgba(47,158,68,0.12);
+}
+
+.act-num {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.act-num.n1 { background: var(--purple); }
+.act-num.n2 { background: var(--orange); }
+.act-num.n3 { background: var(--diamond); }
+
+.act-card-info { flex: 1; }
+
+.act-card-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.act-card-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.act-card-status {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* ── Shared game layout ──────────────────── */
+.game-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 12px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.round-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+}
+
+/* ── Activity 1: Sound Match ─────────────── */
+.hear-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 16px 20px 20px;
+}
+
+.hear-btn {
+  background: var(--orange);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 40px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #b56a00;
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hear-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #b56a00;
+}
+
+.cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 0 20px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 24px;
+  border: 3px solid transparent;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.2s, background 0.2s;
+  min-height: 150px;
+}
+
+.card:active { transform: scale(0.96); }
+
+.card-pic {
+  font-size: 3.5rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.card-word {
+  font-family: 'Courier New', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.08em;
+}
+
+.card.correct {
+  border-color: var(--green);
+  background: rgba(47,158,68,0.2);
+}
+
+.card.wrong {
+  border-color: var(--red);
+  background: rgba(224,49,49,0.15);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+.feedback {
+  text-align: center;
+  padding: 16px 20px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  min-height: 52px;
+}
+
+.feedback.ok { color: var(--green); }
+.feedback.no { color: var(--red); }
+.feedback.hidden { visibility: hidden; }
+
+/* diamond flash */
+.diamond-flash {
+  display: none;
+  text-align: center;
+  padding: 4px 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--diamond);
+}
+
+.diamond-flash.show { display: block; animation: pop 0.4s ease; }
+
+@keyframes pop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  60%  { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Activity 2: Build a Word ────────────── */
+.build-pic {
+  text-align: center;
+  font-size: 5rem;
+  padding: 20px 0 8px;
+  line-height: 1;
+}
+
+.build-slots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 20px 4px;
+}
+
+.build-slot {
+  width: 64px;
+  height: 76px;
+  border-radius: 14px;
+  border: 3px dashed rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: #fff;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.build-slot.active {
+  border-color: var(--orange);
+  border-style: solid;
+  background: rgba(240,140,0,0.12);
+}
+
+.build-slot.filled {
+  border-style: solid;
+  border-color: var(--green);
+  background: rgba(47,158,68,0.15);
+  animation: pop 0.25s ease;
+}
+
+.build-slot.error {
+  border-color: var(--red);
+  background: rgba(224,49,49,0.15);
+  animation: shake 0.35s ease;
+}
+
+.build-slot-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin-top: 2px;
+}
+
+.slot-labels {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.slot-labels span { width: 64px; text-align: center; }
+
+.letter-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 16px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.letter-btn {
+  background: rgba(255,255,255,0.08);
+  border: 3px solid transparent;
+  border-radius: 18px;
+  padding: 16px 8px;
+  font-size: 1.7rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  transition: transform 0.08s, box-shadow 0.08s, opacity 0.15s;
+}
+
+.letter-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.letter-btn.correct-flash {
+  background: rgba(47,158,68,0.25);
+  border-color: var(--green);
+}
+
+.letter-btn.wrong-shake {
+  animation: shake 0.35s ease;
+  background: rgba(224,49,49,0.15);
+  border-color: var(--red);
+}
+
+.letter-btn.dimmed {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* ── Activity 3: Speed Round ─────────────── */
+.speed-word {
+  text-align: center;
+  padding: 28px 20px 12px;
+}
+
+.speed-letters {
+  font-size: 3rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.15em;
+  color: #fff;
+}
+
+.speed-timer {
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  margin: 8px 20px 0;
+  max-width: 480px;
+  align-self: center;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.speed-timer-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 2px;
+  transition: width 0.1s linear, background 0.3s;
+  width: 100%;
+}
+
+.speed-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  padding: 16px 20px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.speed-card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 20px;
+  border: 3px solid transparent;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.2s, background 0.2s;
+}
+
+.speed-card:active { transform: scale(0.95); }
+
+.speed-card .card-pic { font-size: 2.8rem; }
+.speed-card .card-word { font-size: 1rem; color: rgba(255,255,255,0.6); }
+
+.speed-card.correct {
+  border-color: var(--green);
+  background: rgba(47,158,68,0.2);
+}
+
+.speed-card.wrong {
+  border-color: var(--red);
+  background: rgba(224,49,49,0.15);
+  animation: shake 0.4s ease;
+}
+
+/* ── Result screen ───────────────────────── */
+#screen-result {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.result-emoji {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.result-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.result-summary {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.result-detail {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.result-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn-primary {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--purple-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--purple-dark);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ── Summary screen ──────────────────────── */
+#screen-summary {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.summary-trophy {
+  font-size: 5rem;
+  margin-bottom: 16px;
+}
+
+.summary-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+
+.summary-scores {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 28px;
+}
+
+.summary-breakdown {
+  text-align: left;
+  background: rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.sb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 0.9rem;
+}
+
+.sb-row + .sb-row { border-top: 1px solid rgba(255,255,255,0.06); }
+.sb-name { flex: 1; }
+.sb-score { font-weight: 800; }
+</style>
+</head>
+<body>
+
+<!-- ── PLAN SCREEN ───────────────────────── -->
+<div id="screen-plan" class="screen active">
+  <div class="top-bar">
+    <a href="../../" class="back-btn" aria-label="Home">←</a>
+    <span class="top-title">Today's Class</span>
+    <div class="score-badge">
+      <span class="score-stars">⭐ <span id="plan-stars">0</span></span>
+      <span class="score-diamonds">💎 <span id="plan-diamonds">0</span></span>
+    </div>
+  </div>
+
+  <div class="class-hero">
+    <div class="class-date">30 August 2026</div>
+    <div class="class-title">Let's learn our vowels!</div>
+    <div class="class-sub">3 activities — finish each to unlock the next</div>
+  </div>
+
+  <div class="act-list" id="act-list">
+    <div class="act-card" id="plan-act1" onclick="launchActivity(1)">
+      <div class="act-num n1">1</div>
+      <div class="act-card-info">
+        <span class="act-card-name">🔊 Sound Match</span>
+        <span class="act-card-desc">Hear a word, tap the picture</span>
+      </div>
+      <span class="act-card-status" id="status1">▶</span>
+    </div>
+    <div class="act-card locked" id="plan-act2" onclick="launchActivity(2)">
+      <div class="act-num n2">2</div>
+      <div class="act-card-info">
+        <span class="act-card-name">🧱 Build a Word</span>
+        <span class="act-card-desc">Tap letters to spell the word</span>
+      </div>
+      <span class="act-card-status" id="status2">🔒</span>
+    </div>
+    <div class="act-card locked" id="plan-act3" onclick="launchActivity(3)">
+      <div class="act-num n3">3</div>
+      <div class="act-card-info">
+        <span class="act-card-name">⚡ Speed Read</span>
+        <span class="act-card-desc">Read the word, find the picture</span>
+      </div>
+      <span class="act-card-status" id="status3">🔒</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── ACT 1: Sound Match ────────────────── -->
+<div id="screen-act1" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
+    <span class="top-title">Sound Match</span>
+    <div class="score-badge">
+      <span class="score-stars">⭐ <span id="a1-stars">0</span></span>
+      <span class="score-diamonds">💎 <span id="a1-diamonds">0</span></span>
+    </div>
+  </div>
+  <div class="game-progress">
+    <div class="progress-track"><div class="progress-fill" id="a1-progress" style="background:var(--purple)"></div></div>
+    <div class="round-label" id="a1-round">1 / 8</div>
+  </div>
+  <div class="hear-wrap">
+    <button class="hear-btn" id="a1-hear" onclick="a1PlayWord()">
+      <span>🔊</span> <span id="a1-hear-text">Tap to hear</span>
+    </button>
+  </div>
+  <div class="cards-row" id="a1-cards"></div>
+  <div class="diamond-flash" id="a1-diamond">💎 Bonus letter!</div>
+  <div class="feedback hidden" id="a1-fb"></div>
+</div>
+
+<!-- ── ACT 2: Build a Word ───────────────── -->
+<div id="screen-act2" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
+    <span class="top-title">Build a Word</span>
+    <div class="score-badge">
+      <span class="score-stars">⭐ <span id="a2-stars">0</span></span>
+      <span class="score-diamonds">💎 <span id="a2-diamonds">0</span></span>
+    </div>
+  </div>
+  <div class="game-progress">
+    <div class="progress-track"><div class="progress-fill" id="a2-progress" style="background:var(--orange)"></div></div>
+    <div class="round-label" id="a2-round">1 / 6</div>
+  </div>
+  <div class="build-pic" id="a2-pic"></div>
+  <div class="build-slots" id="a2-slots"></div>
+  <div class="slot-labels" id="a2-slot-labels"></div>
+  <div class="diamond-flash" id="a2-diamond">💎 Bonus letter!</div>
+  <div class="feedback hidden" id="a2-fb"></div>
+  <div class="letter-grid" id="a2-grid"></div>
+</div>
+
+<!-- ── ACT 3: Speed Read ─────────────────── -->
+<div id="screen-act3" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
+    <span class="top-title">Speed Read</span>
+    <div class="score-badge">
+      <span class="score-stars">⭐ <span id="a3-stars">0</span></span>
+      <span class="score-diamonds">💎 <span id="a3-diamonds">0</span></span>
+    </div>
+  </div>
+  <div class="game-progress">
+    <div class="progress-track"><div class="progress-fill" id="a3-progress" style="background:var(--diamond)"></div></div>
+    <div class="round-label" id="a3-round">1 / 8</div>
+  </div>
+  <div class="speed-word"><div class="speed-letters" id="a3-word"></div></div>
+  <div class="speed-timer" style="max-width:440px;margin:0 auto;"><div class="speed-timer-fill" id="a3-timer"></div></div>
+  <div class="speed-cards" id="a3-cards"></div>
+  <div class="diamond-flash" id="a3-diamond">💎 Bonus letter!</div>
+  <div class="feedback hidden" id="a3-fb"></div>
+</div>
+
+<!-- ── Activity result ───────────────────── -->
+<div id="screen-result" class="screen">
+  <div class="result-emoji" id="res-emoji">🎉</div>
+  <div class="result-title" id="res-title">Great work!</div>
+  <div class="result-summary">
+    <span class="score-stars">⭐ <span id="res-stars">0</span></span>
+    <span class="score-diamonds">💎 <span id="res-diamonds">0</span></span>
+  </div>
+  <div class="result-detail" id="res-detail"></div>
+  <div class="result-btns">
+    <button class="btn-primary" id="res-next" onclick="nextFromResult()">Continue</button>
+    <button class="btn-secondary" onclick="backToPlan()">Back to plan</button>
+  </div>
+</div>
+
+<!-- ── Session summary ───────────────────── -->
+<div id="screen-summary" class="screen">
+  <div class="summary-trophy">🏆</div>
+  <div class="summary-title">Class complete!</div>
+  <div class="summary-scores">
+    <span class="score-stars">⭐ <span id="sum-stars">0</span></span>
+    <span class="score-diamonds">💎 <span id="sum-diamonds">0</span></span>
+  </div>
+  <div class="summary-breakdown" id="sum-breakdown"></div>
+  <div class="result-btns">
+    <button class="btn-primary" onclick="location.href='../../'">Home</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// WORD DATA — all onsets b-j = gold star; beyond j = diamond
+// ════════════════════════════════════════════════════════════
+
+const KNOWN = 'bcdfghij'.split('');
+const VOWELS = 'aeiou'.split('');
+
+function isDiamond(word) {
+  const onset = word[0];
+  return !KNOWN.includes(onset) && !VOWELS.includes(onset);
+}
+
+// Act 1 words: hear → pick picture (2 choices)
+const A1_WORDS = [
+  { word: 'big', pic: '🦣' },
+  { word: 'dog', pic: '🐕' },
+  { word: 'hug', pic: '🤗' },
+  { word: 'fig', pic: '🫒' },
+  { word: 'jug', pic: '🫗' },
+  { word: 'cob', pic: '🌽' },
+  // diamonds (beyond j)
+  { word: 'net', pic: '🕸️' },
+  { word: 'mop', pic: '🧹' },
+];
+
+// Act 2 words: see pic → spell 3 letters
+const A2_WORDS = [
+  { word: 'fog', pic: '🌫️' },
+  { word: 'jig', pic: '💃' },
+  { word: 'bad', pic: '👎' },
+  { word: 'bug', pic: '🐛' },
+  { word: 'cub', pic: '🐻' },
+  // diamond
+  { word: 'pen', pic: '✏️' },
+];
+
+// Act 3 words: see word → pick picture (3 choices)
+const A3_WORDS = [
+  { word: 'dig', pic: '⛏️' },
+  { word: 'hid', pic: '🫣' },
+  { word: 'jog', pic: '🏃' },
+  { word: 'dug', pic: '🕳️' },
+  { word: 'hub', pic: '🔗' },
+  { word: 'cob', pic: '🌽' },
+  // diamonds
+  { word: 'rat', pic: '🐀' },
+  { word: 'sun', pic: '☀️' },
+];
+
+// Distractor pool
+const ALL_WORDS = [
+  { word: 'big', pic: '🦣' }, { word: 'dog', pic: '🐕' },
+  { word: 'hug', pic: '🤗' }, { word: 'fig', pic: '🫒' },
+  { word: 'jug', pic: '🫗' }, { word: 'cob', pic: '🌽' },
+  { word: 'fog', pic: '🌫️' }, { word: 'jig', pic: '💃' },
+  { word: 'bad', pic: '👎' }, { word: 'bug', pic: '🐛' },
+  { word: 'cub', pic: '🐻' }, { word: 'dig', pic: '⛏️' },
+  { word: 'hid', pic: '🫣' }, { word: 'jog', pic: '🏃' },
+  { word: 'dug', pic: '🕳️' }, { word: 'hub', pic: '🔗' },
+  { word: 'net', pic: '🕸️' }, { word: 'mop', pic: '🧹' },
+  { word: 'rat', pic: '🐀' }, { word: 'sun', pic: '☀️' },
+  { word: 'pen', pic: '✏️' }, { word: 'bed', pic: '🛏️' },
+  { word: 'hat', pic: '🎩' }, { word: 'cat', pic: '🐱' },
+];
+
+// ════════════════════════════════════════════════════════════
+// GLOBAL STATE
+// ════════════════════════════════════════════════════════════
+
+let totalStars    = 0;
+let totalDiamonds = 0;
+const actResults  = { 1: null, 2: null, 3: null };
+let currentAct    = 0;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-GB'; u.rate = 0.82; u.pitch = 1.05;
+  window.speechSynthesis.speak(u);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function updatePlanScores() {
+  document.getElementById('plan-stars').textContent    = totalStars;
+  document.getElementById('plan-diamonds').textContent = totalDiamonds;
+}
+
+// ════════════════════════════════════════════════════════════
+// PLAN SCREEN
+// ════════════════════════════════════════════════════════════
+
+function refreshPlan() {
+  updatePlanScores();
+  for (let i = 1; i <= 3; i++) {
+    const card = document.getElementById('plan-act' + i);
+    const stat = document.getElementById('status' + i);
+    if (actResults[i]) {
+      card.classList.remove('locked');
+      card.classList.add('done');
+      stat.textContent = '✅';
+    } else if (i === 1 || actResults[i - 1]) {
+      card.classList.remove('locked');
+      stat.textContent = '▶';
+    } else {
+      card.classList.add('locked');
+      stat.textContent = '🔒';
+    }
+  }
+}
+
+function launchActivity(n) {
+  currentAct = n;
+  if (n === 1) startAct1();
+  else if (n === 2) startAct2();
+  else if (n === 3) startAct3();
+}
+
+function backToPlan() {
+  if (a3Timer) { clearInterval(a3Timer); a3Timer = null; }
+  refreshPlan();
+  showScreen('screen-plan');
+}
+
+function nextFromResult() {
+  if (currentAct < 3) {
+    launchActivity(currentAct + 1);
+  } else {
+    showSummary();
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// ACT RESULT
+// ════════════════════════════════════════════════════════════
+
+function showActResult(stars, diamonds, actNum) {
+  actResults[actNum] = { stars, diamonds };
+  totalStars    += stars;
+  totalDiamonds += diamonds;
+
+  const emoji = diamonds > 0 ? '💎' : stars >= 5 ? '🌟' : '👍';
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-title').textContent =
+    actNum === 3 ? 'All done!' : 'Activity complete!';
+  document.getElementById('res-stars').textContent    = stars;
+  document.getElementById('res-diamonds').textContent = diamonds;
+
+  const detail = diamonds > 0
+    ? `You earned ${diamonds} diamond${diamonds > 1 ? 's' : ''} for bonus letters!`
+    : stars >= 5 ? 'Brilliant work!' : 'Keep practising!';
+  document.getElementById('res-detail').textContent = detail;
+
+  document.getElementById('res-next').textContent =
+    actNum < 3 ? 'Next activity →' : 'See results 🏆';
+
+  showScreen('screen-result');
+}
+
+// ════════════════════════════════════════════════════════════
+// ACT 1 — Sound Match
+// ════════════════════════════════════════════════════════════
+
+let a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
+
+function startAct1() {
+  a1Words   = shuffle(A1_WORDS);
+  a1Idx     = 0;
+  a1Stars   = 0;
+  a1Dia     = 0;
+  a1Answered = false;
+  showScreen('screen-act1');
+  renderA1();
+}
+
+function renderA1() {
+  a1Answered = false;
+  const w   = a1Words[a1Idx];
+  const tot = a1Words.length;
+
+  document.getElementById('a1-progress').style.width = `${(a1Idx / tot) * 100}%`;
+  document.getElementById('a1-round').textContent = `${a1Idx + 1} / ${tot}`;
+  document.getElementById('a1-stars').textContent    = totalStars + a1Stars;
+  document.getElementById('a1-diamonds').textContent = totalDiamonds + a1Dia;
+  document.getElementById('a1-hear-text').textContent = 'Tap to hear';
+
+  // pick distractor
+  const others = ALL_WORDS.filter(x => x.word !== w.word);
+  const dist   = others[Math.floor(Math.random() * others.length)];
+
+  const items = Math.random() < 0.5 ? [w, dist] : [dist, w];
+  const container = document.getElementById('a1-cards');
+  container.innerHTML = '';
+  items.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<div class="card-pic">${item.pic}</div><div class="card-word">${item.word}</div>`;
+    card.onclick = () => a1Tap(i, item.word === w.word, card, container);
+    container.appendChild(card);
+  });
+
+  const fb = document.getElementById('a1-fb');
+  fb.textContent = ''; fb.className = 'feedback hidden';
+  document.getElementById('a1-diamond').classList.remove('show');
+}
+
+function a1PlayWord() {
+  speak(a1Words[a1Idx].word);
+  document.getElementById('a1-hear-text').textContent = 'Hear it again';
+}
+
+function a1Tap(i, correct, card, container) {
+  if (a1Answered) return;
+  a1Answered = true;
+  container.querySelectorAll('.card').forEach(c => c.style.pointerEvents = 'none');
+
+  const fb = document.getElementById('a1-fb');
+  if (correct) {
+    card.classList.add('correct');
+    fb.textContent = '✓ Well done!'; fb.className = 'feedback ok';
+    const w = a1Words[a1Idx];
+    if (isDiamond(w.word)) {
+      a1Dia++;
+      document.getElementById('a1-diamond').classList.add('show');
+    } else {
+      a1Stars++;
+    }
+  } else {
+    card.classList.add('wrong');
+    const correctCard = container.children[i === 0 ? 1 : 0];
+    correctCard.classList.add('correct');
+    fb.textContent = 'Not quite — look at the green one!'; fb.className = 'feedback no';
+  }
+
+  document.getElementById('a1-stars').textContent    = totalStars + a1Stars;
+  document.getElementById('a1-diamonds').textContent = totalDiamonds + a1Dia;
+
+  setTimeout(() => {
+    a1Idx++;
+    if (a1Idx >= a1Words.length) showActResult(a1Stars, a1Dia, 1);
+    else renderA1();
+  }, 1800);
+}
+
+// ════════════════════════════════════════════════════════════
+// ACT 2 — Build a Word
+// ════════════════════════════════════════════════════════════
+
+let a2Words, a2Idx, a2Stars, a2Dia, a2SlotIdx, a2Correct, a2TriedWrong, a2Waiting;
+
+function startAct2() {
+  a2Words  = shuffle(A2_WORDS);
+  a2Idx    = 0;
+  a2Stars  = 0;
+  a2Dia    = 0;
+  showScreen('screen-act2');
+  renderA2();
+}
+
+function renderA2() {
+  a2SlotIdx   = 0;
+  a2Correct   = [];
+  a2TriedWrong = false;
+  a2Waiting   = false;
+
+  const w   = a2Words[a2Idx];
+  const tot = a2Words.length;
+
+  document.getElementById('a2-progress').style.width = `${(a2Idx / tot) * 100}%`;
+  document.getElementById('a2-round').textContent = `${a2Idx + 1} / ${tot}`;
+  document.getElementById('a2-stars').textContent    = totalStars + a2Stars;
+  document.getElementById('a2-diamonds').textContent = totalDiamonds + a2Dia;
+
+  document.getElementById('a2-pic').textContent = w.pic;
+
+  // Slots
+  const letters = w.word.split('');
+  const slotsEl = document.getElementById('a2-slots');
+  const labelsEl = document.getElementById('a2-slot-labels');
+  slotsEl.innerHTML = '';
+  labelsEl.innerHTML = '';
+  letters.forEach((_, i) => {
+    const slot = document.createElement('div');
+    slot.className = 'build-slot' + (i === 0 ? ' active' : '');
+    slot.id = 'a2-s' + i;
+    slotsEl.appendChild(slot);
+
+    const lbl = document.createElement('span');
+    lbl.className = 'build-slot-label';
+    lbl.style.width = '64px';
+    lbl.textContent = i === 0 ? 'first' : i === letters.length - 1 ? 'last' : 'middle';
+    labelsEl.appendChild(lbl);
+  });
+
+  // Letter grid — correct letters + distractors
+  const extras = shuffle(
+    'abcdefghijou'.split('').filter(l => !letters.includes(l))
+  ).slice(0, 8 - letters.length);
+  const options = shuffle([...letters, ...extras]);
+
+  const grid = document.getElementById('a2-grid');
+  grid.innerHTML = '';
+  options.forEach(letter => {
+    const btn = document.createElement('button');
+    btn.className = 'letter-btn';
+    btn.textContent = letter;
+    btn.onclick = () => a2Tap(letter, btn);
+    grid.appendChild(btn);
+  });
+
+  const fb = document.getElementById('a2-fb');
+  fb.textContent = ''; fb.className = 'feedback hidden';
+  document.getElementById('a2-diamond').classList.remove('show');
+}
+
+function a2Tap(letter, btn) {
+  if (a2Waiting) return;
+  const w       = a2Words[a2Idx];
+  const letters = w.word.split('');
+  const expected = letters[a2SlotIdx];
+
+  if (letter === expected) {
+    // Fill slot
+    const slot = document.getElementById('a2-s' + a2SlotIdx);
+    slot.textContent = letter;
+    slot.classList.remove('active');
+    slot.classList.add('filled');
+    btn.classList.add('correct-flash', 'dimmed');
+
+    a2SlotIdx++;
+    if (a2SlotIdx < letters.length) {
+      document.getElementById('a2-s' + a2SlotIdx).classList.add('active');
+    } else {
+      // Word complete
+      a2Waiting = true;
+      if (!a2TriedWrong) {
+        if (isDiamond(w.word)) a2Dia++; else a2Stars++;
+      }
+      document.getElementById('a2-stars').textContent    = totalStars + a2Stars;
+      document.getElementById('a2-diamonds').textContent = totalDiamonds + a2Dia;
+
+      if (isDiamond(w.word) && !a2TriedWrong) {
+        document.getElementById('a2-diamond').classList.add('show');
+      }
+
+      const fb = document.getElementById('a2-fb');
+      fb.textContent = '✓ ' + w.word + '!'; fb.className = 'feedback ok';
+      speak(w.word);
+
+      setTimeout(() => {
+        a2Idx++;
+        if (a2Idx >= a2Words.length) showActResult(a2Stars, a2Dia, 2);
+        else renderA2();
+      }, 1800);
+    }
+  } else {
+    a2TriedWrong = true;
+    btn.classList.add('wrong-shake');
+    const slot = document.getElementById('a2-s' + a2SlotIdx);
+    slot.classList.add('error');
+    setTimeout(() => {
+      btn.classList.remove('wrong-shake');
+      slot.classList.remove('error');
+    }, 400);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+// ACT 3 — Speed Read
+// ════════════════════════════════════════════════════════════
+
+let a3Words, a3Idx, a3Stars, a3Dia, a3Answered, a3Timer, a3TimeLeft;
+
+const A3_TIME = 8000; // ms per word
+
+function startAct3() {
+  a3Words   = shuffle(A3_WORDS);
+  a3Idx     = 0;
+  a3Stars   = 0;
+  a3Dia     = 0;
+  a3Answered = false;
+  a3Timer   = null;
+  showScreen('screen-act3');
+  renderA3();
+}
+
+function renderA3() {
+  a3Answered  = false;
+  a3TimeLeft  = A3_TIME;
+
+  const w   = a3Words[a3Idx];
+  const tot = a3Words.length;
+
+  document.getElementById('a3-progress').style.width = `${(a3Idx / tot) * 100}%`;
+  document.getElementById('a3-round').textContent    = `${a3Idx + 1} / ${tot}`;
+  document.getElementById('a3-stars').textContent     = totalStars + a3Stars;
+  document.getElementById('a3-diamonds').textContent  = totalDiamonds + a3Dia;
+
+  // Show word with spaced letters
+  document.getElementById('a3-word').textContent = w.word.split('').join(' ');
+
+  // Timer
+  const timerFill = document.getElementById('a3-timer');
+  timerFill.style.width = '100%';
+  timerFill.style.background = 'var(--green)';
+
+  // Pick 2 distractors
+  const others = shuffle(ALL_WORDS.filter(x => x.word !== w.word)).slice(0, 2);
+  const items  = shuffle([w, ...others]);
+
+  const container = document.getElementById('a3-cards');
+  container.innerHTML = '';
+  items.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'speed-card';
+    card.innerHTML = `<div class="card-pic">${item.pic}</div><div class="card-word">${item.word}</div>`;
+    card.onclick = () => a3Tap(item.word === w.word, card, container);
+    container.appendChild(card);
+  });
+
+  const fb = document.getElementById('a3-fb');
+  fb.textContent = ''; fb.className = 'feedback hidden';
+  document.getElementById('a3-diamond').classList.remove('show');
+
+  // Start timer
+  if (a3Timer) clearInterval(a3Timer);
+  const tick = 100;
+  a3Timer = setInterval(() => {
+    a3TimeLeft -= tick;
+    const pct = Math.max(0, a3TimeLeft / A3_TIME) * 100;
+    timerFill.style.width = pct + '%';
+    if (pct < 30) timerFill.style.background = 'var(--orange)';
+    if (pct < 10) timerFill.style.background = 'var(--red)';
+    if (a3TimeLeft <= 0) {
+      clearInterval(a3Timer);
+      if (!a3Answered) a3Timeout(container);
+    }
+  }, tick);
+}
+
+function a3Tap(correct, card, container) {
+  if (a3Answered) return;
+  a3Answered = true;
+  clearInterval(a3Timer);
+  container.querySelectorAll('.speed-card').forEach(c => c.style.pointerEvents = 'none');
+
+  const fb = document.getElementById('a3-fb');
+  if (correct) {
+    card.classList.add('correct');
+    fb.textContent = '✓ Yes!'; fb.className = 'feedback ok';
+    const w = a3Words[a3Idx];
+    if (isDiamond(w.word)) {
+      a3Dia++;
+      document.getElementById('a3-diamond').classList.add('show');
+    } else {
+      a3Stars++;
+    }
+  } else {
+    card.classList.add('wrong');
+    // highlight correct
+    const w = a3Words[a3Idx];
+    container.querySelectorAll('.speed-card').forEach(c => {
+      if (c.querySelector('.card-word').textContent === w.word) c.classList.add('correct');
+    });
+    fb.textContent = 'Not quite!'; fb.className = 'feedback no';
+  }
+
+  document.getElementById('a3-stars').textContent    = totalStars + a3Stars;
+  document.getElementById('a3-diamonds').textContent = totalDiamonds + a3Dia;
+
+  setTimeout(advanceA3, 1800);
+}
+
+function a3Timeout(container) {
+  a3Answered = true;
+  container.querySelectorAll('.speed-card').forEach(c => c.style.pointerEvents = 'none');
+  const w = a3Words[a3Idx];
+  container.querySelectorAll('.speed-card').forEach(c => {
+    if (c.querySelector('.card-word').textContent === w.word) c.classList.add('correct');
+  });
+  const fb = document.getElementById('a3-fb');
+  fb.textContent = 'Time's up — it was ' + w.word + '!'; fb.className = 'feedback no';
+  setTimeout(advanceA3, 2000);
+}
+
+function advanceA3() {
+  a3Idx++;
+  if (a3Idx >= a3Words.length) showActResult(a3Stars, a3Dia, 3);
+  else renderA3();
+}
+
+// ════════════════════════════════════════════════════════════
+// SESSION SUMMARY
+// ════════════════════════════════════════════════════════════
+
+function showSummary() {
+  document.getElementById('sum-stars').textContent    = totalStars;
+  document.getElementById('sum-diamonds').textContent = totalDiamonds;
+
+  const bd = document.getElementById('sum-breakdown');
+  bd.innerHTML = '';
+  const names = { 1: '🔊 Sound Match', 2: '🧱 Build a Word', 3: '⚡ Speed Read' };
+  for (let i = 1; i <= 3; i++) {
+    const r = actResults[i] || { stars: 0, diamonds: 0 };
+    const row = document.createElement('div');
+    row.className = 'sb-row';
+    row.innerHTML = `
+      <span class="sb-name">${names[i]}</span>
+      <span class="sb-score">⭐${r.stars} 💎${r.diamonds}</span>`;
+    bd.appendChild(row);
+  }
+
+  // Save to localStorage
+  const key = 'saba_class_2026-08-30';
+  const data = { totalStars, totalDiamonds, actResults, date: '2026-08-30' };
+  try { localStorage.setItem(key, JSON.stringify(data)); } catch (e) {}
+
+  showScreen('screen-summary');
+}
+
+// ════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════
+
+refreshPlan();
+</script>
+
+</body>
+</html>

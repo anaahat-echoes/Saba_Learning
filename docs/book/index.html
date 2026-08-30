@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Saba's Story Maker</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --amber:       #e67700;
+  --amber-dark:  #b85c00;
+  --amber-light: #fff8e7;
+  --amber-pale:  #FFF4E0;
+  --green:       #2f9e44;
+  --green-light: #d3f9d8;
+  --red:         #e03131;
+  --gray:        #868e96;
+  --bg:          #FFF9F0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #1a1a2e;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px 10px;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--amber-dark);
+  text-decoration: none;
+}
+
+.header-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--amber-dark);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Screen 1: Start ─────────────────────── */
+#screen-start {
+  padding: 0 20px 32px;
+  align-items: center;
+}
+
+.start-hero {
+  text-align: center;
+  padding: 28px 0 24px;
+}
+
+.start-hero .icon { font-size: 3.5rem; display: block; margin-bottom: 10px; }
+.start-hero h1   { font-size: 1.6rem; font-weight: 900; color: var(--amber-dark); }
+.start-hero p    { font-size: 0.9rem; color: var(--gray); margin-top: 4px; }
+
+/* Continue card */
+.continue-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--amber-light);
+  border: 2px solid var(--amber);
+  border-radius: 20px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  display: none;
+}
+
+.continue-card.visible { display: block; }
+.continue-card .cc-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.07em; color: var(--amber); margin-bottom: 6px; }
+.continue-card .cc-title { font-size: 1.1rem; font-weight: 700; color: var(--amber-dark); }
+.continue-card .cc-pages { font-size: 0.82rem; color: var(--gray); margin-top: 2px; }
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 20px;
+  color: var(--gray);
+  font-size: 0.8rem;
+}
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #ddd; }
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gray);
+  margin-bottom: 12px;
+  align-self: flex-start;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* Name tiles */
+.name-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 16px;
+}
+
+.name-tile {
+  padding: 10px 20px;
+  border: 2px solid #ddd;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.name-tile.selected {
+  border-color: var(--amber);
+  background: var(--amber-light);
+  color: var(--amber-dark);
+}
+
+.custom-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 20px;
+}
+
+.custom-name-input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 2px solid #ddd;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  outline: none;
+  background: #fff;
+}
+
+.custom-name-input:focus { border-color: var(--amber); }
+.custom-name-input::placeholder { color: #ccc; font-weight: 400; }
+
+/* Pic tiles */
+.pic-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+  margin-bottom: 28px;
+}
+
+.pic-tile {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #ddd;
+  border-radius: 16px;
+  background: #fff;
+  font-size: 1.8rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.pic-tile.selected {
+  border-color: var(--amber);
+  background: var(--amber-light);
+}
+
+.btn-start {
+  background: var(--amber);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 40px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--amber-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+  width: 100%;
+  max-width: 440px;
+}
+
+.btn-start:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--amber-dark); }
+.btn-start:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: 0 5px 0 var(--amber-dark); }
+
+/* ── Screen 2: Build ─────────────────────── */
+#screen-build { padding-bottom: 24px; }
+
+/* Pages list */
+.pages-list {
+  max-height: 130px;
+  overflow-y: auto;
+  padding: 8px 20px;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.pages-list:empty::after {
+  content: 'Your book will appear here as you add sentences.';
+  color: #ccc;
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+.page-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f5f0e8;
+}
+
+.page-item:last-child { border-bottom: none; }
+
+.page-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gray);
+  min-width: 22px;
+}
+
+.page-text {
+  font-family: 'Courier New', monospace;
+  font-size: 0.88rem;
+  color: #333;
+  flex: 1;
+}
+
+.page-pics { font-size: 1.1rem; }
+
+/* Sentence builder */
+.builder-area {
+  padding: 16px 20px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.sentence-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  justify-content: center;
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  min-height: 88px;
+  border: 2.5px dashed #ccc;
+  border-radius: 16px;
+  padding: 8px;
+  gap: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: #fff;
+  position: relative;
+}
+
+.slot.filled {
+  border-style: solid;
+  border-color: var(--amber);
+  background: var(--amber-light);
+}
+
+.slot .slot-pic  { font-size: 2rem; line-height: 1; }
+.slot .slot-word {
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--amber-dark);
+}
+.slot .slot-empty { font-size: 0.8rem; color: #ccc; }
+
+.slot .clear-x {
+  position: absolute;
+  top: 4px; right: 6px;
+  font-size: 0.7rem;
+  color: var(--amber);
+  font-weight: 700;
+}
+
+.connector {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #555;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Builder buttons */
+.builder-btns {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.btn-hear {
+  background: none;
+  border: 2px solid #ddd;
+  border-radius: 50px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray);
+  cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-hear:active { background: #f5f5f5; }
+
+.btn-add {
+  flex: 1;
+  background: var(--amber);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--amber-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-add:active  { transform: translateY(3px); box-shadow: 0 1px 0 var(--amber-dark); }
+.btn-add:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: 0 4px 0 var(--amber-dark); }
+
+.btn-read-book {
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 18px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #1a7431;
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: none;
+}
+
+.btn-read-book.visible { display: block; }
+.btn-read-book:active  { transform: translateY(3px); box-shadow: 0 1px 0 #1a7431; }
+
+/* Word tile tray */
+.tray-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gray);
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.word-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 20px 4px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.word-tile {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  border: 2px solid #e0d8cc;
+  border-radius: 50px;
+  background: #fff;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #333;
+  transition: border-color 0.1s, background 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.word-tile:active { border-color: var(--amber); background: var(--amber-light); }
+
+.word-tile .tile-pic  { font-size: 1.2rem; line-height: 1; }
+.word-tile .tile-word { letter-spacing: 0.03em; }
+
+.word-tile.character {
+  border-color: var(--amber);
+  background: var(--amber-light);
+  color: var(--amber-dark);
+}
+
+/* ── Screen 3: Read ──────────────────────── */
+#screen-read {
+  background: var(--amber-pale);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 24px;
+}
+
+.read-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  width: 100%;
+  gap: 12px;
+}
+
+.read-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--amber-dark);
+  flex: 1;
+  text-align: center;
+}
+
+/* Page display */
+.read-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+  width: 100%;
+}
+
+.read-pics {
+  font-size: 5rem;
+  line-height: 1;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.read-sentence {
+  font-family: 'Courier New', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  text-align: center;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.read-sentence em {
+  color: var(--amber);
+  font-style: normal;
+}
+
+/* Page nav */
+.page-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.nav-btn {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  width: 48px; height: 48px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+.nav-btn:not(:disabled):active { background: #f0f0f0; }
+
+.page-counter {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gray);
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Read buttons */
+.read-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 20px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.btn-tts {
+  background: var(--amber);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 24px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--amber-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+.btn-tts:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--amber-dark); }
+
+.btn-outline {
+  background: #fff;
+  color: var(--amber-dark);
+  border: 2px solid var(--amber);
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-outline:active { background: var(--amber-light); }
+</style>
+</head>
+<body>
+
+<!-- ── SCREEN 1: Start ────────────────────── -->
+<div id="screen-start" class="screen active">
+  <div class="start-hero">
+    <span class="icon">📖</span>
+    <h1>Story Maker</h1>
+    <p>Build your own book, one sentence at a time</p>
+  </div>
+
+  <!-- Continue saved book -->
+  <div class="continue-card" id="continue-card" onclick="continueBook()">
+    <div class="cc-label">Your last book</div>
+    <div class="cc-title" id="cc-title"></div>
+    <div class="cc-pages" id="cc-pages"></div>
+  </div>
+
+  <div class="divider" id="start-divider">start a new book</div>
+
+  <div class="section-label">Who is the story about?</div>
+
+  <div class="name-tiles" id="name-tiles"></div>
+
+  <div class="custom-name-wrap">
+    <input
+      class="custom-name-input"
+      id="custom-name-input"
+      type="text"
+      maxlength="8"
+      placeholder="Type a name…"
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
+    >
+  </div>
+
+  <div class="section-label">Pick a picture for your character</div>
+  <div class="pic-tiles" id="pic-tiles"></div>
+
+  <button class="btn-start" id="btn-start" onclick="startBook()" disabled>
+    Make my book →
+  </button>
+</div>
+
+<!-- ── SCREEN 2: Build ────────────────────── -->
+<div id="screen-build" class="screen">
+  <div class="page-header">
+    <button class="back-btn" onclick="backFromBuild()" aria-label="Back">←</button>
+    <span class="header-title" id="build-title"></span>
+    <button class="btn-read-book" id="btn-read-book" onclick="goToRead()">Read 📖</button>
+  </div>
+
+  <div class="pages-list" id="pages-list"></div>
+
+  <div class="builder-area">
+    <div class="sentence-row">
+      <div class="slot" id="sub-slot" onclick="clearSlot('sub')">
+        <span class="slot-pic"   id="sub-pic"></span>
+        <span class="slot-word"  id="sub-word"></span>
+        <span class="slot-empty" id="sub-empty">who?</span>
+        <span class="clear-x"    id="sub-x" style="display:none">✕</span>
+      </div>
+      <span class="connector">has a</span>
+      <div class="slot" id="obj-slot" onclick="clearSlot('obj')">
+        <span class="slot-pic"   id="obj-pic"></span>
+        <span class="slot-word"  id="obj-word"></span>
+        <span class="slot-empty" id="obj-empty">what?</span>
+        <span class="clear-x"    id="obj-x" style="display:none">✕</span>
+      </div>
+    </div>
+
+    <div class="builder-btns">
+      <button class="btn-hear" onclick="hearSentence()">🔊 Hear it</button>
+      <button class="btn-add" id="btn-add" onclick="addPage()" disabled>
+        + Add to book
+      </button>
+    </div>
+  </div>
+
+  <div class="tray-label">Tap a word to use it</div>
+  <div class="word-tray" id="word-tray"></div>
+</div>
+
+<!-- ── SCREEN 3: Read ─────────────────────── -->
+<div id="screen-read" class="screen">
+  <div class="read-header">
+    <button class="back-btn" onclick="showScreen('screen-build')" aria-label="Back to building">←</button>
+    <span class="read-title" id="read-title"></span>
+    <div style="width:40px"></div>
+  </div>
+
+  <div class="read-page">
+    <div class="read-pics" id="read-pics"></div>
+    <div class="read-sentence" id="read-sentence"></div>
+  </div>
+
+  <div class="page-nav">
+    <button class="nav-btn" id="nav-prev" onclick="navPage(-1)">←</button>
+    <span class="page-counter" id="page-counter">1 / 3</span>
+    <button class="nav-btn" id="nav-next" onclick="navPage(+1)">→</button>
+  </div>
+
+  <div class="read-btns">
+    <button class="btn-tts" onclick="readThisPage()">🔊 Read this page</button>
+    <button class="btn-tts" style="background:#7048e8;box-shadow:0 4px 0 #5f3dc4;" onclick="readWholeBook()">
+      🔊 Read the whole book
+    </button>
+    <button class="btn-outline" onclick="showScreen('screen-start')">Start a new book</button>
+  </div>
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────
+
+const SUGGESTED_NAMES = ['Dot', 'Pat', 'Ben', 'Kit', 'Meg', 'Pip'];
+
+const CHAR_PICS = ['👧', '🧒', '👦', '🌟', '🦊', '🐱', '🐸', '🐻', '🐰', '🦁'];
+
+const NOUNS = [
+  { word: 'cat', pic: '🐱' },
+  { word: 'rat', pic: '🐀' },
+  { word: 'pig', pic: '🐷' },
+  { word: 'hen', pic: '🐔' },
+  { word: 'man', pic: '👨' },
+  { word: 'hat', pic: '🎩' },
+  { word: 'bag', pic: '👜' },
+  { word: 'cap', pic: '🧢' },
+  { word: 'pan', pic: '🍳' },
+  { word: 'pen', pic: '✏️' },
+  { word: 'pot', pic: '🍲' },
+  { word: 'egg', pic: '🥚' },
+  { word: 'pin', pic: '📌' },
+  { word: 'net', pic: '🕸️' },
+  { word: 'bed', pic: '🛏️' },
+  { word: 'fan', pic: '🪭' },
+  { word: 'van', pic: '🚐' },
+  { word: 'bin', pic: '🗑️' },
+  { word: 'jet', pic: '✈️' },
+  { word: 'pet', pic: '🐕' },
+];
+
+// ── State ─────────────────────────────────────────────────
+
+let charName  = '';
+let charPic   = '';
+let pages     = [];
+let currentSub = null;   // { word, pic } | null
+let currentObj = null;
+let readPage  = 0;
+
+// ── TTS ───────────────────────────────────────────────────
+
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt   = new SpeechSynthesisUtterance(text);
+  utt.lang    = 'en-GB';
+  utt.rate    = 0.82;
+  utt.pitch   = 1.05;
+  window.speechSynthesis.speak(utt);
+}
+
+// ── Screen switching ──────────────────────────────────────
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── Screen 1: Start ───────────────────────────────────────
+
+function initStart() {
+  // Continue card
+  const saved = loadBook();
+  const card  = document.getElementById('continue-card');
+  const divider = document.getElementById('start-divider');
+  if (saved && saved.pages.length > 0) {
+    document.getElementById('cc-title').textContent =
+      saved.charPic + ' ' + saved.charName + "'s Book";
+    const n = saved.pages.length;
+    document.getElementById('cc-pages').textContent =
+      `${n} page${n > 1 ? 's' : ''} — tap to keep going`;
+    card.classList.add('visible');
+    divider.style.display = 'flex';
+  } else {
+    divider.style.display = 'none';
+  }
+
+  // Name tiles
+  const nameTiles = document.getElementById('name-tiles');
+  nameTiles.innerHTML = '';
+  SUGGESTED_NAMES.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className   = 'name-tile';
+    btn.textContent = name;
+    btn.addEventListener('click', () => selectName(name, btn));
+    nameTiles.appendChild(btn);
+  });
+
+  // Custom input
+  const input = document.getElementById('custom-name-input');
+  input.value = '';
+  input.addEventListener('input', () => {
+    const val = input.value.trim();
+    if (val) {
+      document.querySelectorAll('.name-tile').forEach(t => t.classList.remove('selected'));
+      charName = capitalise(val);
+      updateStartBtn();
+    }
+  });
+
+  // Pic tiles
+  const picTiles = document.getElementById('pic-tiles');
+  picTiles.innerHTML = '';
+  CHAR_PICS.forEach(pic => {
+    const btn = document.createElement('button');
+    btn.className   = 'pic-tile';
+    btn.textContent = pic;
+    btn.addEventListener('click', () => selectPic(pic, btn));
+    picTiles.appendChild(btn);
+  });
+
+  charName = '';
+  charPic  = '';
+  updateStartBtn();
+}
+
+function capitalise(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
+
+function selectName(name, btn) {
+  document.querySelectorAll('.name-tile').forEach(t => t.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('custom-name-input').value = '';
+  charName = name;
+  updateStartBtn();
+}
+
+function selectPic(pic, btn) {
+  document.querySelectorAll('.pic-tile').forEach(t => t.classList.remove('selected'));
+  btn.classList.add('selected');
+  charPic = pic;
+  updateStartBtn();
+}
+
+function updateStartBtn() {
+  document.getElementById('btn-start').disabled = !(charName && charPic);
+}
+
+function continueBook() {
+  const saved = loadBook();
+  if (!saved) return;
+  charName = saved.charName;
+  charPic  = saved.charPic;
+  pages    = saved.pages;
+  enterBuild();
+}
+
+function startBook() {
+  pages = [];
+  enterBuild();
+}
+
+// ── Screen 2: Build ───────────────────────────────────────
+
+function enterBuild() {
+  currentSub = null;
+  currentObj = null;
+  showScreen('screen-build');
+  document.getElementById('build-title').textContent = charPic + ' ' + charName + "'s Book";
+  renderTray();
+  renderPages();
+  updateSlotUI();
+  updateBuildBtns();
+}
+
+function renderTray() {
+  const tray = document.getElementById('word-tray');
+  tray.innerHTML = '';
+
+  // Character tile first
+  const charTile = document.createElement('div');
+  charTile.className = 'word-tile character';
+  charTile.innerHTML = `<span class="tile-pic">${charPic}</span><span class="tile-word">${charName}</span>`;
+  charTile.addEventListener('click', () => tapWord({ word: charName, pic: charPic }));
+  tray.appendChild(charTile);
+
+  NOUNS.forEach(noun => {
+    const tile = document.createElement('div');
+    tile.className = 'word-tile';
+    tile.innerHTML = `<span class="tile-pic">${noun.pic}</span><span class="tile-word">${noun.word}</span>`;
+    tile.addEventListener('click', () => tapWord(noun));
+    tray.appendChild(tile);
+  });
+}
+
+function tapWord(noun) {
+  if (!currentSub) {
+    currentSub = noun;
+  } else if (!currentObj) {
+    currentObj = noun;
+  } else {
+    currentObj = noun;   // replace object
+  }
+  updateSlotUI();
+  updateBuildBtns();
+}
+
+function clearSlot(which) {
+  if (which === 'sub') { currentSub = null; currentObj = null; }
+  if (which === 'obj') { currentObj = null; }
+  updateSlotUI();
+  updateBuildBtns();
+}
+
+function updateSlotUI() {
+  setSlot('sub', currentSub);
+  setSlot('obj', currentObj);
+}
+
+function setSlot(which, noun) {
+  const picEl   = document.getElementById(which + '-pic');
+  const wordEl  = document.getElementById(which + '-word');
+  const emptyEl = document.getElementById(which + '-empty');
+  const xEl     = document.getElementById(which + '-x');
+  const slotEl  = document.getElementById(which + '-slot');
+
+  if (noun) {
+    picEl.textContent   = noun.pic;
+    wordEl.textContent  = noun.word;
+    emptyEl.style.display = 'none';
+    xEl.style.display     = 'inline';
+    slotEl.classList.add('filled');
+  } else {
+    picEl.textContent   = '';
+    wordEl.textContent  = '';
+    emptyEl.style.display = 'inline';
+    xEl.style.display     = 'none';
+    slotEl.classList.remove('filled');
+  }
+}
+
+function updateBuildBtns() {
+  const ready = currentSub && currentObj;
+  document.getElementById('btn-add').disabled = !ready;
+  const readBtn = document.getElementById('btn-read-book');
+  if (pages.length >= 1) readBtn.classList.add('visible');
+  else readBtn.classList.remove('visible');
+}
+
+function hearSentence() {
+  if (currentSub && currentObj) {
+    speak(`${currentSub.word} has a ${currentObj.word}`);
+  } else if (currentSub) {
+    speak(currentSub.word);
+  }
+}
+
+function addPage() {
+  if (!currentSub || !currentObj) return;
+  pages.push({ sub: { ...currentSub }, obj: { ...currentObj } });
+  saveBook();
+  currentSub = null;
+  currentObj = null;
+  updateSlotUI();
+  updateBuildBtns();
+  renderPages();
+  // Scroll pages list to bottom
+  const list = document.getElementById('pages-list');
+  list.scrollTop = list.scrollHeight;
+}
+
+function renderPages() {
+  const list = document.getElementById('pages-list');
+  list.innerHTML = '';
+  pages.forEach((pg, i) => {
+    const item = document.createElement('div');
+    item.className = 'page-item';
+    item.innerHTML = `
+      <span class="page-num">${i + 1}.</span>
+      <span class="page-text">${pg.sub.word} has a ${pg.obj.word}.</span>
+      <span class="page-pics">${pg.sub.pic} ${pg.obj.pic}</span>
+    `;
+    list.appendChild(item);
+  });
+  const readBtn = document.getElementById('btn-read-book');
+  if (pages.length >= 1) readBtn.classList.add('visible');
+  else readBtn.classList.remove('visible');
+}
+
+function backFromBuild() {
+  showScreen('screen-start');
+  initStart();
+}
+
+// ── Screen 3: Read ────────────────────────────────────────
+
+function goToRead() {
+  readPage = 0;
+  showScreen('screen-read');
+  document.getElementById('read-title').textContent = charPic + ' ' + charName + "'s Book";
+  renderReadPage();
+}
+
+function renderReadPage() {
+  const pg = pages[readPage];
+  document.getElementById('read-pics').textContent     = pg.sub.pic + '  ' + pg.obj.pic;
+  document.getElementById('read-sentence').innerHTML   =
+    `<em>${pg.sub.word}</em> has a <em>${pg.obj.word}</em>.`;
+  document.getElementById('page-counter').textContent  =
+    `${readPage + 1} / ${pages.length}`;
+  document.getElementById('nav-prev').disabled = readPage === 0;
+  document.getElementById('nav-next').disabled = readPage === pages.length - 1;
+}
+
+function navPage(dir) {
+  readPage = Math.max(0, Math.min(pages.length - 1, readPage + dir));
+  renderReadPage();
+}
+
+function readThisPage() {
+  const pg = pages[readPage];
+  speak(`${pg.sub.word} has a ${pg.obj.word}`);
+}
+
+function readWholeBook() {
+  const text = pages.map(pg => `${pg.sub.word} has a ${pg.obj.word}.`).join('  ');
+  speak(text);
+}
+
+// ── Persistence ───────────────────────────────────────────
+
+function saveBook() {
+  localStorage.setItem('saba_book_current', JSON.stringify({ charName, charPic, pages }));
+}
+
+function loadBook() {
+  try { return JSON.parse(localStorage.getItem('saba_book_current')); }
+  catch { return null; }
+}
+
+// ── Init ──────────────────────────────────────────────────
+
+initStart();
+</script>
+</body>
+</html>
