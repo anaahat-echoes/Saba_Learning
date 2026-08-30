@@ -135,7 +135,7 @@ Words using letters from Groups 1, 2, and 3.
 
 - [x] dog
 - [x] fog
-- [ ] log
+- [x] log
 - [ ] got
 - [ ] god
 - [ ] gap
@@ -211,7 +211,7 @@ Words using letters from Groups 1, 2, and 3.
 - [ ] crisp
 - [ ] crust
 - [ ] fun
-- [ ] frog
+- [x] frog
 - [ ] fit
 - [ ] fig
 - [ ] fin
@@ -325,7 +325,7 @@ Words using letters from Groups 1-4, including digraphs.
 - [ ] jam
 - [ ] jib
 - [ ] job
-- [ ] jog
+- [x] jog
 - [ ] jot
 - [ ] just
 - [ ] jump
