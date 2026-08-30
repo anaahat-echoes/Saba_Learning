@@ -771,6 +771,7 @@ body {
     <button class="hear-btn" id="a1-hear" onclick="a1PlayWord()">
       <span>🔊</span> <span id="a1-hear-text">Tap to hear</span>
     </button>
+    <button class="back-btn" id="a1-next" onclick="a1Forward()" aria-label="Next word" style="display:none;">→</button>
   </div>
   <div class="cards-row" id="a1-cards"></div>
   <div class="diamond-flash" id="a1-diamond">💎 Bonus letter!</div>
@@ -1016,14 +1017,15 @@ function showActResult(stars, diamonds, actNum) {
 // ACT 1 — Listen & Match
 // ════════════════════════════════════════════════════════════
 
-var a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
+var a1Words, a1Idx, a1Stars, a1Dia, a1Answered, a1MaxReached;
 
 function startAct1() {
-  a1Words    = shuffle(A1_WORDS);
-  a1Idx      = 0;
-  a1Stars    = 0;
-  a1Dia      = 0;
-  a1Answered = false;
+  a1Words      = shuffle(A1_WORDS);
+  a1Idx        = 0;
+  a1Stars      = 0;
+  a1Dia        = 0;
+  a1Answered   = false;
+  a1MaxReached = 0;
   showScreen('screen-act1');
   renderA1();
 }
@@ -1039,6 +1041,7 @@ function renderA1() {
   document.getElementById('a1-diamonds').textContent  = totalDiamonds + a1Dia;
   document.getElementById('a1-hear-text').textContent = 'Tap to hear';
   document.getElementById('a1-prev').style.display    = a1Idx > 0 ? '' : 'none';
+  document.getElementById('a1-next').style.display    = a1Idx < a1MaxReached ? '' : 'none';
 
   var dist;
   if (w.distractor) {
@@ -1078,6 +1081,13 @@ function a1Back() {
   }
 }
 
+function a1Forward() {
+  if (a1Idx < a1MaxReached && !a1Answered) {
+    a1Idx++;
+    renderA1();
+  }
+}
+
 function a1Tap(correct, card, container) {
   if (a1Answered) return;
   a1Answered = true;
@@ -1109,6 +1119,7 @@ function a1Tap(correct, card, container) {
 
   setTimeout(function() {
     a1Idx++;
+    if (a1Idx > a1MaxReached) a1MaxReached = a1Idx;
     if (a1Idx >= a1Words.length) showActResult(a1Stars, a1Dia, 1);
     else renderA1();
   }, 1800);
