@@ -589,6 +589,68 @@ body {
   cursor: pointer;
 }
 
+/* ── Watch section ───────────────────────── */
+.watch-section {
+  padding: 8px 20px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.watch-heading {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+  margin-top: 28px;
+}
+
+.video-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: #fff;
+  transition: background 0.15s;
+}
+
+.video-card:active { background: rgba(255,255,255,0.1); }
+
+.video-thumb {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 48px;
+  text-align: center;
+}
+
+.video-info { flex: 1; }
+
+.video-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.video-desc {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+}
+
+.video-play {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
 /* ── Summary screen ──────────────────────── */
 #screen-summary {
   align-items: center;
@@ -684,6 +746,64 @@ body {
       </div>
       <span class="act-card-status" id="status3">🔒</span>
     </div>
+  </div>
+
+  <div class="watch-section">
+    <div class="watch-heading">Watch after class</div>
+
+    <a href="https://www.youtube.com/watch?v=7myUvRHgu0g" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">🅰️</span>
+      <div class="video-info">
+        <span class="video-title">Alphablocks — Taps (Short A)</span>
+        <span class="video-desc">3 min · Learn the /a/ sound</span>
+      </div>
+      <span class="video-play">▶</span>
+    </a>
+
+    <a href="https://www.youtube.com/watch?v=Du-gphJHbPM" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">📧</span>
+      <div class="video-info">
+        <span class="video-title">Alphablocks — E Words (Short E)</span>
+        <span class="video-desc">1 min · Learn the /e/ sound</span>
+      </div>
+      <span class="video-play">▶</span>
+    </a>
+
+    <a href="https://www.youtube.com/watch?v=hDvWymWpUBY" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">ℹ️</span>
+      <div class="video-info">
+        <span class="video-title">Alphablocks — Short I</span>
+        <span class="video-desc">3 min · Learn the /i/ sound</span>
+      </div>
+      <span class="video-play">▶</span>
+    </a>
+
+    <a href="https://www.youtube.com/watch?v=RRFM7kDou5Q" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">⭕</span>
+      <div class="video-info">
+        <span class="video-title">Alphablocks — Dot (Short O)</span>
+        <span class="video-desc">3 min · Learn the /o/ sound</span>
+      </div>
+      <span class="video-play">▶</span>
+    </a>
+
+    <a href="https://www.youtube.com/watch?v=LgLbumOrXMA" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">⬆️</span>
+      <div class="video-info">
+        <span class="video-title">Alphablocks — Up (Short U)</span>
+        <span class="video-desc">3 min · Learn the /u/ sound</span>
+      </div>
+      <span class="video-play">▶</span>
+    </a>
+
+    <a href="https://www.youtube.com/watch?v=bJjQs9NJ0Ho" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">🐷</span>
+      <div class="video-info">
+        <span class="video-title">Peppa Pig — First Day at Playgroup</span>
+        <span class="video-desc">Fun listening practice · Simple English</span>
+      </div>
+      <span class="video-play">▶</span>
+    </a>
   </div>
 </div>
 

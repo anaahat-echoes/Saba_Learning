@@ -11,3 +11,7 @@ YouTube links used or planned across sessions. Can't be saved as files — keep 
 | Jack Hartmann — CVC Words Letter e | https://www.youtube.com/watch?v=_lM8cVG_xoQ | /e/ offline revision option | Structured, slow-paced. Good offline watch. |
 | Alphablocks — ee digraph (E for Summer) | https://www.youtube.com/watch?v=ycAZb-VmBO8 | October (vowel digraphs) | Two E blocks = long /ee/ sound. Save for Phase 5b. |
 | Alphablocks — short I | https://youtu.be/hDvWymWpUBY | Session 3 closer | Short /i/ only. Closing treat. |
+| Alphablocks — Taps (Short A) | https://www.youtube.com/watch?v=7myUvRHgu0g | Class 2026-08-30 watch section | ~3 min. Series 1 Ep 1 — /a/ sound |
+| Alphablocks — Dot (Short O) | https://www.youtube.com/watch?v=RRFM7kDou5Q | Class 2026-08-30 watch section | ~3 min. Series 1 Ep 8 — /o/ sound |
+| Alphablocks — Up (Short U) | https://www.youtube.com/watch?v=LgLbumOrXMA | Class 2026-08-30 watch section | ~3 min. Series 1 Ep 10 — /u/ sound |
+| Peppa Pig — First Day at Playgroup | https://www.youtube.com/watch?v=bJjQs9NJ0Ho | Class 2026-08-30 watch section | Listening practice. Simple dialogue, visual context. |
