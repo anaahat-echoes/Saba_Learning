@@ -700,7 +700,7 @@ var SKIP_QUESTIONS = [
 var skipQs, skipIdx, skipScore, skipSeq, skipBlankIdx, skipWaiting, skipTriedWrong;
 
 function startSkip() {
-  skipQs    = shuffle(SKIP_QUESTIONS);
+  skipQs    = SKIP_QUESTIONS.slice();
   skipIdx   = 0;
   skipScore = 0;
   showScreen('screen-skip');
