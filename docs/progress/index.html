@@ -273,7 +273,7 @@ function renderPairs() {
   const section = document.getElementById('pairs-section');
   const heading = document.createElement('div');
   heading.className   = 'section-heading';
-  heading.textContent = 'Phonics — Listen & Match';
+  heading.textContent = 'English — Listen & Match';
   section.appendChild(heading);
 
   let anyPlayed = false;
@@ -295,7 +295,7 @@ function renderLadders() {
   const section = document.getElementById('ladders-section');
   const heading = document.createElement('div');
   heading.className   = 'section-heading';
-  heading.textContent = 'Phonics — Word Ladders';
+  heading.textContent = 'English — Word Ladders';
   section.appendChild(heading);
 
   let anyPlayed = false;
@@ -318,7 +318,7 @@ function renderLadders() {
 // ── Copy for teacher ──────────────────────────────────────
 
 function buildTeacherText() {
-  const lines = ['📊 Saba — Phonics Progress', `Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`, ''];
+  const lines = ['📊 Saba — English Progress', `Date: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`, ''];
 
   lines.push('Listen & Match:');
   PAIRS_ACTIVITIES.forEach(({ key, name, total }) => {
