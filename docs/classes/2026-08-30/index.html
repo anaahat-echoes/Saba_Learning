@@ -996,6 +996,7 @@ function showActResult(stars, diamonds, actNum) {
   actResults[actNum] = { stars: stars, diamonds: diamonds };
   totalStars    += stars;
   totalDiamonds += diamonds;
+  saveProgress();
 
   var emoji = diamonds > 0 ? '💎' : stars >= 5 ? '🌟' : '👍';
   document.getElementById('res-emoji').textContent = emoji;
@@ -1386,23 +1387,43 @@ function showSummary() {
     bd.appendChild(row);
   }
 
+  saveProgress();
+  showScreen('screen-summary');
+}
+
+// ════════════════════════════════════════════════════════════
+// PERSISTENCE
+// ════════════════════════════════════════════════════════════
+
+var SAVE_KEY = 'saba_class_2026-08-30';
+
+function saveProgress() {
   try {
-    var key = 'saba_class_2026-08-30';
-    localStorage.setItem(key, JSON.stringify({
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
       totalStars: totalStars,
       totalDiamonds: totalDiamonds,
       actResults: actResults,
       date: '2026-08-30'
     }));
   } catch (e) {}
+}
 
-  showScreen('screen-summary');
+function loadProgress() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(SAVE_KEY) || '{}');
+    if (saved.actResults) {
+      actResults    = saved.actResults;
+      totalStars    = saved.totalStars || 0;
+      totalDiamonds = saved.totalDiamonds || 0;
+    }
+  } catch (e) {}
 }
 
 // ════════════════════════════════════════════════════════════
 // INIT
 // ════════════════════════════════════════════════════════════
 
+loadProgress();
 refreshPlan();
 </script>
 
