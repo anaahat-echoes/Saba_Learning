@@ -113,7 +113,7 @@ body {
 }
 
 .family-card {
-  background: #fff;
+  background: rgba(255,255,255,0.06);
   border-radius: 20px;
   padding: 20px 12px 16px;
   display: flex;
@@ -121,8 +121,8 @@ body {
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  border: none;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  border: 2px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
   transition: transform 0.1s, box-shadow 0.1s;
   position: relative;
   text-align: center;
@@ -130,7 +130,7 @@ body {
 
 .family-card:active {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
 }
 
 .family-card.locked {
@@ -148,7 +148,7 @@ body {
 
 .family-words {
   font-size: 0.72rem;
-  color: var(--gray);
+  color: rgba(255,255,255,0.5);
   font-family: 'Courier New', monospace;
   letter-spacing: 0.04em;
 }
@@ -156,7 +156,7 @@ body {
 .family-best {
   font-size: 0.7rem;
   font-weight: 700;
-  color: var(--purple);
+  color: #a78bfa;
   min-height: 16px;
 }
 
@@ -179,7 +179,7 @@ body {
 .progress-track {
   flex: 1;
   height: 8px;
-  background: #e9ecef;
+  background: rgba(255,255,255,0.1);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -219,15 +219,15 @@ body {
   width: 60px;
   height: 72px;
   border-radius: 14px;
-  border: 3px dashed #ced4da;
+  border: 3px dashed rgba(255,255,255,0.25);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.2rem;
   font-weight: 900;
   font-family: 'Courier New', monospace;
-  color: #1a1a2e;
-  background: #fff;
+  color: #fff;
+  background: rgba(255,255,255,0.06);
   transition: border-color 0.2s, background 0.2s;
 }
 
@@ -248,7 +248,7 @@ body {
   font-size: 2.2rem;
   font-weight: 900;
   font-family: 'Courier New', monospace;
-  color: #495057;
+  color: rgba(255,255,255,0.7);
 }
 
 /* Letter buttons */
@@ -263,22 +263,22 @@ body {
 }
 
 .letter-btn {
-  background: #fff;
-  border: 3px solid transparent;
+  background: rgba(255,255,255,0.06);
+  border: 3px solid rgba(255,255,255,0.08);
   border-radius: 18px;
   padding: 18px 8px;
   font-size: 1.8rem;
   font-weight: 900;
   font-family: 'Courier New', monospace;
-  color: #1a1a2e;
+  color: #fff;
   cursor: pointer;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
   transition: transform 0.08s, box-shadow 0.08s, opacity 0.15s;
 }
 
 .letter-btn:active {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.12);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
 }
 
 .letter-btn.correct-flash {
@@ -331,7 +331,7 @@ body {
 .result-score {
   font-size: 2rem;
   font-weight: 900;
-  color: var(--purple-dark);
+  color: #a78bfa;
   margin-bottom: 8px;
 }
 
@@ -343,14 +343,14 @@ body {
 
 .unlock-notice {
   display: none;
-  background: #fff9db;
-  border: 2px solid #f08c00;
+  background: rgba(240,140,0,0.15);
+  border: 2px solid rgba(240,140,0,0.4);
   border-radius: 16px;
   padding: 14px 20px;
   margin-bottom: 24px;
   font-size: 0.95rem;
   font-weight: 700;
-  color: #7c4700;
+  color: #ffd43b;
 }
 
 .unlock-notice.show { display: block; }
