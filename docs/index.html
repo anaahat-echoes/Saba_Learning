@@ -83,17 +83,6 @@ body {
   box-shadow: 0 2px 0 #3d249c;
 }
 
-/* Story World — amber */
-.world-stories {
-  background: linear-gradient(135deg, #f08c00 0%, #e67700 100%);
-  box-shadow: 0 6px 0 #b85c00;
-  color: #fff;
-}
-
-.world-stories:active {
-  box-shadow: 0 2px 0 #b85c00;
-}
-
 /* Class World — green */
 .world-class {
   background: linear-gradient(135deg, #2f9e44 0%, #1a7431 100%);
@@ -151,16 +140,6 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Quest hint ──────────────────────────── */
-.quest-hint {
-  font-size: 0.78rem;
-  text-align: center;
-  color: rgba(255,255,255,0.45);
-  max-width: 300px;
-  line-height: 1.5;
-  margin-bottom: 28px;
-}
-
 /* ── Stats ───────────────────────────────── */
 .stats {
   font-size: 0.9rem;
@@ -207,9 +186,6 @@ body {
     </div>
   </a>
 
-  <!-- Story World — locked or unlocked based on quest -->
-  <div id="story-world-slot"></div>
-
   <!-- Maths — coming soon -->
   <div class="world-card world-locked">
     <span class="world-icon">🔢</span>
@@ -221,8 +197,6 @@ body {
   </div>
 </div>
 
-<div class="quest-hint" id="quest-hint"></div>
-
 <div class="stats">
   <strong id="total-sessions">0</strong> sessions played
   &nbsp;·&nbsp;
@@ -230,87 +204,18 @@ body {
 </div>
 
 <script>
-// ── Quest unlock check ────────────────────────────────────
-
-function storyUnlocked() {
-  const a = JSON.parse(localStorage.getItem('saba_phonics_short-a') || '{}');
-  const e = JSON.parse(localStorage.getItem('saba_phonics_short-e') || '{}');
-  const ladderKeys = ['at','an','et','en','it','in','ot','op'];
-  const anyLadder  = ladderKeys.some(k => {
-    const d = JSON.parse(localStorage.getItem('saba_ladders_' + k) || '{}');
-    return (d.played || 0) > 0;
-  });
-  return (a.played || 0) >= 1 && (e.played || 0) >= 1 && anyLadder;
-}
-
-function questHint() {
-  const a = JSON.parse(localStorage.getItem('saba_phonics_short-a') || '{}');
-  const e = JSON.parse(localStorage.getItem('saba_phonics_short-e') || '{}');
-  const aPlayed = (a.played || 0) >= 1;
-  const ePlayed = (e.played || 0) >= 1;
-  const ladderKeys = ['at','an','et','en','it','in','ot','op'];
-  const anyLadder  = ladderKeys.some(k => {
-    const d = JSON.parse(localStorage.getItem('saba_ladders_' + k) || '{}');
-    return (d.played || 0) > 0;
-  });
-
-  if (!aPlayed || !ePlayed) {
-    const missing = [];
-    if (!aPlayed) missing.push('Short A');
-    if (!ePlayed) missing.push('Short E');
-    return `Play ${missing.join(' & ')} to start unlocking Story World`;
-  }
-  if (!anyLadder) {
-    return 'Play a Word Ladder to unlock Story World';
-  }
-  return '';
-}
-
-// ── Total sessions counter ────────────────────────────────
-
-function totalSessions() {
-  const pairKeys   = ['short-a', 'short-e', 'a-vs-e'];
-  const ladderKeys = ['at','an','et','en','it','in','ot','op'];
-  let n = 0;
-  pairKeys.forEach(k => {
-    const d = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
-    n += d.played || 0;
-  });
-  ladderKeys.forEach(k => {
-    const d = JSON.parse(localStorage.getItem('saba_ladders_' + k) || '{}');
-    n += d.played || 0;
-  });
-  return n;
-}
-
-// ── Render ────────────────────────────────────────────────
-
-const slot = document.getElementById('story-world-slot');
-
-if (storyUnlocked()) {
-  slot.innerHTML = `
-    <a href="book/" class="world-card world-stories">
-      <span class="world-icon">📖</span>
-      <div class="world-info">
-        <span class="world-name">Story World</span>
-        <span class="world-desc">Make your own book!</span>
-      </div>
-    </a>`;
-  document.getElementById('quest-hint').textContent = '';
-} else {
-  slot.innerHTML = `
-    <div class="world-card world-locked">
-      <span class="world-icon">📖</span>
-      <div class="world-info">
-        <span class="world-name">Story World</span>
-        <span class="world-desc">Make your own book</span>
-      </div>
-      <span class="lock-badge">🔒</span>
-    </div>`;
-  document.getElementById('quest-hint').textContent = questHint();
-}
-
-document.getElementById('total-sessions').textContent = totalSessions();
+const pairKeys   = ['short-a', 'short-e', 'a-vs-e'];
+const ladderKeys = ['at','an','et','en','it','in','ot','op'];
+let n = 0;
+pairKeys.forEach(k => {
+  const d = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
+  n += d.played || 0;
+});
+ladderKeys.forEach(k => {
+  const d = JSON.parse(localStorage.getItem('saba_ladders_' + k) || '{}');
+  n += d.played || 0;
+});
+document.getElementById('total-sessions').textContent = n;
 </script>
 
 </body>
