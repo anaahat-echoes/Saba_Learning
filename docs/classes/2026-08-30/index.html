@@ -872,40 +872,41 @@ function isDiamond(word) {
 }
 
 // Act 1: Listen & Match — hear word, tap the right picture from 2
+// 'big' uses a special size-contrast pair (same emoji, different sizes)
 var A1_WORDS = [
-  { word: 'big', pic: '🦣' },
+  { word: 'big', pic: '🐻', size: 'big', distractor: { word: 'small', pic: '🐻', size: 'small' } },
   { word: 'dog', pic: '🐕' },
   { word: 'hug', pic: '🤗' },
-  { word: 'fig', pic: '🫒' },
+  { word: 'hat', pic: '🎩' },
   { word: 'jug', pic: '🫗' },
-  { word: 'cob', pic: '🌽' },
+  { word: 'cup', pic: '☕' },
   { word: 'net', pic: '🕸️' },
   { word: 'mop', pic: '🧹' },
 ];
 
 // Distractor pool for Act 1
 var ALL_PICS = [
-  { word: 'big', pic: '🦣' }, { word: 'dog', pic: '🐕' },
-  { word: 'hug', pic: '🤗' }, { word: 'fig', pic: '🫒' },
-  { word: 'jug', pic: '🫗' }, { word: 'cob', pic: '🌽' },
-  { word: 'fog', pic: '🌫️' }, { word: 'jig', pic: '💃' },
+  { word: 'dog', pic: '🐕' },
+  { word: 'hug', pic: '🤗' }, { word: 'hat', pic: '🎩' },
+  { word: 'jug', pic: '🫗' }, { word: 'cup', pic: '☕' },
+  { word: 'fog', pic: '🌫️' }, { word: 'jet', pic: '✈️' },
   { word: 'bad', pic: '👎' }, { word: 'bug', pic: '🐛' },
   { word: 'dig', pic: '⛏️' }, { word: 'hid', pic: '🫣' },
   { word: 'jog', pic: '🏃' }, { word: 'dug', pic: '🕳️' },
   { word: 'net', pic: '🕸️' }, { word: 'mop', pic: '🧹' },
-  { word: 'rat', pic: '🐀' }, { word: 'sun', pic: '☀️' },
-  { word: 'pen', pic: '✏️' }, { word: 'cat', pic: '🐱' },
+  { word: 'bat', pic: '🏏' }, { word: 'bed', pic: '🛏️' },
+  { word: 'hen', pic: '🐔' }, { word: 'cat', pic: '🐱' },
 ];
 
 // Act 2: Word Ladder — grouped by rime, using only b-j onsets + diamond stretch
 var A2_FAMILIES = [
   {
-    rime: 'ig',
+    rime: 'ug',
     words: [
-      { word: 'big', pic: '🦣', onset: 'b' },
-      { word: 'dig', pic: '⛏️', onset: 'd' },
-      { word: 'fig', pic: '🫒', onset: 'f' },
-      { word: 'jig', pic: '💃', onset: 'j' },
+      { word: 'bug', pic: '🐛', onset: 'b' },
+      { word: 'dug', pic: '🕳️', onset: 'd' },
+      { word: 'hug', pic: '🤗', onset: 'h' },
+      { word: 'jug', pic: '🫗', onset: 'j' },
     ],
   },
   {
@@ -921,10 +922,10 @@ var A2_FAMILIES = [
 
 // Act 3: Build a Word — hear word, tap letters in order to spell it
 var A3_WORDS = [
-  { word: 'dig', pic: '⛏️' },
+  { word: 'dog', pic: '🐕' },
   { word: 'hug', pic: '🤗' },
-  { word: 'cob', pic: '🌽' },
-  { word: 'jig', pic: '💃' },
+  { word: 'cup', pic: '☕' },
+  { word: 'jet', pic: '✈️' },
   { word: 'fog', pic: '🌫️' },
   { word: 'bed', pic: '🛏️' },
 ];
@@ -1064,8 +1065,13 @@ function renderA1() {
   document.getElementById('a1-diamonds').textContent  = totalDiamonds + a1Dia;
   document.getElementById('a1-hear-text').textContent = 'Tap to hear';
 
-  var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
-  var dist   = others[Math.floor(Math.random() * others.length)];
+  var dist;
+  if (w.distractor) {
+    dist = w.distractor;
+  } else {
+    var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
+    dist = others[Math.floor(Math.random() * others.length)];
+  }
 
   var items = Math.random() < 0.5 ? [w, dist] : [dist, w];
   var container = document.getElementById('a1-cards');
@@ -1074,7 +1080,8 @@ function renderA1() {
   items.forEach(function(item) {
     var card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = '<div class="card-pic">' + item.pic + '</div><div class="card-word">' + item.word + '</div>';
+    var picSize = item.size === 'big' ? '5.5rem' : item.size === 'small' ? '1.8rem' : '3.5rem';
+    card.innerHTML = '<div class="card-pic" style="font-size:' + picSize + '">' + item.pic + '</div><div class="card-word">' + item.word + '</div>';
     card.onclick = function() { a1Tap(item.word === w.word, card, container); };
     container.appendChild(card);
   });
