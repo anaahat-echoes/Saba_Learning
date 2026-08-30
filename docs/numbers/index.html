@@ -257,64 +257,71 @@ body {
   animation: shake 0.35s ease;
 }
 
-/* ── Skip counting ───────────────────────── */
-.skip-story {
-  text-align: center;
-  padding: 20px 24px 8px;
-  font-size: 1rem;
-  color: rgba(255,255,255,0.7);
-  line-height: 1.5;
+/* ── Skip counting — ladder ─────────────── */
+.ladder-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 20px 4px;
 }
 
-.skip-story strong {
-  color: #fff;
-  font-weight: 800;
+.ladder-dir {
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+  opacity: 0.6;
 }
 
-.skip-display {
+.ladder {
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+  border-left: 5px solid rgba(255,255,255,0.13);
+  border-right: 5px solid rgba(255,255,255,0.13);
+}
+
+.rung {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 20px 20px 8px;
-  flex-wrap: wrap;
+  gap: 6px;
+  height: 36px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  border-bottom: 3px solid rgba(255,255,255,0.13);
+  position: relative;
+  transition: background 0.3s, color 0.3s;
 }
 
-.skip-num {
-  font-size: 2rem;
-  font-weight: 900;
-  min-width: 52px;
-  text-align: center;
-  background: rgba(255,255,255,0.06);
-  border-radius: 14px;
-  padding: 10px 8px;
-  line-height: 1;
+.rung:first-child {
+  border-top: 3px solid rgba(255,255,255,0.13);
 }
 
-.skip-num.given { color: var(--blue); }
-.skip-num.blank {
-  border: 3px dashed rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.03);
-  color: transparent;
-  min-height: 52px;
+.rung.dim {
+  color: rgba(255,255,255,0.13);
+  background: transparent;
 }
 
-.skip-num.blank.current {
-  border-color: rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.06);
+.rung.lit {
+  background: rgba(25,113,194,0.12);
+  color: rgba(25,113,194,0.5);
 }
 
-.skip-num.filled {
+.rung.given {
+  background: rgba(25,113,194,0.25);
+  color: #fff;
+}
+
+.rung.filled {
+  background: rgba(47,158,68,0.2);
   color: var(--green);
-  border-style: solid;
-  border-color: var(--green);
-  background: rgba(47,158,68,0.15);
   animation: pop 0.25s ease;
 }
 
-.skip-arrow {
-  font-size: 1.2rem;
-  color: rgba(255,255,255,0.2);
+.rung.current {
+  background: rgba(245,159,0,0.18);
+  border-top-color: var(--gold);
+  border-bottom-color: var(--gold);
+  color: var(--gold);
 }
 
 .number-grid {
@@ -498,8 +505,7 @@ body {
     <div class="round-label" id="skip-round">1 / 10</div>
   </div>
 
-  <div class="skip-story" id="skip-story"></div>
-  <div class="skip-display" id="skip-display"></div>
+  <div class="ladder-wrap" id="skip-ladder"></div>
   <div class="number-grid" id="skip-grid"></div>
   <div class="feedback hidden" id="skip-fb"></div>
 </div>
@@ -675,20 +681,20 @@ function cmpTap(symbol) {
 }
 
 // ════════════════════════════════════════════════════════════
-// SKIP COUNTING — stairs story
+// SKIP COUNTING — visual ladder
 // ════════════════════════════════════════════════════════════
 
 var SKIP_QUESTIONS = [
-  { skip: 2, dir: 'up',   start: 2,  steps: 4, story: 'Saba is going UP the stairs, skipping <strong>2 steps</strong> at a time!' },
-  { skip: 2, dir: 'up',   start: 4,  steps: 4, story: 'Keep climbing! Skip <strong>2 steps</strong> each time.' },
-  { skip: 2, dir: 'down', start: 20, steps: 4, story: 'Now Saba is coming DOWN! Skip <strong>2 steps</strong> going down.' },
-  { skip: 2, dir: 'down', start: 16, steps: 4, story: 'Almost at the bottom! Skip <strong>2 steps</strong> down.' },
-  { skip: 2, dir: 'up',   start: 6,  steps: 4, story: 'Up again! Skip <strong>2 steps</strong> at a time.' },
-  { skip: 3, dir: 'up',   start: 3,  steps: 4, story: 'Now Saba is brave — skipping <strong>3 steps</strong> at a time going UP!' },
-  { skip: 3, dir: 'up',   start: 6,  steps: 4, story: 'Keep going! <strong>3 steps</strong> each time.' },
-  { skip: 3, dir: 'down', start: 18, steps: 4, story: 'Coming down by <strong>3 steps</strong> at a time!' },
-  { skip: 3, dir: 'down', start: 15, steps: 4, story: 'Almost there! <strong>3 steps</strong> down.' },
-  { skip: 2, dir: 'up',   start: 10, steps: 4, story: 'Last one! Skip <strong>2 steps</strong> up from step 10!' },
+  { skip: 2, dir: 'up',   start: 2,  steps: 4 },
+  { skip: 2, dir: 'up',   start: 4,  steps: 4 },
+  { skip: 2, dir: 'down', start: 20, steps: 4 },
+  { skip: 2, dir: 'down', start: 16, steps: 4 },
+  { skip: 2, dir: 'up',   start: 6,  steps: 4 },
+  { skip: 3, dir: 'up',   start: 3,  steps: 4 },
+  { skip: 3, dir: 'up',   start: 6,  steps: 4 },
+  { skip: 3, dir: 'down', start: 18, steps: 4 },
+  { skip: 3, dir: 'down', start: 15, steps: 4 },
+  { skip: 2, dir: 'up',   start: 10, steps: 4 },
 ];
 
 var skipQs, skipIdx, skipScore, skipSeq, skipBlankIdx, skipWaiting, skipTriedWrong;
@@ -711,42 +717,57 @@ function renderSkip() {
   document.getElementById('skip-progress').style.width = (skipIdx / tot * 100) + '%';
   document.getElementById('skip-round').textContent    = (skipIdx + 1) + ' / ' + tot;
   document.getElementById('skip-score').textContent     = skipScore;
-  document.getElementById('skip-story').innerHTML       = q.story;
 
-  // Build the sequence
   skipSeq = [];
   for (var i = 0; i < q.steps; i++) {
-    if (q.dir === 'up') {
-      skipSeq.push(q.start + i * q.skip);
-    } else {
-      skipSeq.push(q.start - i * q.skip);
-    }
+    if (q.dir === 'up') skipSeq.push(q.start + i * q.skip);
+    else skipSeq.push(q.start - i * q.skip);
   }
 
-  // Show first number, blank the rest
   skipBlankIdx = 1;
-  var display = document.getElementById('skip-display');
-  display.innerHTML = '';
 
-  for (var i = 0; i < skipSeq.length; i++) {
-    if (i > 0) {
-      var arrow = document.createElement('span');
-      arrow.className = 'skip-arrow';
-      arrow.textContent = q.dir === 'up' ? '→' : '→';
-      display.appendChild(arrow);
-    }
-    var num = document.createElement('div');
-    num.id = 'skip-n' + i;
-    if (i === 0) {
-      num.className = 'skip-num given';
-      num.textContent = skipSeq[i];
+  var seqMin = Math.min.apply(null, skipSeq);
+  var seqMax = Math.max.apply(null, skipSeq);
+  var seqSet = {};
+  skipSeq.forEach(function(n) { seqSet[n] = true; });
+
+  var wrap = document.getElementById('skip-ladder');
+  wrap.innerHTML = '';
+
+  var dirEl = document.createElement('div');
+  dirEl.className = 'ladder-dir';
+  dirEl.textContent = q.dir === 'up' ? '⬆' : '⬇';
+  wrap.appendChild(dirEl);
+
+  var ladder = document.createElement('div');
+  ladder.className = 'ladder';
+
+  for (var n = seqMax; n >= seqMin; n--) {
+    var rung = document.createElement('div');
+    rung.className = 'rung';
+    rung.id = 'rung-' + n;
+
+    if (seqSet[n]) {
+      if (n === skipSeq[0]) {
+        rung.classList.add('given');
+        rung.textContent = n;
+      } else if (n === skipSeq[1]) {
+        rung.classList.add('lit', 'current');
+        rung.innerHTML = '?&nbsp;🧒';
+      } else {
+        rung.classList.add('lit');
+        rung.textContent = '?';
+      }
     } else {
-      num.className = 'skip-num blank' + (i === 1 ? ' current' : '');
+      rung.classList.add('dim');
+      rung.textContent = n;
     }
-    display.appendChild(num);
+
+    ladder.appendChild(rung);
   }
 
-  // Number options: correct answer + 3 distractors
+  wrap.appendChild(ladder);
+
   renderSkipGrid();
 
   var fb = document.getElementById('skip-fb');
@@ -758,15 +779,12 @@ function renderSkipGrid() {
   var q = skipQs[skipIdx];
   var distractors = [];
 
-  // Generate plausible wrong answers
   var candidates = [correct + 1, correct - 1, correct + q.skip + 1, correct - q.skip + 1];
   candidates = candidates.filter(function(n) { return n !== correct && n > 0 && n <= 20; });
-  // Remove duplicates
   var seen = {};
   candidates = candidates.filter(function(n) { if (seen[n]) return false; seen[n] = true; return true; });
   distractors = candidates.slice(0, 3);
 
-  // Fill to 3 if needed
   while (distractors.length < 3) {
     var r = Math.floor(Math.random() * 20) + 1;
     if (r !== correct && distractors.indexOf(r) < 0) distractors.push(r);
@@ -794,21 +812,22 @@ function skipTap(n, btn) {
     skipWaiting = true;
     btn.classList.add('correct-flash');
 
-    var slot = document.getElementById('skip-n' + skipBlankIdx);
-    slot.textContent = n;
-    slot.className = 'skip-num filled';
+    var rung = document.getElementById('rung-' + correct);
+    rung.textContent = correct;
+    rung.className = 'rung filled';
 
     skipBlankIdx++;
 
     if (skipBlankIdx < skipSeq.length) {
-      // More blanks to fill
-      document.getElementById('skip-n' + skipBlankIdx).classList.add('current');
+      var nextRung = document.getElementById('rung-' + skipSeq[skipBlankIdx]);
+      nextRung.className = 'rung lit current';
+      nextRung.innerHTML = '?&nbsp;🧒';
+
       setTimeout(function() {
         skipWaiting = false;
         renderSkipGrid();
       }, 600);
     } else {
-      // Round complete
       if (!skipTriedWrong) skipScore++;
       document.getElementById('skip-score').textContent = skipScore;
 
