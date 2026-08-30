@@ -875,7 +875,7 @@ var WORD_BANK = {
   bad: '👎',  bat: '🏏',  bed: '🛏️', big: '🐻',  bug: '🐛',
   bus: '🚌',  cat: '🐱',  cup: '☕',  dig: '⛏️', dog: '🐕',
   drop:'💧',  dug: '🕳️', fog: '🌫️', hat: '🎩',  hen: '🐔',
-  hid: '🫣',  hog: '🐷', jet: '✈️',  jog: '🏃', jug: '🏺',
+  hid: '🫣',  jet: '✈️',  jug: '🏺',
   net: '🕸️',
 };
 
@@ -894,16 +894,18 @@ var A1_WORDS = [
   wb('dog'), wb('bus'), wb('hat'), wb('jug'), wb('cup'), wb('net'), wb('drop'),
 ];
 
-var ALL_PICS = 'dog bus hat jug cup fog jet bad bug dig hid jog dug net drop bat bed hen cat'.split(' ').map(wb);
+var ALL_PICS = 'dog bus hat jug cup fog jet bad bug dig hid dug net drop bat bed hen cat'.split(' ').map(wb);
 
 // ── Act 2: Word Ladder ──────────────────────────────────
 var A2_FAMILIES = [
   { rime: 'ug', words: ['bug','dug','jug'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'og', words: ['dog','fog','hog','jog'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'og', words: ['dog','fog'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
 ];
 
 // ── Act 3: Build a Word ─────────────────────────────────
-var A3_WORDS = ['dog','bus','cup','jet','fog','bed'].map(wb);
+var A3_WORDS_BASE = ['dog','bus','cup','jet','fog'].map(wb);
+A3_WORDS_BASE.push({ word: 'bed', pic: WORD_BANK.bed, distractors: ['a','t'] });
+var A3_WORDS = A3_WORDS_BASE;
 
 // ════════════════════════════════════════════════════════════
 // GLOBAL STATE
@@ -1271,10 +1273,21 @@ function renderA3() {
   }
 
   var letters = w.word.split('');
-  var extras = 'abcdefghij'.split('').filter(function(c) {
-    return letters.indexOf(c) === -1;
-  });
-  extras = shuffle(extras).slice(0, 3);
+  var extras;
+  if (w.distractors) {
+    extras = w.distractors.filter(function(c) { return letters.indexOf(c) === -1; });
+    var need = 3 - extras.length;
+    if (need > 0) {
+      var pool = 'abcdefghij'.split('').filter(function(c) {
+        return letters.indexOf(c) === -1 && extras.indexOf(c) === -1;
+      });
+      extras = extras.concat(shuffle(pool).slice(0, need));
+    }
+  } else {
+    extras = shuffle('abcdefghij'.split('').filter(function(c) {
+      return letters.indexOf(c) === -1;
+    })).slice(0, 3);
+  }
   var options = shuffle(letters.concat(extras));
 
   var grid = document.getElementById('a3-grid');
