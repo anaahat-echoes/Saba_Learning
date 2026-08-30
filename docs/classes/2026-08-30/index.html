@@ -871,9 +871,9 @@ body {
 
 var WORD_BANK = {
   bad: '👎',  bat: '🏏',  bed: '🛏️', big: '🐻',  bug: '🐛',
-  cat: '🐱',  cup: '☕',  dig: '⛏️', dog: '🐕',  dug: '🕳️',
-  fog: '🌫️', hat: '🎩',  hen: '🐔', hid: '🫣',  hog: '🐷',
-  hug: '🤗',  jet: '✈️',  jog: '🏃', jug: '🏺',  mop: '🧹',
+  bus: '🚌',  cat: '🐱',  cup: '☕',  dig: '⛏️', dog: '🐕',
+  drop:'💧',  dug: '🕳️', fog: '🌫️', hat: '🎩',  hen: '🐔',
+  hid: '🫣',  hog: '🐷', jet: '✈️',  jog: '🏃', jug: '🏺',
   net: '🕸️',
 };
 
@@ -889,19 +889,19 @@ function isDiamond(word) {
 // ── Act 1: Listen & Match ────────────────────────────────
 var A1_WORDS = [
   { word: 'big', pic: WORD_BANK.big, size: 'big', distractor: { word: 'small', pic: WORD_BANK.big, size: 'small' } },
-  wb('dog'), wb('hug'), wb('hat'), wb('jug'), wb('cup'), wb('net'), wb('mop'),
+  wb('dog'), wb('bus'), wb('hat'), wb('jug'), wb('cup'), wb('net'), wb('drop'),
 ];
 
-var ALL_PICS = 'dog hug hat jug cup fog jet bad bug dig hid jog dug net mop bat bed hen cat'.split(' ').map(wb);
+var ALL_PICS = 'dog bus hat jug cup fog jet bad bug dig hid jog dug net drop bat bed hen cat'.split(' ').map(wb);
 
 // ── Act 2: Word Ladder ──────────────────────────────────
 var A2_FAMILIES = [
-  { rime: 'ug', words: ['bug','dug','hug','jug'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'ug', words: ['bug','dug','jug'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'og', words: ['dog','fog','hog','jog'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
 ];
 
 // ── Act 3: Build a Word ─────────────────────────────────
-var A3_WORDS = ['dog','hug','cup','jet','fog','bed'].map(wb);
+var A3_WORDS = ['dog','bus','cup','jet','fog','bed'].map(wb);
 
 // ════════════════════════════════════════════════════════════
 // GLOBAL STATE
