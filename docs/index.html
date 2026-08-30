@@ -157,6 +157,37 @@ body {
   text-decoration: underline;
   margin-left: 10px;
 }
+
+/* ── Achievements ────────────────────────── */
+.achievements {
+  margin-bottom: 20px;
+  padding: 18px 28px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.1);
+  max-width: 380px;
+  width: 100%;
+}
+
+.trophy-row {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  font-size: 1.5rem;
+}
+
+.trophy-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trophy-item strong {
+  font-weight: 900;
+}
+
+.trophy-stars strong { color: #f59f00; }
+.trophy-diamonds strong { color: #22b8cf; }
 </style>
 </head>
 <body>
@@ -197,6 +228,13 @@ body {
   </div>
 </div>
 
+<div class="achievements" id="achievements" style="display:none;">
+  <div class="trophy-row">
+    <span class="trophy-item trophy-stars">⭐ <strong id="total-stars">0</strong></span>
+    <span class="trophy-item trophy-diamonds">💎 <strong id="total-diamonds">0</strong></span>
+  </div>
+</div>
+
 <div class="stats">
   <strong id="total-sessions">0</strong> sessions played
   &nbsp;·&nbsp;
@@ -206,7 +244,11 @@ body {
 <script>
 const pairKeys   = ['short-a', 'short-e', 'a-vs-e'];
 const ladderKeys = ['at','an','et','en','it','in','ot','op'];
+const buildKeys  = ['todays-words', 'more-cvc'];
+const classKeys  = ['2026-08-30'];
 let n = 0;
+let stars = 0, diamonds = 0;
+
 pairKeys.forEach(k => {
   const d = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
   n += d.played || 0;
@@ -215,7 +257,28 @@ ladderKeys.forEach(k => {
   const d = JSON.parse(localStorage.getItem('saba_ladders_' + k) || '{}');
   n += d.played || 0;
 });
+buildKeys.forEach(k => {
+  const d = JSON.parse(localStorage.getItem('saba_build_' + k) || '{}');
+  n += d.played || 0;
+});
+classKeys.forEach(k => {
+  const d = JSON.parse(localStorage.getItem('saba_class_' + k) || '{}');
+  if (d.totalStars) stars += d.totalStars;
+  if (d.totalDiamonds) diamonds += d.totalDiamonds;
+  if (d.actResults) {
+    for (const a in d.actResults) {
+      if (d.actResults[a]) n++;
+    }
+  }
+});
+
 document.getElementById('total-sessions').textContent = n;
+
+if (stars > 0 || diamonds > 0) {
+  document.getElementById('achievements').style.display = '';
+  document.getElementById('total-stars').textContent = stars;
+  document.getElementById('total-diamonds').textContent = diamonds;
+}
 </script>
 
 </body>
