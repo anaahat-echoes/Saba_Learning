@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Numbers World</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:       #1971c2;
+  --blue-dark:  #1259a1;
+  --green:      #2f9e44;
+  --red:        #e03131;
+  --orange:     #f08c00;
+  --gold:       #f59f00;
+  --gray:       rgba(255,255,255,0.5);
+  --bg:         #1a1a2e;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── Top bar ─────────────────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px 10px;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.top-title {
+  flex: 1;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+
+.score-badge {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+/* ── Picker ──────────────────────────────── */
+#screen-pick { padding-bottom: 40px; }
+
+.pick-hero {
+  text-align: center;
+  padding: 20px 24px 28px;
+}
+
+.pick-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+
+.pick-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.pick-sub {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.act-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.act-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.act-card:active { transform: translateY(2px); }
+
+.act-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.act-info { flex: 1; }
+
+.act-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.act-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+}
+
+.act-arrow {
+  font-size: 1.2rem;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* ── Game shared ─────────────────────────── */
+.game-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 12px;
+}
+
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  width: 0%;
+  background: var(--blue);
+}
+
+.round-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  white-space: nowrap;
+}
+
+.feedback {
+  text-align: center;
+  padding: 16px 20px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  min-height: 52px;
+}
+
+.feedback.ok { color: var(--green); }
+.feedback.no { color: var(--red); }
+.feedback.hidden { visibility: hidden; }
+
+@keyframes pop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  60%  { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+/* ── Compare: number display ─────────────── */
+.compare-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px 20px 24px;
+}
+
+.compare-num {
+  font-size: 4rem;
+  font-weight: 900;
+  min-width: 80px;
+  text-align: center;
+  background: rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 16px 12px;
+  line-height: 1;
+}
+
+.compare-vs {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+}
+
+.symbol-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.symbol-btn {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border: 3px solid transparent;
+  border-radius: 20px;
+  padding: 20px 8px;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.2s;
+}
+
+.symbol-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.symbol-btn.correct {
+  border-color: var(--green);
+  background: rgba(47,158,68,0.2);
+}
+
+.symbol-btn.wrong {
+  border-color: var(--red);
+  background: rgba(224,49,49,0.15);
+  animation: shake 0.35s ease;
+}
+
+/* ── Skip counting ───────────────────────── */
+.skip-story {
+  text-align: center;
+  padding: 20px 24px 8px;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+}
+
+.skip-story strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+.skip-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 20px 8px;
+  flex-wrap: wrap;
+}
+
+.skip-num {
+  font-size: 2rem;
+  font-weight: 900;
+  min-width: 52px;
+  text-align: center;
+  background: rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 10px 8px;
+  line-height: 1;
+}
+
+.skip-num.given { color: var(--blue); }
+.skip-num.blank {
+  border: 3px dashed rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.03);
+  color: transparent;
+  min-height: 52px;
+}
+
+.skip-num.blank.current {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.06);
+}
+
+.skip-num.filled {
+  color: var(--green);
+  border-style: solid;
+  border-color: var(--green);
+  background: rgba(47,158,68,0.15);
+  animation: pop 0.25s ease;
+}
+
+.skip-arrow {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.2);
+}
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px 24px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.num-btn {
+  background: rgba(255,255,255,0.08);
+  border: 3px solid transparent;
+  border-radius: 18px;
+  padding: 18px 8px;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+.num-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.num-btn.correct-flash {
+  background: rgba(47,158,68,0.25);
+  border-color: var(--green);
+}
+
+.num-btn.wrong-shake {
+  animation: shake 0.35s ease;
+  background: rgba(224,49,49,0.15);
+  border-color: var(--red);
+}
+
+.num-btn.dimmed {
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* ── Result ──────────────────────────────── */
+#screen-result {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.result-emoji { font-size: 4rem; margin-bottom: 16px; }
+.result-title { font-size: 1.6rem; font-weight: 900; margin-bottom: 12px; }
+
+.result-score {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.result-detail {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 32px;
+}
+
+.result-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--blue-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.btn-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--blue-dark);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- ── PICKER ────────────────────────────── -->
+<div id="screen-pick" class="screen active">
+  <div class="top-bar">
+    <a href="../" class="back-btn" aria-label="Home">←</a>
+    <span class="top-title">🔢 Numbers World</span>
+  </div>
+
+  <div class="pick-hero">
+    <span class="pick-icon">🔢</span>
+    <div class="pick-title">Numbers World</div>
+    <div class="pick-sub">Pick an activity to play</div>
+  </div>
+
+  <div class="act-list">
+    <div class="act-card" onclick="startCompare()">
+      <span class="act-icon">⚖️</span>
+      <div class="act-info">
+        <span class="act-name">Bigger or Smaller?</span>
+        <span class="act-desc">Compare two numbers — tap &gt; &lt; or =</span>
+      </div>
+      <span class="act-arrow">▶</span>
+    </div>
+
+    <div class="act-card" onclick="startSkip()">
+      <span class="act-icon">🪜</span>
+      <div class="act-info">
+        <span class="act-name">Skip the Steps!</span>
+        <span class="act-desc">Count by 2s and 3s up and down the stairs</span>
+      </div>
+      <span class="act-arrow">▶</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── COMPARE GAME ──────────────────────── -->
+<div id="screen-compare" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="goToPicker()" aria-label="Back">←</button>
+    <span class="top-title">Bigger or Smaller?</span>
+    <span class="score-badge">⭐ <span id="cmp-score">0</span></span>
+  </div>
+  <div class="game-progress">
+    <div class="progress-track"><div class="progress-fill" id="cmp-progress"></div></div>
+    <div class="round-label" id="cmp-round">1 / 10</div>
+  </div>
+
+  <div class="compare-area">
+    <div class="compare-num" id="cmp-left"></div>
+    <div class="compare-vs">?</div>
+    <div class="compare-num" id="cmp-right"></div>
+  </div>
+
+  <div class="symbol-row" id="cmp-symbols">
+    <button class="symbol-btn" onclick="cmpTap('<')">&lt;</button>
+    <button class="symbol-btn" onclick="cmpTap('=')">=</button>
+    <button class="symbol-btn" onclick="cmpTap('>')">&gt;</button>
+  </div>
+
+  <div class="feedback hidden" id="cmp-fb"></div>
+</div>
+
+<!-- ── SKIP COUNTING GAME ────────────────── -->
+<div id="screen-skip" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="goToPicker()" aria-label="Back">←</button>
+    <span class="top-title">Skip the Steps!</span>
+    <span class="score-badge">⭐ <span id="skip-score">0</span></span>
+  </div>
+  <div class="game-progress">
+    <div class="progress-track"><div class="progress-fill" id="skip-progress"></div></div>
+    <div class="round-label" id="skip-round">1 / 10</div>
+  </div>
+
+  <div class="skip-story" id="skip-story"></div>
+  <div class="skip-display" id="skip-display"></div>
+  <div class="number-grid" id="skip-grid"></div>
+  <div class="feedback hidden" id="skip-fb"></div>
+</div>
+
+<!-- ── RESULT ────────────────────────────── -->
+<div id="screen-result" class="screen">
+  <div class="result-emoji" id="res-emoji">🎉</div>
+  <div class="result-title" id="res-title">Great work!</div>
+  <div class="result-score" id="res-score">⭐ 0 / 10</div>
+  <div class="result-detail" id="res-detail"></div>
+  <div class="result-btns">
+    <button class="btn-primary" id="res-again">Play again</button>
+    <button class="btn-secondary" onclick="goToPicker()">Back to Numbers World</button>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// SHARED
+// ════════════════════════════════════════════════════════════
+
+function showScreen(id) {
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
+function goToPicker() { showScreen('screen-pick'); }
+
+function showResult(score, total, game, againFn) {
+  var pct = score / total;
+  var emoji = pct >= 0.8 ? '🌟' : pct >= 0.5 ? '👍' : '💪';
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-title').textContent =
+    pct >= 0.8 ? 'Amazing!' : pct >= 0.5 ? 'Good job!' : 'Keep practising!';
+  document.getElementById('res-score').textContent = '⭐ ' + score + ' / ' + total;
+  document.getElementById('res-detail').textContent =
+    score === total ? 'Perfect score!' : 'You got ' + score + ' right!';
+
+  var btn = document.getElementById('res-again');
+  btn.textContent = 'Play again';
+  btn.onclick = againFn;
+
+  try {
+    var key = 'saba_numbers_' + game;
+    var prev = JSON.parse(localStorage.getItem(key) || '{}');
+    prev.played = (prev.played || 0) + 1;
+    prev.bestScore = Math.max(prev.bestScore || 0, score);
+    prev.lastPlayed = new Date().toISOString().slice(0, 10);
+    prev.totalQuestions = total;
+    localStorage.setItem(key, JSON.stringify(prev));
+  } catch(e) {}
+
+  showScreen('screen-result');
+}
+
+// ════════════════════════════════════════════════════════════
+// COMPARE — Greater, Less, or Equal
+// ════════════════════════════════════════════════════════════
+
+var CMP_PAIRS = [
+  [12, 8],
+  [5, 15],
+  [23, 23],
+  [7, 42],
+  [30, 19],
+  [14, 14],
+  [3, 9],
+  [45, 38],
+  [16, 27],
+  [50, 50],
+];
+
+var cmpPairs, cmpIdx, cmpScore, cmpAnswered;
+
+function startCompare() {
+  cmpPairs    = shuffle(CMP_PAIRS);
+  cmpIdx      = 0;
+  cmpScore    = 0;
+  cmpAnswered = false;
+  showScreen('screen-compare');
+  renderCmp();
+}
+
+function renderCmp() {
+  cmpAnswered = false;
+  var pair = cmpPairs[cmpIdx];
+  var tot  = cmpPairs.length;
+
+  document.getElementById('cmp-progress').style.width = (cmpIdx / tot * 100) + '%';
+  document.getElementById('cmp-round').textContent    = (cmpIdx + 1) + ' / ' + tot;
+  document.getElementById('cmp-score').textContent     = cmpScore;
+
+  document.getElementById('cmp-left').textContent  = pair[0];
+  document.getElementById('cmp-right').textContent = pair[1];
+
+  var btns = document.querySelectorAll('.symbol-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].className = 'symbol-btn';
+    btns[i].style.pointerEvents = '';
+  }
+
+  var fb = document.getElementById('cmp-fb');
+  fb.textContent = ''; fb.className = 'feedback hidden';
+}
+
+function cmpTap(symbol) {
+  if (cmpAnswered) return;
+  cmpAnswered = true;
+
+  var pair = cmpPairs[cmpIdx];
+  var correct;
+  if (pair[0] > pair[1])      correct = '>';
+  else if (pair[0] < pair[1]) correct = '<';
+  else                        correct = '=';
+
+  var btns = document.querySelectorAll('.symbol-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].style.pointerEvents = 'none';
+
+  var fb = document.getElementById('cmp-fb');
+  var tappedBtn = null;
+  var correctBtn = null;
+  for (var i = 0; i < btns.length; i++) {
+    var t = btns[i].textContent.trim();
+    if (t === symbol || (symbol === '<' && t === '<') || (symbol === '>' && t === '>')) {
+      if (btns[i].onclick.toString().indexOf("'" + symbol + "'") >= 0 ||
+          btns[i].textContent.trim() === symbol) {
+        tappedBtn = btns[i];
+      }
+    }
+  }
+
+  // Find buttons by their symbol content
+  for (var i = 0; i < btns.length; i++) {
+    var btnSymbol = btns[i].textContent.trim();
+    if (btnSymbol === '<' && symbol === '<') tappedBtn = btns[i];
+    if (btnSymbol === '=' && symbol === '=') tappedBtn = btns[i];
+    if (btnSymbol === '>' && symbol === '>') tappedBtn = btns[i];
+    if (btnSymbol === '<' && correct === '<') correctBtn = btns[i];
+    if (btnSymbol === '=' && correct === '=') correctBtn = btns[i];
+    if (btnSymbol === '>' && correct === '>') correctBtn = btns[i];
+  }
+
+  if (symbol === correct) {
+    cmpScore++;
+    tappedBtn.classList.add('correct');
+    fb.textContent = '✓ ' + pair[0] + ' ' + correct + ' ' + pair[1];
+    fb.className = 'feedback ok';
+  } else {
+    tappedBtn.classList.add('wrong');
+    correctBtn.classList.add('correct');
+    fb.textContent = pair[0] + ' ' + correct + ' ' + pair[1];
+    fb.className = 'feedback no';
+  }
+
+  document.getElementById('cmp-score').textContent = cmpScore;
+
+  setTimeout(function() {
+    cmpIdx++;
+    if (cmpIdx >= cmpPairs.length) showResult(cmpScore, cmpPairs.length, 'compare', startCompare);
+    else renderCmp();
+  }, 1800);
+}
+
+// ════════════════════════════════════════════════════════════
+// SKIP COUNTING — stairs story
+// ════════════════════════════════════════════════════════════
+
+var SKIP_QUESTIONS = [
+  { skip: 2, dir: 'up',   start: 2,  steps: 4, story: 'Saba is going UP the stairs, skipping <strong>2 steps</strong> at a time!' },
+  { skip: 2, dir: 'up',   start: 4,  steps: 4, story: 'Keep climbing! Skip <strong>2 steps</strong> each time.' },
+  { skip: 2, dir: 'down', start: 20, steps: 4, story: 'Now Saba is coming DOWN! Skip <strong>2 steps</strong> going down.' },
+  { skip: 2, dir: 'down', start: 16, steps: 4, story: 'Almost at the bottom! Skip <strong>2 steps</strong> down.' },
+  { skip: 2, dir: 'up',   start: 6,  steps: 4, story: 'Up again! Skip <strong>2 steps</strong> at a time.' },
+  { skip: 3, dir: 'up',   start: 3,  steps: 4, story: 'Now Saba is brave — skipping <strong>3 steps</strong> at a time going UP!' },
+  { skip: 3, dir: 'up',   start: 6,  steps: 4, story: 'Keep going! <strong>3 steps</strong> each time.' },
+  { skip: 3, dir: 'down', start: 18, steps: 4, story: 'Coming down by <strong>3 steps</strong> at a time!' },
+  { skip: 3, dir: 'down', start: 15, steps: 4, story: 'Almost there! <strong>3 steps</strong> down.' },
+  { skip: 2, dir: 'up',   start: 10, steps: 4, story: 'Last one! Skip <strong>2 steps</strong> up from step 10!' },
+];
+
+var skipQs, skipIdx, skipScore, skipSeq, skipBlankIdx, skipWaiting, skipTriedWrong;
+
+function startSkip() {
+  skipQs    = shuffle(SKIP_QUESTIONS);
+  skipIdx   = 0;
+  skipScore = 0;
+  showScreen('screen-skip');
+  renderSkip();
+}
+
+function renderSkip() {
+  skipWaiting    = false;
+  skipTriedWrong = false;
+
+  var q   = skipQs[skipIdx];
+  var tot = skipQs.length;
+
+  document.getElementById('skip-progress').style.width = (skipIdx / tot * 100) + '%';
+  document.getElementById('skip-round').textContent    = (skipIdx + 1) + ' / ' + tot;
+  document.getElementById('skip-score').textContent     = skipScore;
+  document.getElementById('skip-story').innerHTML       = q.story;
+
+  // Build the sequence
+  skipSeq = [];
+  for (var i = 0; i < q.steps; i++) {
+    if (q.dir === 'up') {
+      skipSeq.push(q.start + i * q.skip);
+    } else {
+      skipSeq.push(q.start - i * q.skip);
+    }
+  }
+
+  // Show first number, blank the rest
+  skipBlankIdx = 1;
+  var display = document.getElementById('skip-display');
+  display.innerHTML = '';
+
+  for (var i = 0; i < skipSeq.length; i++) {
+    if (i > 0) {
+      var arrow = document.createElement('span');
+      arrow.className = 'skip-arrow';
+      arrow.textContent = q.dir === 'up' ? '→' : '→';
+      display.appendChild(arrow);
+    }
+    var num = document.createElement('div');
+    num.id = 'skip-n' + i;
+    if (i === 0) {
+      num.className = 'skip-num given';
+      num.textContent = skipSeq[i];
+    } else {
+      num.className = 'skip-num blank' + (i === 1 ? ' current' : '');
+    }
+    display.appendChild(num);
+  }
+
+  // Number options: correct answer + 3 distractors
+  renderSkipGrid();
+
+  var fb = document.getElementById('skip-fb');
+  fb.textContent = ''; fb.className = 'feedback hidden';
+}
+
+function renderSkipGrid() {
+  var correct = skipSeq[skipBlankIdx];
+  var q = skipQs[skipIdx];
+  var distractors = [];
+
+  // Generate plausible wrong answers
+  var candidates = [correct + 1, correct - 1, correct + q.skip + 1, correct - q.skip + 1];
+  candidates = candidates.filter(function(n) { return n !== correct && n > 0 && n <= 20; });
+  // Remove duplicates
+  var seen = {};
+  candidates = candidates.filter(function(n) { if (seen[n]) return false; seen[n] = true; return true; });
+  distractors = candidates.slice(0, 3);
+
+  // Fill to 3 if needed
+  while (distractors.length < 3) {
+    var r = Math.floor(Math.random() * 20) + 1;
+    if (r !== correct && distractors.indexOf(r) < 0) distractors.push(r);
+  }
+
+  var options = shuffle([correct].concat(distractors));
+
+  var grid = document.getElementById('skip-grid');
+  grid.innerHTML = '';
+  options.forEach(function(n) {
+    var btn = document.createElement('button');
+    btn.className = 'num-btn';
+    btn.textContent = n;
+    btn.onclick = function() { skipTap(n, btn); };
+    grid.appendChild(btn);
+  });
+}
+
+function skipTap(n, btn) {
+  if (skipWaiting) return;
+
+  var correct = skipSeq[skipBlankIdx];
+
+  if (n === correct) {
+    skipWaiting = true;
+    btn.classList.add('correct-flash');
+
+    var slot = document.getElementById('skip-n' + skipBlankIdx);
+    slot.textContent = n;
+    slot.className = 'skip-num filled';
+
+    skipBlankIdx++;
+
+    if (skipBlankIdx < skipSeq.length) {
+      // More blanks to fill
+      document.getElementById('skip-n' + skipBlankIdx).classList.add('current');
+      setTimeout(function() {
+        skipWaiting = false;
+        renderSkipGrid();
+      }, 600);
+    } else {
+      // Round complete
+      if (!skipTriedWrong) skipScore++;
+      document.getElementById('skip-score').textContent = skipScore;
+
+      var fb = document.getElementById('skip-fb');
+      fb.textContent = '✓ Well done!'; fb.className = 'feedback ok';
+
+      setTimeout(function() {
+        skipIdx++;
+        if (skipIdx >= skipQs.length) showResult(skipScore, skipQs.length, 'skip', startSkip);
+        else renderSkip();
+      }, 1500);
+    }
+  } else {
+    skipTriedWrong = true;
+    btn.classList.add('wrong-shake');
+    setTimeout(function() { btn.classList.remove('wrong-shake'); }, 400);
+  }
+}
+</script>
+
+</body>
+</html>
