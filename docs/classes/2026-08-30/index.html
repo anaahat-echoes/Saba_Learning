@@ -767,6 +767,7 @@ body {
     <div class="round-label" id="a1-round">1 / 8</div>
   </div>
   <div class="hear-wrap">
+    <button class="back-btn" id="a1-prev" onclick="a1Back()" aria-label="Previous word" style="display:none;">←</button>
     <button class="hear-btn" id="a1-hear" onclick="a1PlayWord()">
       <span>🔊</span> <span id="a1-hear-text">Tap to hear</span>
     </button>
@@ -1037,6 +1038,7 @@ function renderA1() {
   document.getElementById('a1-stars').textContent     = totalStars + a1Stars;
   document.getElementById('a1-diamonds').textContent  = totalDiamonds + a1Dia;
   document.getElementById('a1-hear-text').textContent = 'Tap to hear';
+  document.getElementById('a1-prev').style.display    = a1Idx > 0 ? '' : 'none';
 
   var dist;
   if (w.distractor) {
@@ -1067,6 +1069,13 @@ function renderA1() {
 function a1PlayWord() {
   speak(a1Words[a1Idx].word);
   document.getElementById('a1-hear-text').textContent = 'Hear it again';
+}
+
+function a1Back() {
+  if (a1Idx > 0 && !a1Answered) {
+    a1Idx--;
+    renderA1();
+  }
 }
 
 function a1Tap(correct, card, container) {
