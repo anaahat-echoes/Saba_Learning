@@ -10,7 +10,6 @@
 :root {
   --purple: #7048e8;
   --purple-dark: #5f3dc4;
-  --purple-light: #F3F0FF;
   --green: #2f9e44;
   --green-light: #d3f9d8;
   --red: #e03131;
@@ -30,11 +29,10 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ── Screens ─────────────────────────────── */
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: flex; flex-direction: column; }
 
-/* ── Header bar ──────────────────────────── */
+/* ── Top bar ─────────────────────────────── */
 .top-bar {
   display: flex;
   align-items: center;
@@ -74,10 +72,8 @@ body {
 .score-stars { color: var(--gold); }
 .score-diamonds { color: var(--diamond); }
 
-/* ── Class overview (screen-plan) ────────── */
-#screen-plan {
-  padding-bottom: 40px;
-}
+/* ── Plan screen ─────────────────────────── */
+#screen-plan { padding-bottom: 40px; }
 
 .class-hero {
   text-align: center;
@@ -103,7 +99,6 @@ body {
 .class-sub {
   font-size: 0.9rem;
   color: rgba(255,255,255,0.55);
-  line-height: 1.4;
 }
 
 .score-hero {
@@ -115,7 +110,6 @@ body {
   font-weight: 800;
 }
 
-/* Activity cards */
 .act-list {
   display: flex;
   flex-direction: column;
@@ -164,7 +158,6 @@ body {
 
 .act-num.n1 { background: var(--purple); }
 .act-num.n2 { background: var(--orange); }
-.act-num.n3 { background: var(--diamond); }
 
 .act-card-info { flex: 1; }
 
@@ -185,7 +178,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ── Shared game layout ──────────────────── */
+/* ── Game shared ─────────────────────────── */
 .game-progress {
   display: flex;
   align-items: center;
@@ -215,7 +208,36 @@ body {
   white-space: nowrap;
 }
 
-/* ── Activity 1: Sound Match ─────────────── */
+.diamond-flash {
+  display: none;
+  text-align: center;
+  padding: 4px 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--diamond);
+}
+
+.diamond-flash.show { display: block; animation: pop 0.4s ease; }
+
+@keyframes pop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  60%  { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.feedback {
+  text-align: center;
+  padding: 16px 20px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  min-height: 52px;
+}
+
+.feedback.ok { color: var(--green); }
+.feedback.no { color: var(--red); }
+.feedback.hidden { visibility: hidden; }
+
+/* ── Listen & Match (Act 1) ──────────────── */
 .hear-wrap {
   display: flex;
   justify-content: center;
@@ -303,57 +325,26 @@ body {
   80% { transform: translateX(6px); }
 }
 
-.feedback {
-  text-align: center;
-  padding: 16px 20px 0;
-  font-size: 1rem;
-  font-weight: 700;
-  min-height: 52px;
-}
-
-.feedback.ok { color: var(--green); }
-.feedback.no { color: var(--red); }
-.feedback.hidden { visibility: hidden; }
-
-/* diamond flash */
-.diamond-flash {
-  display: none;
-  text-align: center;
-  padding: 4px 20px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--diamond);
-}
-
-.diamond-flash.show { display: block; animation: pop 0.4s ease; }
-
-@keyframes pop {
-  0%   { transform: scale(0.7); opacity: 0; }
-  60%  { transform: scale(1.2); }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* ── Activity 2: Build a Word ────────────── */
-.build-pic {
-  text-align: center;
-  font-size: 5rem;
-  padding: 20px 0 8px;
-  line-height: 1;
-}
-
-.build-slots {
+/* ── Word Ladder (Act 2) ─────────────────── */
+.word-display {
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 8px 20px 4px;
+  gap: 4px;
+  padding: 24px 20px 8px;
 }
 
-.build-slot {
-  width: 64px;
-  height: 76px;
+.word-pic {
+  font-size: 4.5rem;
+  line-height: 1;
+  margin-right: 12px;
+}
+
+.onset-slot {
+  width: 60px;
+  height: 72px;
   border-radius: 14px;
   border: 3px dashed rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.05);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -361,51 +352,29 @@ body {
   font-weight: 900;
   font-family: 'Courier New', monospace;
   color: #fff;
+  background: rgba(255,255,255,0.05);
   transition: border-color 0.2s, background 0.2s;
 }
 
-.build-slot.active {
-  border-color: var(--orange);
-  border-style: solid;
-  background: rgba(240,140,0,0.12);
-}
-
-.build-slot.filled {
+.onset-slot.filled {
   border-style: solid;
   border-color: var(--green);
   background: rgba(47,158,68,0.15);
   animation: pop 0.25s ease;
 }
 
-.build-slot.error {
-  border-color: var(--red);
-  background: rgba(224,49,49,0.15);
-  animation: shake 0.35s ease;
+.rime-part {
+  font-size: 2.2rem;
+  font-weight: 900;
+  font-family: 'Courier New', monospace;
+  color: rgba(255,255,255,0.6);
 }
-
-.build-slot-label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.35);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-align: center;
-  margin-top: 2px;
-}
-
-.slot-labels {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-.slot-labels span { width: 64px; text-align: center; }
 
 .letter-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  padding: 16px 24px;
+  gap: 12px;
+  padding: 20px 24px;
   max-width: 480px;
   margin: 0 auto;
   width: 100%;
@@ -415,8 +384,8 @@ body {
   background: rgba(255,255,255,0.08);
   border: 3px solid transparent;
   border-radius: 18px;
-  padding: 16px 8px;
-  font-size: 1.7rem;
+  padding: 18px 8px;
+  font-size: 1.8rem;
   font-weight: 900;
   font-family: 'Courier New', monospace;
   color: #fff;
@@ -446,78 +415,16 @@ body {
   pointer-events: none;
 }
 
-/* ── Activity 3: Speed Round ─────────────── */
-.speed-word {
+.hint-text {
   text-align: center;
-  padding: 28px 20px 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  min-height: 32px;
+  padding: 4px 20px;
 }
 
-.speed-letters {
-  font-size: 3rem;
-  font-weight: 900;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 0.15em;
-  color: #fff;
-}
-
-.speed-timer {
-  width: 100%;
-  height: 4px;
-  background: rgba(255,255,255,0.1);
-  margin: 8px 20px 0;
-  max-width: 480px;
-  align-self: center;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.speed-timer-fill {
-  height: 100%;
-  background: var(--green);
-  border-radius: 2px;
-  transition: width 0.1s linear, background 0.3s;
-  width: 100%;
-}
-
-.speed-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  padding: 16px 20px;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.speed-card {
-  background: rgba(255,255,255,0.08);
-  border-radius: 20px;
-  border: 3px solid transparent;
-  padding: 16px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: transform 0.1s, border-color 0.2s, background 0.2s;
-}
-
-.speed-card:active { transform: scale(0.95); }
-
-.speed-card .card-pic { font-size: 2.8rem; }
-.speed-card .card-word { font-size: 1rem; color: rgba(255,255,255,0.6); }
-
-.speed-card.correct {
-  border-color: var(--green);
-  background: rgba(47,158,68,0.2);
-}
-
-.speed-card.wrong {
-  border-color: var(--red);
-  background: rgba(224,49,49,0.15);
-  animation: shake 0.4s ease;
-}
-
-/* ── Result screen ───────────────────────── */
+/* ── Result ──────────────────────────────── */
 #screen-result {
   align-items: center;
   justify-content: center;
@@ -525,16 +432,8 @@ body {
   text-align: center;
 }
 
-.result-emoji {
-  font-size: 4rem;
-  margin-bottom: 16px;
-}
-
-.result-title {
-  font-size: 1.6rem;
-  font-weight: 900;
-  margin-bottom: 12px;
-}
+.result-emoji { font-size: 4rem; margin-bottom: 16px; }
+.result-title { font-size: 1.6rem; font-weight: 900; margin-bottom: 12px; }
 
 .result-summary {
   display: flex;
@@ -549,7 +448,6 @@ body {
   font-size: 0.9rem;
   color: rgba(255,255,255,0.55);
   margin-bottom: 32px;
-  line-height: 1.5;
 }
 
 .result-btns {
@@ -588,6 +486,48 @@ body {
   font-weight: 700;
   cursor: pointer;
 }
+
+/* ── Summary ─────────────────────────────── */
+#screen-summary {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.summary-trophy { font-size: 5rem; margin-bottom: 16px; }
+.summary-title { font-size: 1.6rem; font-weight: 900; margin-bottom: 20px; }
+
+.summary-scores {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 28px;
+}
+
+.summary-breakdown {
+  text-align: left;
+  background: rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.sb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 0.9rem;
+}
+
+.sb-row + .sb-row { border-top: 1px solid rgba(255,255,255,0.06); }
+.sb-name { flex: 1; }
+.sb-score { font-weight: 800; }
 
 /* ── Watch section ───────────────────────── */
 .watch-section {
@@ -650,56 +590,6 @@ body {
   flex-shrink: 0;
   opacity: 0.5;
 }
-
-/* ── Summary screen ──────────────────────── */
-#screen-summary {
-  align-items: center;
-  justify-content: center;
-  padding: 32px 24px;
-  text-align: center;
-}
-
-.summary-trophy {
-  font-size: 5rem;
-  margin-bottom: 16px;
-}
-
-.summary-title {
-  font-size: 1.6rem;
-  font-weight: 900;
-  margin-bottom: 20px;
-}
-
-.summary-scores {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 28px;
-}
-
-.summary-breakdown {
-  text-align: left;
-  background: rgba(255,255,255,0.06);
-  border-radius: 16px;
-  padding: 16px 20px;
-  margin-bottom: 32px;
-  width: 100%;
-  max-width: 320px;
-}
-
-.sb-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 0;
-  font-size: 0.9rem;
-}
-
-.sb-row + .sb-row { border-top: 1px solid rgba(255,255,255,0.06); }
-.sb-name { flex: 1; }
-.sb-score { font-weight: 800; }
 </style>
 </head>
 <body>
@@ -707,7 +597,7 @@ body {
 <!-- ── PLAN SCREEN ───────────────────────── -->
 <div id="screen-plan" class="screen active">
   <div class="top-bar">
-    <a href="../../" class="back-btn" aria-label="Home">←</a>
+    <a href="../" class="back-btn" aria-label="Back">←</a>
     <span class="top-title">Today's Class</span>
     <div class="score-badge">
       <span class="score-stars">⭐ <span id="plan-stars">0</span></span>
@@ -718,14 +608,14 @@ body {
   <div class="class-hero">
     <div class="class-date">30 August 2026</div>
     <div class="class-title">Let's learn our vowels!</div>
-    <div class="class-sub">3 activities — finish each to unlock the next</div>
+    <div class="class-sub">2 activities — finish each to unlock the next</div>
   </div>
 
-  <div class="act-list" id="act-list">
+  <div class="act-list">
     <div class="act-card" id="plan-act1" onclick="launchActivity(1)">
       <div class="act-num n1">1</div>
       <div class="act-card-info">
-        <span class="act-card-name">🔊 Sound Match</span>
+        <span class="act-card-name">🔊 Listen &amp; Match</span>
         <span class="act-card-desc">Hear a word, tap the picture</span>
       </div>
       <span class="act-card-status" id="status1">▶</span>
@@ -733,18 +623,10 @@ body {
     <div class="act-card locked" id="plan-act2" onclick="launchActivity(2)">
       <div class="act-num n2">2</div>
       <div class="act-card-info">
-        <span class="act-card-name">🧱 Build a Word</span>
-        <span class="act-card-desc">Tap letters to spell the word</span>
+        <span class="act-card-name">🪜 Word Ladder</span>
+        <span class="act-card-desc">Fill in the missing letter</span>
       </div>
       <span class="act-card-status" id="status2">🔒</span>
-    </div>
-    <div class="act-card locked" id="plan-act3" onclick="launchActivity(3)">
-      <div class="act-num n3">3</div>
-      <div class="act-card-info">
-        <span class="act-card-name">⚡ Speed Read</span>
-        <span class="act-card-desc">Read the word, find the picture</span>
-      </div>
-      <span class="act-card-status" id="status3">🔒</span>
     </div>
   </div>
 
@@ -755,7 +637,7 @@ body {
       <span class="video-thumb">🅰️</span>
       <div class="video-info">
         <span class="video-title">Alphablocks — Taps (Short A)</span>
-        <span class="video-desc">3 min · Learn the /a/ sound</span>
+        <span class="video-desc">3 min</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -764,7 +646,7 @@ body {
       <span class="video-thumb">📧</span>
       <div class="video-info">
         <span class="video-title">Alphablocks — E Words (Short E)</span>
-        <span class="video-desc">1 min · Learn the /e/ sound</span>
+        <span class="video-desc">1 min</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -773,7 +655,7 @@ body {
       <span class="video-thumb">ℹ️</span>
       <div class="video-info">
         <span class="video-title">Alphablocks — Short I</span>
-        <span class="video-desc">3 min · Learn the /i/ sound</span>
+        <span class="video-desc">3 min</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -782,7 +664,7 @@ body {
       <span class="video-thumb">⭕</span>
       <div class="video-info">
         <span class="video-title">Alphablocks — Dot (Short O)</span>
-        <span class="video-desc">3 min · Learn the /o/ sound</span>
+        <span class="video-desc">3 min</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -791,7 +673,7 @@ body {
       <span class="video-thumb">⬆️</span>
       <div class="video-info">
         <span class="video-title">Alphablocks — Up (Short U)</span>
-        <span class="video-desc">3 min · Learn the /u/ sound</span>
+        <span class="video-desc">3 min</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -800,18 +682,18 @@ body {
       <span class="video-thumb">🐷</span>
       <div class="video-info">
         <span class="video-title">Peppa Pig — First Day at Playgroup</span>
-        <span class="video-desc">Fun listening practice · Simple English</span>
+        <span class="video-desc">Listening practice</span>
       </div>
       <span class="video-play">▶</span>
     </a>
   </div>
 </div>
 
-<!-- ── ACT 1: Sound Match ────────────────── -->
+<!-- ── ACT 1: Listen & Match ─────────────── -->
 <div id="screen-act1" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
-    <span class="top-title">Sound Match</span>
+    <span class="top-title">Listen &amp; Match</span>
     <div class="score-badge">
       <span class="score-stars">⭐ <span id="a1-stars">0</span></span>
       <span class="score-diamonds">💎 <span id="a1-diamonds">0</span></span>
@@ -831,11 +713,11 @@ body {
   <div class="feedback hidden" id="a1-fb"></div>
 </div>
 
-<!-- ── ACT 2: Build a Word ───────────────── -->
+<!-- ── ACT 2: Word Ladder ────────────────── -->
 <div id="screen-act2" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
-    <span class="top-title">Build a Word</span>
+    <span class="top-title">Word Ladder</span>
     <div class="score-badge">
       <span class="score-stars">⭐ <span id="a2-stars">0</span></span>
       <span class="score-diamonds">💎 <span id="a2-diamonds">0</span></span>
@@ -845,33 +727,15 @@ body {
     <div class="progress-track"><div class="progress-fill" id="a2-progress" style="background:var(--orange)"></div></div>
     <div class="round-label" id="a2-round">1 / 6</div>
   </div>
-  <div class="build-pic" id="a2-pic"></div>
-  <div class="build-slots" id="a2-slots"></div>
-  <div class="slot-labels" id="a2-slot-labels"></div>
+  <div class="word-display">
+    <span class="word-pic" id="a2-pic"></span>
+    <div class="onset-slot" id="a2-slot"></div>
+    <div class="rime-part" id="a2-rime"></div>
+  </div>
+  <div class="hint-text" id="a2-hint"></div>
+  <div class="letter-grid" id="a2-grid"></div>
   <div class="diamond-flash" id="a2-diamond">💎 Bonus letter!</div>
   <div class="feedback hidden" id="a2-fb"></div>
-  <div class="letter-grid" id="a2-grid"></div>
-</div>
-
-<!-- ── ACT 3: Speed Read ─────────────────── -->
-<div id="screen-act3" class="screen">
-  <div class="top-bar">
-    <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
-    <span class="top-title">Speed Read</span>
-    <div class="score-badge">
-      <span class="score-stars">⭐ <span id="a3-stars">0</span></span>
-      <span class="score-diamonds">💎 <span id="a3-diamonds">0</span></span>
-    </div>
-  </div>
-  <div class="game-progress">
-    <div class="progress-track"><div class="progress-fill" id="a3-progress" style="background:var(--diamond)"></div></div>
-    <div class="round-label" id="a3-round">1 / 8</div>
-  </div>
-  <div class="speed-word"><div class="speed-letters" id="a3-word"></div></div>
-  <div class="speed-timer" style="max-width:440px;margin:0 auto;"><div class="speed-timer-fill" id="a3-timer"></div></div>
-  <div class="speed-cards" id="a3-cards"></div>
-  <div class="diamond-flash" id="a3-diamond">💎 Bonus letter!</div>
-  <div class="feedback hidden" id="a3-fb"></div>
 </div>
 
 <!-- ── Activity result ───────────────────── -->
@@ -899,90 +763,84 @@ body {
   </div>
   <div class="summary-breakdown" id="sum-breakdown"></div>
   <div class="result-btns">
-    <button class="btn-primary" onclick="location.href='../../'">Home</button>
+    <button class="btn-primary" onclick="location.href='../'">Back to classes</button>
   </div>
 </div>
 
 <script>
 // ════════════════════════════════════════════════════════════
-// WORD DATA — all onsets b-j = gold star; beyond j = diamond
+// WORD DATA
 // ════════════════════════════════════════════════════════════
 
-const KNOWN = 'bcdfghij'.split('');
-const VOWELS = 'aeiou'.split('');
+var KNOWN = 'bcdfghij'.split('');
 
 function isDiamond(word) {
-  const onset = word[0];
-  return !KNOWN.includes(onset) && !VOWELS.includes(onset);
+  var c = word[0];
+  return !KNOWN.includes(c) && !'aeiou'.includes(c);
 }
 
-// Act 1 words: hear → pick picture (2 choices)
-const A1_WORDS = [
+// Act 1: Listen & Match — hear word, tap the right picture from 2
+var A1_WORDS = [
   { word: 'big', pic: '🦣' },
   { word: 'dog', pic: '🐕' },
   { word: 'hug', pic: '🤗' },
   { word: 'fig', pic: '🫒' },
   { word: 'jug', pic: '🫗' },
   { word: 'cob', pic: '🌽' },
-  // diamonds (beyond j)
   { word: 'net', pic: '🕸️' },
   { word: 'mop', pic: '🧹' },
 ];
 
-// Act 2 words: see pic → spell 3 letters
-const A2_WORDS = [
-  { word: 'fog', pic: '🌫️' },
-  { word: 'jig', pic: '💃' },
-  { word: 'bad', pic: '👎' },
-  { word: 'bug', pic: '🐛' },
-  { word: 'cub', pic: '🐻' },
-  // diamond
-  { word: 'pen', pic: '✏️' },
-];
-
-// Act 3 words: see word → pick picture (3 choices)
-const A3_WORDS = [
-  { word: 'dig', pic: '⛏️' },
-  { word: 'hid', pic: '🫣' },
-  { word: 'jog', pic: '🏃' },
-  { word: 'dug', pic: '🕳️' },
-  { word: 'hub', pic: '🔗' },
-  { word: 'cob', pic: '🌽' },
-  // diamonds
-  { word: 'rat', pic: '🐀' },
-  { word: 'sun', pic: '☀️' },
-];
-
-// Distractor pool
-const ALL_WORDS = [
+// Distractor pool for Act 1
+var ALL_PICS = [
   { word: 'big', pic: '🦣' }, { word: 'dog', pic: '🐕' },
   { word: 'hug', pic: '🤗' }, { word: 'fig', pic: '🫒' },
   { word: 'jug', pic: '🫗' }, { word: 'cob', pic: '🌽' },
   { word: 'fog', pic: '🌫️' }, { word: 'jig', pic: '💃' },
   { word: 'bad', pic: '👎' }, { word: 'bug', pic: '🐛' },
-  { word: 'cub', pic: '🐻' }, { word: 'dig', pic: '⛏️' },
-  { word: 'hid', pic: '🫣' }, { word: 'jog', pic: '🏃' },
-  { word: 'dug', pic: '🕳️' }, { word: 'hub', pic: '🔗' },
+  { word: 'dig', pic: '⛏️' }, { word: 'hid', pic: '🫣' },
+  { word: 'jog', pic: '🏃' }, { word: 'dug', pic: '🕳️' },
   { word: 'net', pic: '🕸️' }, { word: 'mop', pic: '🧹' },
   { word: 'rat', pic: '🐀' }, { word: 'sun', pic: '☀️' },
-  { word: 'pen', pic: '✏️' }, { word: 'bed', pic: '🛏️' },
-  { word: 'hat', pic: '🎩' }, { word: 'cat', pic: '🐱' },
+  { word: 'pen', pic: '✏️' }, { word: 'cat', pic: '🐱' },
+];
+
+// Act 2: Word Ladder — grouped by rime, using only b-j onsets + diamond stretch
+var A2_FAMILIES = [
+  {
+    rime: 'ig',
+    words: [
+      { word: 'big', pic: '🦣', onset: 'b' },
+      { word: 'dig', pic: '⛏️', onset: 'd' },
+      { word: 'fig', pic: '🫒', onset: 'f' },
+      { word: 'jig', pic: '💃', onset: 'j' },
+    ],
+  },
+  {
+    rime: 'og',
+    words: [
+      { word: 'dog', pic: '🐕', onset: 'd' },
+      { word: 'fog', pic: '🌫️', onset: 'f' },
+      { word: 'hog', pic: '🐷', onset: 'h' },
+      { word: 'jog', pic: '🏃', onset: 'j' },
+    ],
+  },
 ];
 
 // ════════════════════════════════════════════════════════════
 // GLOBAL STATE
 // ════════════════════════════════════════════════════════════
 
-let totalStars    = 0;
-let totalDiamonds = 0;
-const actResults  = { 1: null, 2: null, 3: null };
-let currentAct    = 0;
+var totalStars    = 0;
+var totalDiamonds = 0;
+var actResults    = { 1: null, 2: null };
+var currentAct    = 0;
 
 function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
   }
   return a;
 }
@@ -990,13 +848,14 @@ function shuffle(arr) {
 function speak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
+  var u = new SpeechSynthesisUtterance(text);
   u.lang = 'en-GB'; u.rate = 0.82; u.pitch = 1.05;
   window.speechSynthesis.speak(u);
 }
 
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) screens[i].classList.remove('active');
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
 }
@@ -1012,9 +871,9 @@ function updatePlanScores() {
 
 function refreshPlan() {
   updatePlanScores();
-  for (let i = 1; i <= 3; i++) {
-    const card = document.getElementById('plan-act' + i);
-    const stat = document.getElementById('status' + i);
+  for (var i = 1; i <= 2; i++) {
+    var card = document.getElementById('plan-act' + i);
+    var stat = document.getElementById('status' + i);
     if (actResults[i]) {
       card.classList.remove('locked');
       card.classList.add('done');
@@ -1033,17 +892,15 @@ function launchActivity(n) {
   currentAct = n;
   if (n === 1) startAct1();
   else if (n === 2) startAct2();
-  else if (n === 3) startAct3();
 }
 
 function backToPlan() {
-  if (a3Timer) { clearInterval(a3Timer); a3Timer = null; }
   refreshPlan();
   showScreen('screen-plan');
 }
 
 function nextFromResult() {
-  if (currentAct < 3) {
+  if (currentAct < 2) {
     launchActivity(currentAct + 1);
   } else {
     showSummary();
@@ -1055,39 +912,39 @@ function nextFromResult() {
 // ════════════════════════════════════════════════════════════
 
 function showActResult(stars, diamonds, actNum) {
-  actResults[actNum] = { stars, diamonds };
+  actResults[actNum] = { stars: stars, diamonds: diamonds };
   totalStars    += stars;
   totalDiamonds += diamonds;
 
-  const emoji = diamonds > 0 ? '💎' : stars >= 5 ? '🌟' : '👍';
+  var emoji = diamonds > 0 ? '💎' : stars >= 5 ? '🌟' : '👍';
   document.getElementById('res-emoji').textContent = emoji;
   document.getElementById('res-title').textContent =
-    actNum === 3 ? 'All done!' : 'Activity complete!';
+    actNum === 2 ? 'All done!' : 'Activity complete!';
   document.getElementById('res-stars').textContent    = stars;
   document.getElementById('res-diamonds').textContent = diamonds;
 
-  const detail = diamonds > 0
-    ? `You earned ${diamonds} diamond${diamonds > 1 ? 's' : ''} for bonus letters!`
+  var detail = diamonds > 0
+    ? 'You earned ' + diamonds + ' diamond' + (diamonds > 1 ? 's' : '') + ' for bonus letters!'
     : stars >= 5 ? 'Brilliant work!' : 'Keep practising!';
   document.getElementById('res-detail').textContent = detail;
 
   document.getElementById('res-next').textContent =
-    actNum < 3 ? 'Next activity →' : 'See results 🏆';
+    actNum < 2 ? 'Next activity →' : 'See results 🏆';
 
   showScreen('screen-result');
 }
 
 // ════════════════════════════════════════════════════════════
-// ACT 1 — Sound Match
+// ACT 1 — Listen & Match
 // ════════════════════════════════════════════════════════════
 
-let a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
+var a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
 
 function startAct1() {
-  a1Words   = shuffle(A1_WORDS);
-  a1Idx     = 0;
-  a1Stars   = 0;
-  a1Dia     = 0;
+  a1Words    = shuffle(A1_WORDS);
+  a1Idx      = 0;
+  a1Stars    = 0;
+  a1Dia      = 0;
   a1Answered = false;
   showScreen('screen-act1');
   renderA1();
@@ -1095,31 +952,31 @@ function startAct1() {
 
 function renderA1() {
   a1Answered = false;
-  const w   = a1Words[a1Idx];
-  const tot = a1Words.length;
+  var w   = a1Words[a1Idx];
+  var tot = a1Words.length;
 
-  document.getElementById('a1-progress').style.width = `${(a1Idx / tot) * 100}%`;
-  document.getElementById('a1-round').textContent = `${a1Idx + 1} / ${tot}`;
-  document.getElementById('a1-stars').textContent    = totalStars + a1Stars;
-  document.getElementById('a1-diamonds').textContent = totalDiamonds + a1Dia;
+  document.getElementById('a1-progress').style.width = (a1Idx / tot * 100) + '%';
+  document.getElementById('a1-round').textContent    = (a1Idx + 1) + ' / ' + tot;
+  document.getElementById('a1-stars').textContent     = totalStars + a1Stars;
+  document.getElementById('a1-diamonds').textContent  = totalDiamonds + a1Dia;
   document.getElementById('a1-hear-text').textContent = 'Tap to hear';
 
-  // pick distractor
-  const others = ALL_WORDS.filter(x => x.word !== w.word);
-  const dist   = others[Math.floor(Math.random() * others.length)];
+  var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
+  var dist   = others[Math.floor(Math.random() * others.length)];
 
-  const items = Math.random() < 0.5 ? [w, dist] : [dist, w];
-  const container = document.getElementById('a1-cards');
+  var items = Math.random() < 0.5 ? [w, dist] : [dist, w];
+  var container = document.getElementById('a1-cards');
   container.innerHTML = '';
-  items.forEach((item, i) => {
-    const card = document.createElement('div');
+
+  items.forEach(function(item) {
+    var card = document.createElement('div');
     card.className = 'card';
-    card.innerHTML = `<div class="card-pic">${item.pic}</div><div class="card-word">${item.word}</div>`;
-    card.onclick = () => a1Tap(i, item.word === w.word, card, container);
+    card.innerHTML = '<div class="card-pic">' + item.pic + '</div><div class="card-word">' + item.word + '</div>';
+    card.onclick = function() { a1Tap(item.word === w.word, card, container); };
     container.appendChild(card);
   });
 
-  const fb = document.getElementById('a1-fb');
+  var fb = document.getElementById('a1-fb');
   fb.textContent = ''; fb.className = 'feedback hidden';
   document.getElementById('a1-diamond').classList.remove('show');
 }
@@ -1129,16 +986,17 @@ function a1PlayWord() {
   document.getElementById('a1-hear-text').textContent = 'Hear it again';
 }
 
-function a1Tap(i, correct, card, container) {
+function a1Tap(correct, card, container) {
   if (a1Answered) return;
   a1Answered = true;
-  container.querySelectorAll('.card').forEach(c => c.style.pointerEvents = 'none');
+  var cards = container.querySelectorAll('.card');
+  for (var i = 0; i < cards.length; i++) cards[i].style.pointerEvents = 'none';
 
-  const fb = document.getElementById('a1-fb');
+  var fb = document.getElementById('a1-fb');
   if (correct) {
     card.classList.add('correct');
     fb.textContent = '✓ Well done!'; fb.className = 'feedback ok';
-    const w = a1Words[a1Idx];
+    var w = a1Words[a1Idx];
     if (isDiamond(w.word)) {
       a1Dia++;
       document.getElementById('a1-diamond').classList.add('show');
@@ -1147,15 +1005,17 @@ function a1Tap(i, correct, card, container) {
     }
   } else {
     card.classList.add('wrong');
-    const correctCard = container.children[i === 0 ? 1 : 0];
-    correctCard.classList.add('correct');
+    var allCards = container.querySelectorAll('.card');
+    for (var j = 0; j < allCards.length; j++) {
+      if (allCards[j] !== card) allCards[j].classList.add('correct');
+    }
     fb.textContent = 'Not quite — look at the green one!'; fb.className = 'feedback no';
   }
 
   document.getElementById('a1-stars').textContent    = totalStars + a1Stars;
   document.getElementById('a1-diamonds').textContent = totalDiamonds + a1Dia;
 
-  setTimeout(() => {
+  setTimeout(function() {
     a1Idx++;
     if (a1Idx >= a1Words.length) showActResult(a1Stars, a1Dia, 1);
     else renderA1();
@@ -1163,250 +1023,108 @@ function a1Tap(i, correct, card, container) {
 }
 
 // ════════════════════════════════════════════════════════════
-// ACT 2 — Build a Word
+// ACT 2 — Word Ladder
 // ════════════════════════════════════════════════════════════
 
-let a2Words, a2Idx, a2Stars, a2Dia, a2SlotIdx, a2Correct, a2TriedWrong, a2Waiting;
+var a2Family, a2Words, a2Idx, a2Stars, a2Dia, a2TriedWrong, a2Waiting;
 
 function startAct2() {
-  a2Words  = shuffle(A2_WORDS);
-  a2Idx    = 0;
-  a2Stars  = 0;
-  a2Dia    = 0;
+  // Pick a random family
+  a2Family     = A2_FAMILIES[Math.floor(Math.random() * A2_FAMILIES.length)];
+  a2Words      = shuffle(a2Family.words.slice());
+  a2Idx        = 0;
+  a2Stars      = 0;
+  a2Dia        = 0;
+  a2TriedWrong = false;
+  a2Waiting    = false;
   showScreen('screen-act2');
   renderA2();
 }
 
 function renderA2() {
-  a2SlotIdx   = 0;
-  a2Correct   = [];
   a2TriedWrong = false;
-  a2Waiting   = false;
+  a2Waiting    = false;
 
-  const w   = a2Words[a2Idx];
-  const tot = a2Words.length;
+  var w   = a2Words[a2Idx];
+  var tot = a2Words.length;
 
-  document.getElementById('a2-progress').style.width = `${(a2Idx / tot) * 100}%`;
-  document.getElementById('a2-round').textContent = `${a2Idx + 1} / ${tot}`;
-  document.getElementById('a2-stars').textContent    = totalStars + a2Stars;
-  document.getElementById('a2-diamonds').textContent = totalDiamonds + a2Dia;
+  document.getElementById('a2-progress').style.width = (a2Idx / tot * 100) + '%';
+  document.getElementById('a2-round').textContent    = (a2Idx + 1) + ' / ' + tot;
+  document.getElementById('a2-stars').textContent     = totalStars + a2Stars;
+  document.getElementById('a2-diamonds').textContent  = totalDiamonds + a2Dia;
 
-  document.getElementById('a2-pic').textContent = w.pic;
+  document.getElementById('a2-pic').textContent  = w.pic;
+  document.getElementById('a2-rime').textContent = a2Family.rime;
 
-  // Slots
-  const letters = w.word.split('');
-  const slotsEl = document.getElementById('a2-slots');
-  const labelsEl = document.getElementById('a2-slot-labels');
-  slotsEl.innerHTML = '';
-  labelsEl.innerHTML = '';
-  letters.forEach((_, i) => {
-    const slot = document.createElement('div');
-    slot.className = 'build-slot' + (i === 0 ? ' active' : '');
-    slot.id = 'a2-s' + i;
-    slotsEl.appendChild(slot);
+  var slot = document.getElementById('a2-slot');
+  slot.textContent = '';
+  slot.className   = 'onset-slot';
 
-    const lbl = document.createElement('span');
-    lbl.className = 'build-slot-label';
-    lbl.style.width = '64px';
-    lbl.textContent = i === 0 ? 'first' : i === letters.length - 1 ? 'last' : 'middle';
-    labelsEl.appendChild(lbl);
-  });
+  document.getElementById('a2-hint').textContent = '';
 
-  // Letter grid — correct letters + distractors
-  const extras = shuffle(
-    'abcdefghijou'.split('').filter(l => !letters.includes(l))
-  ).slice(0, 8 - letters.length);
-  const options = shuffle([...letters, ...extras]);
+  // Letter options: correct + 3 others from family
+  var otherOnsets = shuffle(
+    a2Family.words.map(function(x) { return x.onset; })
+      .filter(function(o) { return o !== w.onset; })
+  ).slice(0, 3);
+  var options = shuffle([w.onset].concat(otherOnsets));
 
-  const grid = document.getElementById('a2-grid');
+  var grid = document.getElementById('a2-grid');
   grid.innerHTML = '';
-  options.forEach(letter => {
-    const btn = document.createElement('button');
-    btn.className = 'letter-btn';
+  options.forEach(function(letter) {
+    var btn = document.createElement('button');
+    btn.className   = 'letter-btn';
     btn.textContent = letter;
-    btn.onclick = () => a2Tap(letter, btn);
+    btn.onclick = function() { a2Tap(letter, btn, w); };
     grid.appendChild(btn);
   });
 
-  const fb = document.getElementById('a2-fb');
+  var fb = document.getElementById('a2-fb');
   fb.textContent = ''; fb.className = 'feedback hidden';
   document.getElementById('a2-diamond').classList.remove('show');
 }
 
-function a2Tap(letter, btn) {
+function a2Tap(letter, btn, w) {
   if (a2Waiting) return;
-  const w       = a2Words[a2Idx];
-  const letters = w.word.split('');
-  const expected = letters[a2SlotIdx];
 
-  if (letter === expected) {
-    // Fill slot
-    const slot = document.getElementById('a2-s' + a2SlotIdx);
-    slot.textContent = letter;
-    slot.classList.remove('active');
-    slot.classList.add('filled');
-    btn.classList.add('correct-flash', 'dimmed');
-
-    a2SlotIdx++;
-    if (a2SlotIdx < letters.length) {
-      document.getElementById('a2-s' + a2SlotIdx).classList.add('active');
-    } else {
-      // Word complete
-      a2Waiting = true;
-      if (!a2TriedWrong) {
-        if (isDiamond(w.word)) a2Dia++; else a2Stars++;
-      }
-      document.getElementById('a2-stars').textContent    = totalStars + a2Stars;
-      document.getElementById('a2-diamonds').textContent = totalDiamonds + a2Dia;
-
-      if (isDiamond(w.word) && !a2TriedWrong) {
+  if (letter === w.onset) {
+    a2Waiting = true;
+    if (!a2TriedWrong) {
+      if (isDiamond(w.word)) {
+        a2Dia++;
         document.getElementById('a2-diamond').classList.add('show');
+      } else {
+        a2Stars++;
       }
-
-      const fb = document.getElementById('a2-fb');
-      fb.textContent = '✓ ' + w.word + '!'; fb.className = 'feedback ok';
-      speak(w.word);
-
-      setTimeout(() => {
-        a2Idx++;
-        if (a2Idx >= a2Words.length) showActResult(a2Stars, a2Dia, 2);
-        else renderA2();
-      }, 1800);
     }
+
+    btn.classList.add('correct-flash');
+    var slot = document.getElementById('a2-slot');
+    slot.textContent = letter;
+    slot.classList.add('filled');
+    document.getElementById('a2-hint').textContent = '';
+
+    var btns = document.querySelectorAll('#a2-grid .letter-btn');
+    for (var i = 0; i < btns.length; i++) btns[i].style.pointerEvents = 'none';
+
+    document.getElementById('a2-stars').textContent    = totalStars + a2Stars;
+    document.getElementById('a2-diamonds').textContent = totalDiamonds + a2Dia;
+
+    speak(w.word);
+
+    setTimeout(function() {
+      a2Idx++;
+      if (a2Idx >= a2Words.length) showActResult(a2Stars, a2Dia, 2);
+      else renderA2();
+    }, 1700);
   } else {
     a2TriedWrong = true;
-    btn.classList.add('wrong-shake');
-    const slot = document.getElementById('a2-s' + a2SlotIdx);
-    slot.classList.add('error');
-    setTimeout(() => {
+    btn.classList.add('wrong-shake', 'dimmed');
+    document.getElementById('a2-hint').textContent = 'Try another letter!';
+    setTimeout(function() {
       btn.classList.remove('wrong-shake');
-      slot.classList.remove('error');
     }, 400);
   }
-}
-
-// ════════════════════════════════════════════════════════════
-// ACT 3 — Speed Read
-// ════════════════════════════════════════════════════════════
-
-let a3Words, a3Idx, a3Stars, a3Dia, a3Answered, a3Timer, a3TimeLeft;
-
-const A3_TIME = 8000; // ms per word
-
-function startAct3() {
-  a3Words   = shuffle(A3_WORDS);
-  a3Idx     = 0;
-  a3Stars   = 0;
-  a3Dia     = 0;
-  a3Answered = false;
-  a3Timer   = null;
-  showScreen('screen-act3');
-  renderA3();
-}
-
-function renderA3() {
-  a3Answered  = false;
-  a3TimeLeft  = A3_TIME;
-
-  const w   = a3Words[a3Idx];
-  const tot = a3Words.length;
-
-  document.getElementById('a3-progress').style.width = `${(a3Idx / tot) * 100}%`;
-  document.getElementById('a3-round').textContent    = `${a3Idx + 1} / ${tot}`;
-  document.getElementById('a3-stars').textContent     = totalStars + a3Stars;
-  document.getElementById('a3-diamonds').textContent  = totalDiamonds + a3Dia;
-
-  // Show word with spaced letters
-  document.getElementById('a3-word').textContent = w.word.split('').join(' ');
-
-  // Timer
-  const timerFill = document.getElementById('a3-timer');
-  timerFill.style.width = '100%';
-  timerFill.style.background = 'var(--green)';
-
-  // Pick 2 distractors
-  const others = shuffle(ALL_WORDS.filter(x => x.word !== w.word)).slice(0, 2);
-  const items  = shuffle([w, ...others]);
-
-  const container = document.getElementById('a3-cards');
-  container.innerHTML = '';
-  items.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'speed-card';
-    card.innerHTML = `<div class="card-pic">${item.pic}</div><div class="card-word">${item.word}</div>`;
-    card.onclick = () => a3Tap(item.word === w.word, card, container);
-    container.appendChild(card);
-  });
-
-  const fb = document.getElementById('a3-fb');
-  fb.textContent = ''; fb.className = 'feedback hidden';
-  document.getElementById('a3-diamond').classList.remove('show');
-
-  // Start timer
-  if (a3Timer) clearInterval(a3Timer);
-  const tick = 100;
-  a3Timer = setInterval(() => {
-    a3TimeLeft -= tick;
-    const pct = Math.max(0, a3TimeLeft / A3_TIME) * 100;
-    timerFill.style.width = pct + '%';
-    if (pct < 30) timerFill.style.background = 'var(--orange)';
-    if (pct < 10) timerFill.style.background = 'var(--red)';
-    if (a3TimeLeft <= 0) {
-      clearInterval(a3Timer);
-      if (!a3Answered) a3Timeout(container);
-    }
-  }, tick);
-}
-
-function a3Tap(correct, card, container) {
-  if (a3Answered) return;
-  a3Answered = true;
-  clearInterval(a3Timer);
-  container.querySelectorAll('.speed-card').forEach(c => c.style.pointerEvents = 'none');
-
-  const fb = document.getElementById('a3-fb');
-  if (correct) {
-    card.classList.add('correct');
-    fb.textContent = '✓ Yes!'; fb.className = 'feedback ok';
-    const w = a3Words[a3Idx];
-    if (isDiamond(w.word)) {
-      a3Dia++;
-      document.getElementById('a3-diamond').classList.add('show');
-    } else {
-      a3Stars++;
-    }
-  } else {
-    card.classList.add('wrong');
-    // highlight correct
-    const w = a3Words[a3Idx];
-    container.querySelectorAll('.speed-card').forEach(c => {
-      if (c.querySelector('.card-word').textContent === w.word) c.classList.add('correct');
-    });
-    fb.textContent = 'Not quite!'; fb.className = 'feedback no';
-  }
-
-  document.getElementById('a3-stars').textContent    = totalStars + a3Stars;
-  document.getElementById('a3-diamonds').textContent = totalDiamonds + a3Dia;
-
-  setTimeout(advanceA3, 1800);
-}
-
-function a3Timeout(container) {
-  a3Answered = true;
-  container.querySelectorAll('.speed-card').forEach(c => c.style.pointerEvents = 'none');
-  const w = a3Words[a3Idx];
-  container.querySelectorAll('.speed-card').forEach(c => {
-    if (c.querySelector('.card-word').textContent === w.word) c.classList.add('correct');
-  });
-  const fb = document.getElementById('a3-fb');
-  fb.textContent = "Time's up — it was " + w.word + "!"; fb.className = 'feedback no';
-  setTimeout(advanceA3, 2000);
-}
-
-function advanceA3() {
-  a3Idx++;
-  if (a3Idx >= a3Words.length) showActResult(a3Stars, a3Dia, 3);
-  else renderA3();
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1417,23 +1135,27 @@ function showSummary() {
   document.getElementById('sum-stars').textContent    = totalStars;
   document.getElementById('sum-diamonds').textContent = totalDiamonds;
 
-  const bd = document.getElementById('sum-breakdown');
+  var names = { 1: '🔊 Listen & Match', 2: '🪜 Word Ladder' };
+  var bd = document.getElementById('sum-breakdown');
   bd.innerHTML = '';
-  const names = { 1: '🔊 Sound Match', 2: '🧱 Build a Word', 3: '⚡ Speed Read' };
-  for (let i = 1; i <= 3; i++) {
-    const r = actResults[i] || { stars: 0, diamonds: 0 };
-    const row = document.createElement('div');
+  for (var i = 1; i <= 2; i++) {
+    var r = actResults[i] || { stars: 0, diamonds: 0 };
+    var row = document.createElement('div');
     row.className = 'sb-row';
-    row.innerHTML = `
-      <span class="sb-name">${names[i]}</span>
-      <span class="sb-score">⭐${r.stars} 💎${r.diamonds}</span>`;
+    row.innerHTML = '<span class="sb-name">' + names[i] + '</span>' +
+      '<span class="sb-score">⭐' + r.stars + ' 💎' + r.diamonds + '</span>';
     bd.appendChild(row);
   }
 
-  // Save to localStorage
-  const key = 'saba_class_2026-08-30';
-  const data = { totalStars, totalDiamonds, actResults, date: '2026-08-30' };
-  try { localStorage.setItem(key, JSON.stringify(data)); } catch (e) {}
+  try {
+    var key = 'saba_class_2026-08-30';
+    localStorage.setItem(key, JSON.stringify({
+      totalStars: totalStars,
+      totalDiamonds: totalDiamonds,
+      actResults: actResults,
+      date: '2026-08-30'
+    }));
+  } catch (e) {}
 
   showScreen('screen-summary');
 }
