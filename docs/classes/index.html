@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Classes</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1a1a2e;
+  min-height: 100vh;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: 40px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.page-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+
+.hero {
+  text-align: center;
+  padding: 16px 24px 32px;
+}
+
+.hero-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.hero h2 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.hero p {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.class-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 20px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.class-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #2f9e44 0%, #1a7431 100%);
+  box-shadow: 0 5px 0 #0d5a1e;
+  text-decoration: none;
+  color: #fff;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.class-card:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #0d5a1e;
+}
+
+.class-card.latest {
+  border: 2px solid rgba(255,255,255,0.3);
+}
+
+.class-date-badge {
+  background: rgba(255,255,255,0.2);
+  border-radius: 14px;
+  padding: 8px 12px;
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 56px;
+}
+
+.class-day {
+  font-size: 1.3rem;
+  font-weight: 900;
+  display: block;
+  line-height: 1;
+}
+
+.class-month {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+
+.class-info { flex: 1; }
+
+.class-title {
+  font-size: 1rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.class-desc {
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+.class-arrow {
+  font-size: 1.2rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.latest-tag {
+  font-size: 0.6rem;
+  background: rgba(255,255,255,0.25);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  position: absolute;
+  top: -8px;
+  right: 16px;
+}
+
+.empty-msg {
+  text-align: center;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+  padding: 40px 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="../" class="back-btn" aria-label="Home">←</a>
+  <span class="page-title">📅 Classes</span>
+</div>
+
+<div class="hero">
+  <span class="hero-icon">📚</span>
+  <h2>All Classes</h2>
+  <p>Tap a class to practise again or watch videos</p>
+</div>
+
+<div class="class-list">
+  <a href="2026-08-30/" class="class-card latest">
+    <div class="class-date-badge">
+      <span class="class-day">30</span>
+      <span class="class-month">Aug</span>
+    </div>
+    <div class="class-info">
+      <span class="class-title">Let's learn our vowels!</span>
+      <span class="class-desc">Sound Match · Build a Word · Speed Read</span>
+    </div>
+    <span class="class-arrow">→</span>
+  </a>
+</div>
+
+</body>
+</html>
