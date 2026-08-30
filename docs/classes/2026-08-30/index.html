@@ -864,6 +864,21 @@ body {
 // WORD DATA
 // ════════════════════════════════════════════════════════════
 
+// ════════════════════════════════════════════════════════════
+// CENTRAL WORD BANK — single source of truth for all games
+// Fix an emoji here and it fixes everywhere.
+// ════════════════════════════════════════════════════════════
+
+var WORD_BANK = {
+  bad: '👎',  bat: '🏏',  bed: '🛏️', big: '🐻',  bug: '🐛',
+  cat: '🐱',  cup: '☕',  dig: '⛏️', dog: '🐕',  dug: '🕳️',
+  fog: '🌫️', hat: '🎩',  hen: '🐔', hid: '🫣',  hog: '🐷',
+  hug: '🤗',  jet: '✈️',  jog: '🏃', jug: '🏺',  mop: '🧹',
+  net: '🕸️',
+};
+
+function wb(word) { return { word: word, pic: WORD_BANK[word] }; }
+
 var KNOWN = 'bcdfghij'.split('');
 
 function isDiamond(word) {
@@ -871,64 +886,22 @@ function isDiamond(word) {
   return !KNOWN.includes(c) && !'aeiou'.includes(c);
 }
 
-// Act 1: Listen & Match — hear word, tap the right picture from 2
-// 'big' uses a special size-contrast pair (same emoji, different sizes)
+// ── Act 1: Listen & Match ────────────────────────────────
 var A1_WORDS = [
-  { word: 'big', pic: '🐻', size: 'big', distractor: { word: 'small', pic: '🐻', size: 'small' } },
-  { word: 'dog', pic: '🐕' },
-  { word: 'hug', pic: '🤗' },
-  { word: 'hat', pic: '🎩' },
-  { word: 'jug', pic: '🫗' },
-  { word: 'cup', pic: '☕' },
-  { word: 'net', pic: '🕸️' },
-  { word: 'mop', pic: '🧹' },
+  { word: 'big', pic: WORD_BANK.big, size: 'big', distractor: { word: 'small', pic: WORD_BANK.big, size: 'small' } },
+  wb('dog'), wb('hug'), wb('hat'), wb('jug'), wb('cup'), wb('net'), wb('mop'),
 ];
 
-// Distractor pool for Act 1
-var ALL_PICS = [
-  { word: 'dog', pic: '🐕' },
-  { word: 'hug', pic: '🤗' }, { word: 'hat', pic: '🎩' },
-  { word: 'jug', pic: '🫗' }, { word: 'cup', pic: '☕' },
-  { word: 'fog', pic: '🌫️' }, { word: 'jet', pic: '✈️' },
-  { word: 'bad', pic: '👎' }, { word: 'bug', pic: '🐛' },
-  { word: 'dig', pic: '⛏️' }, { word: 'hid', pic: '🫣' },
-  { word: 'jog', pic: '🏃' }, { word: 'dug', pic: '🕳️' },
-  { word: 'net', pic: '🕸️' }, { word: 'mop', pic: '🧹' },
-  { word: 'bat', pic: '🏏' }, { word: 'bed', pic: '🛏️' },
-  { word: 'hen', pic: '🐔' }, { word: 'cat', pic: '🐱' },
-];
+var ALL_PICS = 'dog hug hat jug cup fog jet bad bug dig hid jog dug net mop bat bed hen cat'.split(' ').map(wb);
 
-// Act 2: Word Ladder — grouped by rime, using only b-j onsets + diamond stretch
+// ── Act 2: Word Ladder ──────────────────────────────────
 var A2_FAMILIES = [
-  {
-    rime: 'ug',
-    words: [
-      { word: 'bug', pic: '🐛', onset: 'b' },
-      { word: 'dug', pic: '🕳️', onset: 'd' },
-      { word: 'hug', pic: '🤗', onset: 'h' },
-      { word: 'jug', pic: '🫗', onset: 'j' },
-    ],
-  },
-  {
-    rime: 'og',
-    words: [
-      { word: 'dog', pic: '🐕', onset: 'd' },
-      { word: 'fog', pic: '🌫️', onset: 'f' },
-      { word: 'hog', pic: '🐷', onset: 'h' },
-      { word: 'jog', pic: '🏃', onset: 'j' },
-    ],
-  },
+  { rime: 'ug', words: ['bug','dug','hug','jug'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'og', words: ['dog','fog','hog','jog'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
 ];
 
-// Act 3: Build a Word — hear word, tap letters in order to spell it
-var A3_WORDS = [
-  { word: 'dog', pic: '🐕' },
-  { word: 'hug', pic: '🤗' },
-  { word: 'cup', pic: '☕' },
-  { word: 'jet', pic: '✈️' },
-  { word: 'fog', pic: '🌫️' },
-  { word: 'bed', pic: '🛏️' },
-];
+// ── Act 3: Build a Word ─────────────────────────────────
+var A3_WORDS = ['dog','hug','cup','jet','fog','bed'].map(wb);
 
 // ════════════════════════════════════════════════════════════
 // GLOBAL STATE
