@@ -1399,7 +1399,7 @@ function a3Timeout(container) {
     if (c.querySelector('.card-word').textContent === w.word) c.classList.add('correct');
   });
   const fb = document.getElementById('a3-fb');
-  fb.textContent = 'Time's up — it was ' + w.word + '!'; fb.className = 'feedback no';
+  fb.textContent = "Time's up — it was " + w.word + "!"; fb.className = 'feedback no';
   setTimeout(advanceA3, 2000);
 }
 
