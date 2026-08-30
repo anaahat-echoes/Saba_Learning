@@ -663,7 +663,7 @@ body {
   <div class="class-hero">
     <div class="class-date">30 August 2026</div>
     <div class="class-title">Let's learn our vowels!</div>
-    <div class="class-sub">3 activities — finish each to unlock the next</div>
+    <div class="class-sub">3 activities — play in any order</div>
   </div>
 
   <div class="act-list">
@@ -675,21 +675,21 @@ body {
       </div>
       <span class="act-card-status" id="status1">▶</span>
     </div>
-    <div class="act-card locked" id="plan-act2" onclick="launchActivity(2)">
+    <div class="act-card" id="plan-act2" onclick="launchActivity(2)">
       <div class="act-num n2">2</div>
       <div class="act-card-info">
         <span class="act-card-name">🪜 Word Ladder</span>
         <span class="act-card-desc">Fill in the missing letter</span>
       </div>
-      <span class="act-card-status" id="status2">🔒</span>
+      <span class="act-card-status" id="status2">▶</span>
     </div>
-    <div class="act-card locked" id="plan-act3" onclick="launchActivity(3)">
+    <div class="act-card" id="plan-act3" onclick="launchActivity(3)">
       <div class="act-num n3">3</div>
       <div class="act-card-info">
         <span class="act-card-name">🔨 Build a Word</span>
         <span class="act-card-desc">Hear it, spell it — tap letters in order</span>
       </div>
-      <span class="act-card-status" id="status3">🔒</span>
+      <span class="act-card-status" id="status3">▶</span>
     </div>
   </div>
 
@@ -955,15 +955,10 @@ function refreshPlan() {
     var card = document.getElementById('plan-act' + i);
     var stat = document.getElementById('status' + i);
     if (actResults[i]) {
-      card.classList.remove('locked');
       card.classList.add('done');
       stat.textContent = '✅';
-    } else if (i === 1 || actResults[i - 1]) {
-      card.classList.remove('locked');
-      stat.textContent = '▶';
     } else {
-      card.classList.add('locked');
-      stat.textContent = '🔒';
+      stat.textContent = '▶';
     }
   }
 }
