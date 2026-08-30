@@ -94,6 +94,27 @@ body {
   box-shadow: 0 2px 0 #b85c00;
 }
 
+/* Class World — green */
+.world-class {
+  background: linear-gradient(135deg, #2f9e44 0%, #1a7431 100%);
+  box-shadow: 0 6px 0 #0d5a1e;
+  color: #fff;
+}
+
+.world-class:active {
+  box-shadow: 0 2px 0 #0d5a1e;
+}
+
+.class-tag {
+  font-size: 0.65rem;
+  background: rgba(255,255,255,0.25);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
 /* Locked world */
 .world-locked {
   background: rgba(255,255,255,0.08);
@@ -175,6 +196,16 @@ body {
       <span class="world-name">Word World</span>
       <span class="world-desc">Listen, match and build words</span>
     </div>
+  </a>
+
+  <!-- Today's Class -->
+  <a href="classes/2026-08-30/" class="world-card world-class">
+    <span class="world-icon">📅</span>
+    <div class="world-info">
+      <span class="world-name">Today's Class</span>
+      <span class="world-desc">Let's learn our vowels!</span>
+    </div>
+    <span class="class-tag">30 Aug</span>
   </a>
 
   <!-- Story World — locked or unlocked based on quest -->
