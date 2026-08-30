@@ -274,9 +274,10 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
-  padding: 0 28px;
-  max-width: 380px;
+  padding: 0 24px;
+  max-width: 480px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .letter-btn {
@@ -285,12 +286,12 @@ body {
   font-weight: 900;
   font-family: 'Courier New', monospace;
   box-shadow: 0 4px 0 rgba(0,0,0,0.25);
-  border: none;
-  background: rgba(255,255,255,0.12);
+  border: 3px solid transparent;
+  background: rgba(255,255,255,0.08);
   color: #fff;
-  padding: 16px 0;
+  padding: 18px 8px;
   cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.1s, opacity 0.3s, background 0.2s;
+  transition: transform 0.08s, box-shadow 0.08s, opacity 0.15s, background 0.2s;
   -webkit-tap-highlight-color: transparent;
   text-transform: lowercase;
 }
