@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Word List</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1a1a2e;
+  min-height: 100vh;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: 40px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+}
+
+.page-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+
+.summary {
+  padding: 0 20px 20px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.5;
+}
+
+.summary strong {
+  color: rgba(255,255,255,0.7);
+}
+
+.vowel-section {
+  margin-bottom: 8px;
+}
+
+.vowel-heading {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 16px 20px 8px;
+}
+
+.family-group {
+  background: rgba(255,255,255,0.04);
+  margin: 0 12px 6px;
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.family-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 6px;
+}
+
+.word-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  font-size: 0.88rem;
+}
+
+.word-chip.covered {
+  background: rgba(47,158,68,0.15);
+  border: 1px solid rgba(47,158,68,0.3);
+}
+
+.word-pic {
+  font-size: 1.1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.word-text {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.04em;
+}
+
+.word-check {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: #2f9e44;
+  flex-shrink: 0;
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+  padding: 4px 20px 16px;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.45);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.legend-dot.done { background: rgba(47,158,68,0.3); border: 1px solid rgba(47,158,68,0.5); }
+.legend-dot.todo { background: rgba(255,255,255,0.06); }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <a href="../" class="back-btn" aria-label="Back">←</a>
+  <span class="page-title">📋 Word List</span>
+</div>
+
+<div class="summary">
+  All CVC words across Listen & Match, Word Ladders, and Build a Word.
+  <br><strong id="count-done">0</strong> of <strong id="count-total">0</strong> covered in class.
+</div>
+
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot done"></span> Covered</span>
+  <span class="legend-item"><span class="legend-dot todo"></span> Coming up</span>
+</div>
+
+<div id="word-list"></div>
+
+<script>
+var COVERED = new Set([
+  // After each class session, add covered words here.
+  // e.g. 'cat', 'hat', 'bat',
+]);
+
+var SECTIONS = [
+  {
+    vowel: 'Short A',
+    families: [
+      { label: '-at family', words: [
+        { w: 'cat', p: '🐱' }, { w: 'hat', p: '🎩' }, { w: 'bat', p: '🏏' }, { w: 'rat', p: '🐀' },
+      ]},
+      { label: '-an family', words: [
+        { w: 'pan', p: '🍳' }, { w: 'man', p: '👨' }, { w: 'van', p: '🚐' }, { w: 'fan', p: '🪭' },
+      ]},
+      { label: 'other Short A', words: [
+        { w: 'bag', p: '👜' }, { w: 'cap', p: '🧢' },
+      ]},
+    ]
+  },
+  {
+    vowel: 'Short E',
+    families: [
+      { label: '-et family', words: [
+        { w: 'net', p: '🕸️' }, { w: 'pet', p: '🐕' }, { w: 'jet', p: '✈️' }, { w: 'vet', p: '🩺' },
+      ]},
+      { label: '-en family', words: [
+        { w: 'hen', p: '🐔' }, { w: 'pen', p: '✏️' }, { w: 'ten', p: '🔟' }, { w: 'men', p: '👥' },
+      ]},
+      { label: 'other Short E', words: [
+        { w: 'bed', p: '🛏️' }, { w: 'leg', p: '🦵' }, { w: 'red', p: '🔴' }, { w: 'egg', p: '🥚' },
+      ]},
+    ]
+  },
+  {
+    vowel: 'Short I',
+    families: [
+      { label: '-it family', words: [
+        { w: 'sit', p: '🪑' }, { w: 'hit', p: '🥊' }, { w: 'fit', p: '💪' }, { w: 'kit', p: '🧰' },
+      ]},
+      { label: '-in family', words: [
+        { w: 'pin', p: '📌' }, { w: 'win', p: '🏆' }, { w: 'bin', p: '🗑️' }, { w: 'fin', p: '🐟' },
+      ]},
+      { label: 'other Short I', words: [
+        { w: 'big', p: '🐻' }, { w: 'dig', p: '⛏️' },
+      ]},
+    ]
+  },
+  {
+    vowel: 'Short O',
+    families: [
+      { label: '-ot family', words: [
+        { w: 'pot', p: '🍲' }, { w: 'hot', p: '🔥' }, { w: 'cot', p: '🛏️' }, { w: 'dot', p: '⚫' },
+      ]},
+      { label: '-op family', words: [
+        { w: 'mop', p: '🧹' }, { w: 'pop', p: '🎈' }, { w: 'hop', p: '🐇' }, { w: 'cop', p: '👮' },
+      ]},
+    ]
+  },
+  {
+    vowel: 'Short U',
+    families: [
+      { label: '-ut family', words: [
+        { w: 'cut', p: '✂️' }, { w: 'hut', p: '🛖' }, { w: 'but', p: '🤷' }, { w: 'gut', p: '💪' },
+      ]},
+      { label: '-ug family', words: [
+        { w: 'bug', p: '🐛' }, { w: 'dug', p: '🕳️' }, { w: 'jug', p: '🏺' }, { w: 'hug', p: '🤗' },
+      ]},
+      { label: '-un family', words: [
+        { w: 'bun', p: '🍔' }, { w: 'fun', p: '🎉' }, { w: 'gun', p: '🔫' }, { w: 'sun', p: '☀️' },
+      ]},
+      { label: '-ub family', words: [
+        { w: 'cub', p: '🐻' }, { w: 'hub', p: '🎯' }, { w: 'sub', p: '🥪' }, { w: 'tub', p: '🛁' },
+      ]},
+      { label: 'other Short U', words: [
+        { w: 'cup', p: '☕' }, { w: 'bus', p: '🚌' },
+      ]},
+    ]
+  },
+];
+
+function render() {
+  var container = document.getElementById('word-list');
+  var total = 0, done = 0;
+
+  SECTIONS.forEach(function(section) {
+    var sec = document.createElement('div');
+    sec.className = 'vowel-section';
+
+    var heading = document.createElement('div');
+    heading.className = 'vowel-heading';
+    heading.textContent = section.vowel;
+    sec.appendChild(heading);
+
+    section.families.forEach(function(family) {
+      var group = document.createElement('div');
+      group.className = 'family-group';
+
+      var label = document.createElement('div');
+      label.className = 'family-label';
+      label.textContent = family.label;
+      group.appendChild(label);
+
+      var grid = document.createElement('div');
+      grid.className = 'word-grid';
+
+      family.words.forEach(function(item) {
+        total++;
+        var isCovered = COVERED.has(item.w);
+        if (isCovered) done++;
+
+        var chip = document.createElement('div');
+        chip.className = 'word-chip' + (isCovered ? ' covered' : '');
+
+        chip.innerHTML =
+          '<span class="word-pic">' + item.p + '</span>' +
+          '<span class="word-text">' + item.w + '</span>' +
+          (isCovered ? '<span class="word-check">✓</span>' : '');
+
+        grid.appendChild(chip);
+      });
+
+      group.appendChild(grid);
+      sec.appendChild(group);
+    });
+
+    container.appendChild(sec);
+  });
+
+  document.getElementById('count-total').textContent = total;
+  document.getElementById('count-done').textContent = done;
+}
+
+render();
+</script>
+
+</body>
+</html>

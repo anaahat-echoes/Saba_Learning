@@ -118,15 +118,24 @@ body {
 .act-btn.color-ladders { border-left: 5px solid #1971c2; }
 .act-btn.color-build   { border-left: 5px solid #2f9e44; }
 
-.progress-link {
-  display: block;
-  text-align: center;
+.footer-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   margin-top: 32px;
   padding-bottom: 40px;
+}
+
+.footer-link {
   font-size: 0.9rem;
   font-weight: 700;
   color: #a78bfa;
   text-decoration: none;
+}
+
+.footer-dot {
+  color: rgba(255,255,255,0.25);
 }
 </style>
 </head>
@@ -168,7 +177,11 @@ body {
   </a>
 </div>
 
-<a href="../progress/" class="progress-link">📊 See progress</a>
+<div class="footer-links">
+  <a href="../progress/" class="footer-link">📊 Progress</a>
+  <span class="footer-dot">·</span>
+  <a href="words/" class="footer-link">📋 Word list</a>
+</div>
 
 </body>
 </html>
