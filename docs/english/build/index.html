@@ -461,15 +461,17 @@ body {
 // ── Word Bank ────────────────────────────────────────────
 var WORD_BANK = {
   bad: '👎', bat: '🏏', bed: {pic:'🛏️', distractors:['a','t']},
-  big: '🐻', bin: '🗑️', bug: '🐛', bus: '🚌',
-  cat: '🐱', cop: '👮', cot: '🛏️', cup: '☕',
+  big: '🐻', bin: '🗑️', bug: '🐛', bun: '🍔', bus: '🚌', but: '🤷',
+  cat: '🐱', cop: '👮', cot: '🛏️', cub: '🐻', cup: '☕', cut: '✂️',
   dig: '⛏️', dog: '🐕', dot: '⚫', drop: '💧', dug: '🕳️',
-  fan: '🪭', fin: '🐟', fit: '💪', fog: '🌫️',
-  hat: '🎩', hen: '🐔', hid: '🫣', hit: '🥊', hop: '🐇', hot: '🔥',
+  fan: '🪭', fin: '🐟', fit: '💪', fog: '🌫️', fun: '🎉',
+  gut: '💪', hat: '🎩', hen: '🐔', hid: '🫣', hit: '🥊',
+  hop: '🐇', hot: '🔥', hub: '🎯', hug: '🤗', hut: '🛖',
   jet: '✈️', jug: '🏺', kit: '🧰',
   man: '👨', men: '👥', mop: '🧹', net: '🕸️',
   pan: '🍳', pen: '✏️', pet: '🐕', pin: '📌', pop: '🎈', pot: '🍲',
-  rat: '🐀', sit: '🪑', ten: '🔟', van: '🚐', vet: '🩺', win: '🏆',
+  rat: '🐀', sit: '🪑', sub: '🥪', sun: '☀️', ten: '🔟', tub: '🛁',
+  van: '🚐', vet: '🩺', win: '🏆',
 };
 
 // Normalise entries: each becomes {pic, distractors?}
@@ -503,6 +505,12 @@ var WORD_SETS = [
     name: 'Short I & O',
     words: ['sit','hit','fit','pin','win','bin','pot','hot','dot','mop','pop','hop'],
     emoji: '🆕'
+  },
+  {
+    key: 'u-families',
+    name: 'Short U',
+    words: ['cut','hut','but','bug','dug','jug','hug','bun','fun','sun','cub','tub','sub'],
+    emoji: '🔥'
   },
 ];
 

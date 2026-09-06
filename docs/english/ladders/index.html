@@ -529,6 +529,43 @@ const FAMILIES = {
       { word: 'cop', pic: '👮', onset: 'c' },
     ],
   },
+  // Short U
+  '-ut': {
+    rime: 'ut', color: '#d6336c',
+    words: [
+      { word: 'cut', pic: '✂️', onset: 'c' },
+      { word: 'hut', pic: '🛖', onset: 'h' },
+      { word: 'but', pic: '🤷', onset: 'b' },
+      { word: 'gut', pic: '💪', onset: 'g' },
+    ],
+  },
+  '-ug': {
+    rime: 'ug', color: '#d6336c',
+    words: [
+      { word: 'bug', pic: '🐛', onset: 'b' },
+      { word: 'dug', pic: '🕳️', onset: 'd' },
+      { word: 'jug', pic: '🏺', onset: 'j' },
+      { word: 'hug', pic: '🤗', onset: 'h' },
+    ],
+  },
+  '-un': {
+    rime: 'un', color: '#d6336c',
+    words: [
+      { word: 'bun', pic: '🍔', onset: 'b' },
+      { word: 'fun', pic: '🎉', onset: 'f' },
+      { word: 'gun', pic: '🔫', onset: 'g' },
+      { word: 'sun', pic: '☀️', onset: 's' },
+    ],
+  },
+  '-ub': {
+    rime: 'ub', color: '#d6336c',
+    words: [
+      { word: 'cub', pic: '🐻', onset: 'c' },
+      { word: 'hub', pic: '🎯', onset: 'h' },
+      { word: 'sub', pic: '🥪', onset: 's' },
+      { word: 'tub', pic: '🛁', onset: 't' },
+    ],
+  },
 };
 
 const LOCKED_KEYS = ['-it', '-in', '-ot', '-op'];
@@ -609,6 +646,14 @@ function renderPicker() {
   grid.appendChild(ioLabel);
 
   LOCKED_KEYS.forEach(key => renderFamilyCard(grid, key));
+
+  // Short U section
+  const uLabel = document.createElement('div');
+  uLabel.className = 'section-divider';
+  uLabel.textContent = 'Short U';
+  grid.appendChild(uLabel);
+
+  ['-ut', '-ug', '-un', '-ub'].forEach(key => renderFamilyCard(grid, key));
 }
 
 function renderFamilyCard(grid, key) {
