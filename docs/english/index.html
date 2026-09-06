@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Saba's Phonics</title>
+<title>Word World</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -156,7 +156,10 @@ body {
 
 .act-btn.level-a  { border-left: 5px solid #f08c00; }
 .act-btn.level-e  { border-left: 5px solid #2f9e44; }
+.act-btn.level-i  { border-left: 5px solid #1c7ed6; }
+.act-btn.level-u  { border-left: 5px solid #d6336c; }
 .act-btn.level-ae { border-left: 5px solid var(--purple); }
+.act-btn.level-ei { border-left: 5px solid #0ca678; }
 .act-btn.level-ladder { border-left: 5px solid #1971c2; }
 
 .progress-link {
@@ -427,6 +430,24 @@ body {
       <span class="act-best" id="best-short-e"></span>
     </button>
 
+    <button class="act-btn level-i" onclick="startGame('short-i')" aria-label="Short I words">
+      <span class="act-emoji">📌</span>
+      <span class="act-info">
+        <span class="act-name">Short I words</span>
+        <span class="act-words">sit · hit · pin · bin · dig</span>
+      </span>
+      <span class="act-best" id="best-short-i"></span>
+    </button>
+
+    <button class="act-btn level-u" onclick="startGame('short-u')" aria-label="Short U words">
+      <span class="act-emoji">☀️</span>
+      <span class="act-info">
+        <span class="act-name">Short U words</span>
+        <span class="act-words">bug · jug · cut · sun · cup</span>
+      </span>
+      <span class="act-best" id="best-short-u"></span>
+    </button>
+
     <button class="act-btn level-ae" onclick="startGame('a-vs-e')" aria-label="A versus E contrast">
       <span class="act-emoji">🎯</span>
       <span class="act-info">
@@ -436,13 +457,22 @@ body {
       <span class="act-best" id="best-a-vs-e"></span>
     </button>
 
+    <button class="act-btn level-ei" onclick="startGame('e-vs-i')" aria-label="E versus I contrast">
+      <span class="act-emoji">🎯</span>
+      <span class="act-info">
+        <span class="act-name">E vs I — hear the difference</span>
+        <span class="act-words">pen vs pin · net vs kit · pet vs sit</span>
+      </span>
+      <span class="act-best" id="best-e-vs-i"></span>
+    </button>
+
     <div class="section-label">Word Ladders</div>
 
     <a href="ladders/" class="act-btn level-ladder" aria-label="Word Ladders game">
       <span class="act-emoji">🪜</span>
       <span class="act-info">
         <span class="act-name">Word Ladders</span>
-        <span class="act-words">-at · -an · -et · -en</span>
+        <span class="act-words">Short A &amp; E · Short I &amp; O · Short U</span>
       </span>
       <span class="act-best">▶</span>
     </a>
@@ -536,6 +566,30 @@ const WORDS = {
     { word: 'red', pic: '🔴' },
     { word: 'egg', pic: '🥚' },
   ],
+  'short-i': [
+    { word: 'sit', pic: '🪑' },
+    { word: 'hit', pic: '🥊' },
+    { word: 'fit', pic: '💪' },
+    { word: 'pin', pic: '📌' },
+    { word: 'bin', pic: '🗑️' },
+    { word: 'fin', pic: '🐟' },
+    { word: 'kit', pic: '🧰' },
+    { word: 'win', pic: '🏆' },
+    { word: 'big', pic: '🐻' },
+    { word: 'dig', pic: '⛏️' },
+  ],
+  'short-u': [
+    { word: 'bug', pic: '🐛' },
+    { word: 'jug', pic: '🏺' },
+    { word: 'hug', pic: '🤗' },
+    { word: 'cut', pic: '✂️' },
+    { word: 'hut', pic: '🛖' },
+    { word: 'bun', pic: '🍔' },
+    { word: 'fun', pic: '🎉' },
+    { word: 'sun', pic: '☀️' },
+    { word: 'cup', pic: '☕' },
+    { word: 'bus', pic: '🚌' },
+  ],
 };
 
 // Pairs for A vs E — each pair is [a-word, e-word]
@@ -552,10 +606,26 @@ const AE_PAIRS = [
   [{ word: 'rat', pic: '🐀' },  { word: 'pet', pic: '🐕' }],
 ];
 
+const EI_PAIRS = [
+  [{ word: 'pen', pic: '✏️' },  { word: 'pin', pic: '📌' }],
+  [{ word: 'net', pic: '🕸️' },  { word: 'kit', pic: '🧰' }],
+  [{ word: 'pet', pic: '🐕' },  { word: 'sit', pic: '🪑' }],
+  [{ word: 'hen', pic: '🐔' },  { word: 'hit', pic: '🥊' }],
+  [{ word: 'bed', pic: '🛏️' },  { word: 'big', pic: '🐻' }],
+  [{ word: 'jet', pic: '✈️' },  { word: 'dig', pic: '⛏️' }],
+  [{ word: 'ten', pic: '🔟' },  { word: 'win', pic: '🏆' }],
+  [{ word: 'red', pic: '🔴' },  { word: 'fin', pic: '🐟' }],
+  [{ word: 'egg', pic: '🥚' },  { word: 'bin', pic: '🗑️' }],
+  [{ word: 'leg', pic: '🦵' },  { word: 'fit', pic: '💪' }],
+];
+
 const SET_LABELS = {
   'short-a': 'SHORT A WORDS',
   'short-e': 'SHORT E WORDS',
+  'short-i': 'SHORT I WORDS',
+  'short-u': 'SHORT U WORDS',
   'a-vs-e':  'A VS E — HEAR THE DIFFERENCE',
+  'e-vs-i':  'E VS I — HEAR THE DIFFERENCE',
 };
 
 const ROUNDS_PER_GAME = 10;
@@ -603,8 +673,9 @@ function speak(text) {
 // ── Round building ────────────────────────────────────────
 
 function buildRounds(setKey) {
-  if (setKey === 'a-vs-e') {
-    return shuffle(AE_PAIRS).slice(0, ROUNDS_PER_GAME).map(pair => {
+  if (setKey === 'a-vs-e' || setKey === 'e-vs-i') {
+    const pairs = setKey === 'a-vs-e' ? AE_PAIRS : EI_PAIRS;
+    return shuffle(pairs).slice(0, ROUNDS_PER_GAME).map(pair => {
       const flip = Math.random() < 0.5;
       return { target: pair[flip ? 1 : 0], distractor: pair[flip ? 0 : 1] };
     });
@@ -634,7 +705,7 @@ function goToPicker() {
 }
 
 function loadBestScores() {
-  ['short-a', 'short-e', 'a-vs-e'].forEach(k => {
+  ['short-a', 'short-e', 'short-i', 'short-u', 'a-vs-e', 'e-vs-i'].forEach(k => {
     const d  = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
     const el = document.getElementById('best-' + k);
     if (el) el.textContent = d.bestScore > 0 ? `Best: ${d.bestScore}/${ROUNDS_PER_GAME}` : '';
