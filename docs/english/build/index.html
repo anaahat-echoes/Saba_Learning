@@ -461,17 +461,17 @@ body {
 // ── Word Bank ────────────────────────────────────────────
 var WORD_BANK = {
   bad: '👎', bat: '🏏', bed: {pic:'🛏️', distractors:['a','t']},
-  big: '🐻', bin: '🗑️', bug: '🐛', bun: '🍔', bus: '🚌', but: '🤷',
-  cat: '🐱', cop: '👮', cot: '🛏️', cub: '🐻', cup: '☕', cut: '✂️',
-  dig: '⛏️', dog: '🐕', dot: '⚫', drop: '💧', dug: '🕳️',
+  big: '🐘', bin: '🗑️', bug: '🐛', bun: '🍔', bus: '🚌', but: '🤷',
+  cat: '🐱', cot: '🛏️', cub: '🐻', cup: '☕', cut: '✂️',
+  dig: '⛏️', dog: '🐕', dot: '⚫', drop: '💧',
   fan: '🪭', fin: '🐟', fit: '💪', fog: '🌫️', fun: '🎉',
-  gut: '💪', hat: '🎩', hen: '🐔', hid: '🫣', hit: '🥊',
-  hop: '🐇', hot: '🔥', hub: '🎯', hug: '🤗', hut: '🛖',
+  hat: '🎩', hen: '🐔', hid: '🫣', hit: '🥊',
+  hop: '🐇', hot: '🔥', hug: '🤗', hut: '🛖',
   jet: '✈️', jug: '🏺', kit: '🧰',
   man: '👨', men: '👥', mop: '🧹', net: '🕸️',
   pan: '🍳', pen: '✏️', pet: '🐕', pin: '📌', pop: '🎈', pot: '🍲',
-  rat: '🐀', sit: '🪑', sub: '🥪', sun: '☀️', ten: '🔟', tub: '🛁',
-  van: '🚐', vet: '🩺', win: '🏆',
+  rat: '🐀', rub: '🤲', sit: '🪑', sun: '☀️', ten: '🔟', tub: '🛁',
+  van: '🚐', vet: '🐾🩺', win: '🏆',
 };
 
 // Normalise entries: each becomes {pic, distractors?}
@@ -491,7 +491,7 @@ var WORD_SETS = [
   {
     key: 'more-cvc',
     name: 'More CVC Words',
-    words: ['hat','bug','dug','big','hen','bat'],
+    words: ['hat','bug','big','hen','bat','hug'],
     emoji: '⭐'
   },
   {
@@ -509,7 +509,7 @@ var WORD_SETS = [
   {
     key: 'u-families',
     name: 'Short U',
-    words: ['cut','hut','but','bug','dug','jug','hug','bun','fun','sun','cub','tub','sub'],
+    words: ['cut','hut','but','bug','jug','hug','bun','fun','sun','cub','rub','tub'],
     emoji: '🔥'
   },
 ];
