@@ -143,6 +143,7 @@ body {
 .n1 { background: var(--purple); }
 .n2 { background: var(--orange); }
 .n3 { background: #1971c2; }
+.n4 { background: #0ca678; }
 
 .act-card-info { flex: 1; }
 
@@ -471,6 +472,63 @@ body {
   0%{transform:scale(1)} 50%{transform:scale(1.1)} 100%{transform:scale(1)}
 }
 
+/* ── Compare game ────────────────────────── */
+.compare-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px 20px 24px;
+}
+
+.compare-num {
+  font-size: 4rem;
+  font-weight: 900;
+  min-width: 80px;
+  text-align: center;
+  background: rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 16px 12px;
+  line-height: 1;
+}
+
+.compare-vs {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+}
+
+.symbol-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.symbol-btn {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border: 3px solid transparent;
+  border-radius: 20px;
+  padding: 20px 8px;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.2s;
+}
+
+.symbol-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.symbol-btn.correct { border-color: var(--green); background: rgba(47,158,68,0.2); }
+.symbol-btn.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
+
 /* ── Result / Summary ────────────────────── */
 .result-emoji { font-size: 4rem; margin-bottom: 12px; text-align: center; padding-top: 40px; }
 .result-title { font-size: 1.5rem; font-weight: 900; text-align: center; margin-bottom: 12px; }
@@ -532,7 +590,7 @@ body {
   <div class="class-hero">
     <div class="class-date">Upcoming</div>
     <div class="class-title">Short I, O & U!</div>
-    <div class="class-sub">3 activities — play in any order</div>
+    <div class="class-sub">4 activities — play in any order</div>
   </div>
 
   <div class="act-list">
@@ -559,6 +617,14 @@ body {
         <span class="act-card-desc">Short I &amp; O words</span>
       </div>
       <span class="act-card-status" id="status3">▶</span>
+    </div>
+    <div class="act-card" id="plan-act4" onclick="launchActivity(4)">
+      <div class="act-num n4">4</div>
+      <div class="act-card-info">
+        <span class="act-card-name">🔢 Bigger or Smaller?</span>
+        <span class="act-card-desc">Compare numbers 1–50</span>
+      </div>
+      <span class="act-card-status" id="status4">▶</span>
     </div>
   </div>
 
@@ -681,6 +747,36 @@ body {
   <div class="feedback hidden" id="a3-fb"></div>
 </div>
 
+<!-- ── ACT 4: Bigger or Smaller ───────────── -->
+<div id="screen-act4" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
+    <span class="top-title">Bigger or Smaller?</span>
+    <div class="score-badge">
+      <span class="score-stars">⭐ <span id="a4-stars">0</span></span>
+      <span class="score-diamonds">💎 <span id="a4-diamonds">0</span></span>
+    </div>
+  </div>
+  <div class="game-progress">
+    <div class="progress-track"><div class="progress-fill" id="a4-progress" style="background:#0ca678"></div></div>
+    <div class="round-label" id="a4-round">1 / 10</div>
+  </div>
+
+  <div class="compare-area">
+    <div class="compare-num" id="a4-left"></div>
+    <div class="compare-vs">?</div>
+    <div class="compare-num" id="a4-right"></div>
+  </div>
+
+  <div class="symbol-row" id="a4-symbols">
+    <button class="symbol-btn" onclick="a4Tap('&lt;')">&lt;</button>
+    <button class="symbol-btn" onclick="a4Tap('=')">=</button>
+    <button class="symbol-btn" onclick="a4Tap('&gt;')">&gt;</button>
+  </div>
+
+  <div class="feedback hidden" id="a4-fb"></div>
+</div>
+
 <!-- ── Activity result ───────────────────── -->
 <div id="screen-result" class="screen">
   <div class="result-emoji" id="res-emoji">🎉</div>
@@ -773,7 +869,7 @@ var A3_WORDS = ['sit','hit','fit','pin','win','bin','pot','hot','dot','mop','pop
 
 var totalStars    = 0;
 var totalDiamonds = 0;
-var actResults    = { 1: null, 2: null, 3: null };
+var actResults    = { 1: null, 2: null, 3: null, 4: null };
 var currentAct    = 0;
 
 function shuffle(arr) {
@@ -811,7 +907,7 @@ function updatePlanScores() {
 
 function refreshPlan() {
   updatePlanScores();
-  for (var i = 1; i <= 3; i++) {
+  for (var i = 1; i <= 4; i++) {
     var card = document.getElementById('plan-act' + i);
     var stat = document.getElementById('status' + i);
     if (actResults[i]) {
@@ -828,6 +924,7 @@ function launchActivity(n) {
   if (n === 1) startAct1();
   else if (n === 2) startAct2();
   else if (n === 3) startAct3();
+  else if (n === 4) startAct4();
 }
 
 function backToPlan() {
@@ -836,7 +933,7 @@ function backToPlan() {
 }
 
 function nextFromResult() {
-  if (currentAct < 3) launchActivity(currentAct + 1);
+  if (currentAct < 4) launchActivity(currentAct + 1);
   else showSummary();
 }
 
@@ -853,7 +950,7 @@ function showActResult(stars, diamonds, actNum) {
   var emoji = diamonds > 0 ? '💎' : stars >= 5 ? '🌟' : '👍';
   document.getElementById('res-emoji').textContent = emoji;
   document.getElementById('res-title').textContent =
-    actNum === 3 ? 'All done!' : 'Activity complete!';
+    actNum === 4 ? 'All done!' : 'Activity complete!';
   document.getElementById('res-stars').textContent    = stars;
   document.getElementById('res-diamonds').textContent = diamonds;
 
@@ -862,7 +959,7 @@ function showActResult(stars, diamonds, actNum) {
     : stars >= 5 ? 'Brilliant work!' : 'Keep practising!';
   document.getElementById('res-detail').textContent = detail;
   document.getElementById('res-next').textContent =
-    actNum < 3 ? 'Next activity →' : 'See results 🏆';
+    actNum < 4 ? 'Next activity →' : 'See results 🏆';
 
   showScreen('screen-result');
 }
@@ -1204,6 +1301,92 @@ function a3Tap(letter, btn) {
 }
 
 // ════════════════════════════════════════════════════════════
+// ACT 4 — Bigger or Smaller? (Compare numbers 1–50)
+// ════════════════════════════════════════════════════════════
+
+var A4_PAIRS = [
+  [12, 8],  [5, 15],  [23, 23], [7, 42],  [30, 19],
+  [14, 14], [3, 9],   [45, 38], [16, 27], [50, 50],
+];
+
+var a4Pairs, a4Idx, a4Stars, a4Dia, a4Answered;
+
+function startAct4() {
+  a4Pairs    = shuffle(A4_PAIRS);
+  a4Idx      = 0;
+  a4Stars    = 0;
+  a4Dia      = 0;
+  a4Answered = false;
+  showScreen('screen-act4');
+  renderA4();
+}
+
+function renderA4() {
+  a4Answered = false;
+  var pair = a4Pairs[a4Idx];
+  var tot  = a4Pairs.length;
+
+  document.getElementById('a4-progress').style.width = (a4Idx / tot * 100) + '%';
+  document.getElementById('a4-round').textContent    = (a4Idx + 1) + ' / ' + tot;
+  document.getElementById('a4-stars').textContent     = totalStars + a4Stars;
+  document.getElementById('a4-diamonds').textContent  = totalDiamonds + a4Dia;
+
+  document.getElementById('a4-left').textContent  = pair[0];
+  document.getElementById('a4-right').textContent = pair[1];
+
+  var btns = document.querySelectorAll('#a4-symbols .symbol-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].className = 'symbol-btn';
+    btns[i].style.pointerEvents = '';
+  }
+
+  var fb = document.getElementById('a4-fb');
+  fb.textContent = ''; fb.className = 'feedback hidden';
+}
+
+function a4Tap(symbol) {
+  if (a4Answered) return;
+  a4Answered = true;
+
+  var pair = a4Pairs[a4Idx];
+  var correct;
+  if (pair[0] > pair[1])      correct = '>';
+  else if (pair[0] < pair[1]) correct = '<';
+  else                        correct = '=';
+
+  var btns = document.querySelectorAll('#a4-symbols .symbol-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].style.pointerEvents = 'none';
+
+  var tappedBtn = null, correctBtn = null;
+  for (var i = 0; i < btns.length; i++) {
+    var s = btns[i].textContent.trim();
+    if (s === symbol) tappedBtn = btns[i];
+    if (s === correct) correctBtn = btns[i];
+  }
+
+  var fb = document.getElementById('a4-fb');
+  if (symbol === correct) {
+    a4Stars++;
+    tappedBtn.classList.add('correct');
+    fb.textContent = '✓ ' + pair[0] + ' ' + correct + ' ' + pair[1];
+    fb.className = 'feedback ok';
+  } else {
+    tappedBtn.classList.add('wrong');
+    correctBtn.classList.add('correct');
+    fb.textContent = pair[0] + ' ' + correct + ' ' + pair[1];
+    fb.className = 'feedback no';
+  }
+
+  document.getElementById('a4-stars').textContent = totalStars + a4Stars;
+
+  setTimeout(function() {
+    a4Idx++;
+    if (a4Idx >= a4Pairs.length) showActResult(a4Stars, a4Dia, 4);
+    else renderA4();
+  }, 1800);
+}
+
+// ════════════════════════════════════════════════════════════
 // SESSION SUMMARY
 // ════════════════════════════════════════════════════════════
 
@@ -1211,10 +1394,10 @@ function showSummary() {
   document.getElementById('sum-stars').textContent    = totalStars;
   document.getElementById('sum-diamonds').textContent = totalDiamonds;
 
-  var names = { 1: '🔊 Listen & Match', 2: '🪜 Word Ladder', 3: '🔨 Build a Word' };
+  var names = { 1: '🔊 Listen & Match', 2: '🪜 Word Ladder', 3: '🔨 Build a Word', 4: '🔢 Bigger or Smaller?' };
   var bd = document.getElementById('sum-breakdown');
   bd.innerHTML = '';
-  for (var i = 1; i <= 3; i++) {
+  for (var i = 1; i <= 4; i++) {
     var r = actResults[i] || { stars: 0, diamonds: 0 };
     var row = document.createElement('div');
     row.className = 'sb-row';
