@@ -461,10 +461,15 @@ body {
 // ── Word Bank ────────────────────────────────────────────
 var WORD_BANK = {
   bad: '👎', bat: '🏏', bed: {pic:'🛏️', distractors:['a','t']},
-  big: '🐻', bug: '🐛',
-  bus: '🚌', cat: '🐱', cup: '☕', dig: '⛏️', dog: '🐕',
-  drop: '💧', dug: '🕳️', fog: '🌫️', hat: '🎩', hen: '🐔',
-  hid: '🫣', jet: '✈️', jug: '🏺', net: '🕸️',
+  big: '🐻', bin: '🗑️', bug: '🐛', bus: '🚌',
+  cat: '🐱', cop: '👮', cot: '🛏️', cup: '☕',
+  dig: '⛏️', dog: '🐕', dot: '⚫', drop: '💧', dug: '🕳️',
+  fan: '🪭', fin: '🐟', fit: '💪', fog: '🌫️',
+  hat: '🎩', hen: '🐔', hid: '🫣', hit: '🥊', hop: '🐇', hot: '🔥',
+  jet: '✈️', jug: '🏺', kit: '🧰',
+  man: '👨', men: '👥', mop: '🧹', net: '🕸️',
+  pan: '🍳', pen: '✏️', pet: '🐕', pin: '📌', pop: '🎈', pot: '🍲',
+  rat: '🐀', sit: '🪑', ten: '🔟', van: '🚐', vet: '🐄', win: '🏆',
 };
 
 // Normalise entries: each becomes {pic, distractors?}
@@ -486,6 +491,18 @@ var WORD_SETS = [
     name: 'More CVC Words',
     words: ['hat','bug','dug','big','hen','bat'],
     emoji: '⭐'
+  },
+  {
+    key: 'ae-families',
+    name: 'Short A & E',
+    words: ['cat','hat','bat','rat','pan','man','fan','net','jet','hen','pen','ten'],
+    emoji: '🔤'
+  },
+  {
+    key: 'io-families',
+    name: 'Short I & O',
+    words: ['sit','hit','fit','pin','win','bin','pot','hot','dot','mop','pop','hop'],
+    emoji: '🆕'
   },
 ];
 
