@@ -493,7 +493,7 @@ const FAMILIES = {
   },
   // Short I — locked until Short A + Short E both played
   '-it': {
-    rime: 'it', color: '#1c7ed6', locked: true,
+    rime: 'it', color: '#1c7ed6', locked: false,
     words: [
       { word: 'sit', pic: '🪑', onset: 's' },
       { word: 'hit', pic: '🥊', onset: 'h' },
@@ -502,7 +502,7 @@ const FAMILIES = {
     ],
   },
   '-in': {
-    rime: 'in', color: '#1c7ed6', locked: true,
+    rime: 'in', color: '#1c7ed6', locked: false,
     words: [
       { word: 'pin', pic: '📌', onset: 'p' },
       { word: 'win', pic: '🏆', onset: 'w' },
@@ -512,7 +512,7 @@ const FAMILIES = {
   },
   // Short O — locked until Short A + Short E both played
   '-ot': {
-    rime: 'ot', color: '#e03131', locked: true,
+    rime: 'ot', color: '#e03131', locked: false,
     words: [
       { word: 'pot', pic: '🍲', onset: 'p' },
       { word: 'hot', pic: '🔥', onset: 'h' },
@@ -521,7 +521,7 @@ const FAMILIES = {
     ],
   },
   '-op': {
-    rime: 'op', color: '#e03131', locked: true,
+    rime: 'op', color: '#e03131', locked: false,
     words: [
       { word: 'mop', pic: '🧹', onset: 'm' },
       { word: 'pop', pic: '🎈', onset: 'p' },
@@ -591,18 +591,8 @@ function goToPicker() {
 }
 
 function renderPicker() {
-  const unlocked = isIOUnlocked();
-  const grid     = document.getElementById('family-grid');
+  const grid = document.getElementById('family-grid');
   grid.innerHTML = '';
-
-  // Unlock banner
-  const banner = document.getElementById('unlock-banner');
-  if (unlocked) {
-    banner.textContent = '🎉 Short I & Short O unlocked! Explore new word families!';
-    banner.classList.add('show');
-  } else {
-    banner.classList.remove('show');
-  }
 
   // Short A & E section
   const aeLabel = document.createElement('div');
@@ -610,39 +600,32 @@ function renderPicker() {
   aeLabel.textContent = 'Short A & E';
   grid.appendChild(aeLabel);
 
-  ['-at', '-an', '-et', '-en'].forEach(key => renderFamilyCard(grid, key, false));
+  ['-at', '-an', '-et', '-en'].forEach(key => renderFamilyCard(grid, key));
 
   // Short I & O section
   const ioLabel = document.createElement('div');
   ioLabel.className = 'section-divider';
-  ioLabel.textContent = unlocked
-    ? 'Short I & O — unlocked!'
-    : 'Short I & O — play A & E games to unlock 🔒';
+  ioLabel.textContent = 'Short I & O';
   grid.appendChild(ioLabel);
 
-  LOCKED_KEYS.forEach(key => renderFamilyCard(grid, key, !unlocked));
+  LOCKED_KEYS.forEach(key => renderFamilyCard(grid, key));
 }
 
-function renderFamilyCard(grid, key, forcelock) {
-  const fam    = FAMILIES[key];
-  const locked = forcelock;
+function renderFamilyCard(grid, key) {
+  const fam = FAMILIES[key];
 
   const card = document.createElement('button');
-  card.className = 'family-card' + (locked ? ' locked' : '');
+  card.className = 'family-card';
   card.style.borderTop = `4px solid ${fam.color}`;
+  card.onclick = () => startGame(key);
 
-  if (!locked) {
-    card.onclick = () => startGame(key);
-  }
-
-  const storageKey = 'saba_ladders_' + key.slice(1); // '-at' → 'at'
+  const storageKey = 'saba_ladders_' + key.slice(1);
   const saved      = JSON.parse(localStorage.getItem(storageKey) || '{}');
   const bestStr    = saved.bestScore > 0
     ? `Best: ${saved.bestScore}/${fam.words.length}`
     : '';
 
   card.innerHTML = `
-    ${locked ? '<span class="lock-badge">🔒</span>' : ''}
     <div class="family-rime" style="color:${fam.color}">${key}</div>
     <div class="family-words">${fam.words.map(w => w.word).join(' · ')}</div>
     <div class="family-best">${bestStr}</div>
@@ -793,24 +776,6 @@ function showResult() {
     .map(w => w.word);
   localStorage.setItem(storageKey, JSON.stringify(prev));
 
-  // Check if I/O unlock threshold just reached
-  const unlockNotice = document.getElementById('unlock-notice');
-  if (isIOUnlocked() &&
-      ['-at', '-an', '-et', '-en'].includes(currentFamilyKey)) {
-    // Show unlock notice only if all locked families have 0 plays
-    const anyIOPlayed = LOCKED_KEYS.some(k => {
-      const d = JSON.parse(localStorage.getItem('saba_ladders_' + k.slice(1)) || '{}');
-      return (d.played || 0) > 0;
-    });
-    if (!anyIOPlayed) {
-      unlockNotice.textContent = '🎉 You unlocked Short I & Short O families! Check the picker!';
-      unlockNotice.classList.add('show');
-    } else {
-      unlockNotice.classList.remove('show');
-    }
-  } else {
-    unlockNotice.classList.remove('show');
-  }
 }
 
 function playAgain() { startGame(currentFamilyKey); }
