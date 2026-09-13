@@ -548,11 +548,14 @@ function shuffle(arr) {
 function speak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  var utt = new SpeechSynthesisUtterance(text);
-  utt.lang  = 'en-GB';
-  utt.rate  = 0.82;
-  utt.pitch = 1.05;
-  window.speechSynthesis.speak(utt);
+  setTimeout(function() {
+    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+    var utt = new SpeechSynthesisUtterance(text);
+    utt.lang  = 'en-GB';
+    utt.rate  = 0.82;
+    utt.pitch = 1.05;
+    window.speechSynthesis.speak(utt);
+  }, 60);
 }
 
 // ── Screens ──────────────────────────────────────────────
