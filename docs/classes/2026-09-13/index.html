@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Class — Upcoming</title>
+<title>Class — 13 September</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -588,7 +588,7 @@ body {
   </div>
 
   <div class="class-hero">
-    <div class="class-date">Upcoming</div>
+    <div class="class-date">13 September 2026</div>
     <div class="class-title">Let's keep learning!</div>
     <div class="class-sub">4 activities — play in any order</div>
   </div>
@@ -598,7 +598,7 @@ body {
       <div class="act-num n1">1</div>
       <div class="act-card-info">
         <span class="act-card-name">🔊 Listen &amp; Match</span>
-        <span class="act-card-desc">Short E → Short O → Short U</span>
+        <span class="act-card-desc">Short I → E vs I → Short U</span>
       </div>
       <span class="act-card-status" id="status1">▶</span>
     </div>
@@ -606,7 +606,7 @@ body {
       <div class="act-num n2">2</div>
       <div class="act-card-info">
         <span class="act-card-name">🪜 Word Ladder</span>
-        <span class="act-card-desc">-et -en · -ot -op · -ut -ug · -un -ub</span>
+        <span class="act-card-desc">-it -in · -ot -op · -ut -ug · -et -en</span>
       </div>
       <span class="act-card-status" id="status2">▶</span>
     </div>
@@ -614,7 +614,7 @@ body {
       <div class="act-num n3">3</div>
       <div class="act-card-info">
         <span class="act-card-name">🔨 Build a Word</span>
-        <span class="act-card-desc">Short E, O &amp; U words</span>
+        <span class="act-card-desc">Short I &amp; O words</span>
       </div>
       <span class="act-card-status" id="status3">▶</span>
     </div>
@@ -631,11 +631,11 @@ body {
   <div class="watch-section">
     <div class="watch-heading">Watch after class</div>
 
-    <a href="https://www.youtube.com/watch?v=Du-gphJHbPM" target="_blank" rel="noopener" class="video-card">
-      <span class="video-thumb">📧</span>
+    <a href="https://www.youtube.com/watch?v=hDvWymWpUBY" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">ℹ️</span>
       <div class="video-info">
-        <span class="video-title">Alphablocks — E Words (Short E)</span>
-        <span class="video-desc">1 min</span>
+        <span class="video-title">Alphablocks — Short I</span>
+        <span class="video-desc">3 min</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -654,6 +654,15 @@ body {
       <div class="video-info">
         <span class="video-title">Alphablocks — Up (Short U)</span>
         <span class="video-desc">3 min</span>
+      </div>
+      <span class="video-play">▶</span>
+    </a>
+
+    <a href="https://www.youtube.com/watch?v=Du-gphJHbPM" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">📧</span>
+      <div class="video-info">
+        <span class="video-title">Alphablocks — E Words (Short E)</span>
+        <span class="video-desc">1 min · for E vs I contrast</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -803,12 +812,14 @@ body {
 // ════════════════════════════════════════════════════════════
 
 var WORD_BANK = {
+  sit: '🪑', hit: '🥊', fit: '💪', kit: '🧰',
+  pin: '📌', win: '🏆', bin: '🗑️', fin: '🐟',
+  big: '🐘', dig: '⛏️',
   pot: '🍲', hot: '🔥', cot: '🛏️', dot: '⚫',
   mop: '🧹', pop: '🎈', hop: '🐇',
   cut: '✂️', hut: '🛖', but: '🤷',
   bug: '🐛', jug: '🏺', hug: '🤗',
-  bun: '🍔', fun: '🎉', gun: '🔫', sun: '☀️',
-  cub: '🐻', rub: '🤲', tub: '🛁',
+  bun: '🍔', fun: '🎉', sun: '☀️',
   net: '🕸️', pet: '🐕', jet: '✈️', vet: '🐕🩺',
   hen: '🐔', pen: '✏️', ten: '🔟', men: '👥',
   cup: '☕', bus: '🚌',
@@ -823,27 +834,34 @@ function isDiamond(word) {
 }
 
 // ── Act 1: Listen & Match ────────────────────────────────
-// Short E, Short O, Short U — mixed together
-var A1_SHORT_E = [wb('net'), wb('pet'), wb('jet'), wb('hen'), wb('pen'), wb('ten')];
-var A1_SHORT_O = [wb('pot'), wb('hot'), wb('cot'), wb('dot'), wb('mop'), wb('pop')];
+// Short I words, then E vs I pairs, then Short U words — mixed together
+var A1_SHORT_I = [wb('sit'), wb('hit'), wb('fit'), wb('pin'), wb('bin'), wb('kit')];
 var A1_SHORT_U = [wb('bug'), wb('jug'), wb('hug'), wb('cut'), wb('bun'), wb('sun')];
+
+var A1_EI_PAIRS = [
+  [wb('pen'), wb('pin')],
+  [wb('net'), wb('kit')],
+  [wb('pet'), wb('sit')],
+  [wb('hen'), wb('hit')],
+  [wb('ten'), wb('win')],
+];
 
 var ALL_PICS = Object.keys(WORD_BANK).map(wb);
 
 // ── Act 2: Word Ladder families ─────────────────────────
 var A2_FAMILIES = [
-  { rime: 'et', words: ['net','pet','jet','vet'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'en', words: ['hen','pen','ten','men'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'it', words: ['sit','hit','fit','kit'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'in', words: ['pin','win','bin','fin'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'ot', words: ['pot','hot','cot','dot'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'op', words: ['mop','pop','hop'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'ut', words: ['cut','hut','but'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'ug', words: ['bug','jug','hug'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'un', words: ['bun','fun','gun','sun'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'ub', words: ['cub','rub','tub'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'et', words: ['net','pet','jet','vet'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'en', words: ['hen','pen','ten','men'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
 ];
 
-// ── Act 3: Build a Word — Short E, O & U ────────────────
-var A3_WORDS = ['net','pet','hen','pen','pot','hot','mop','pop','cut','bug','bun','sun'].map(wb);
+// ── Act 3: Build a Word — Short I & O ───────────────────
+var A3_WORDS = ['sit','hit','fit','pin','win','bin','pot','hot','dot','mop','pop','hop'].map(wb);
 
 // ════════════════════════════════════════════════════════════
 // GLOBAL STATE
@@ -950,31 +968,30 @@ function showActResult(stars, diamonds, actNum) {
 }
 
 // ════════════════════════════════════════════════════════════
-// ACT 1 — Listen & Match (Short E, Short O, Short U)
+// ACT 1 — Listen & Match (Short I, E vs I contrast, Short U)
 // ════════════════════════════════════════════════════════════
 
 var a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
 
 function startAct1() {
-  // Build rounds: 3 Short E + 3 Short O + 3 Short U = 9 rounds
-  var shortE = shuffle(A1_SHORT_E).slice(0, 3);
-  var shortO = shuffle(A1_SHORT_O).slice(0, 3);
+  // Build rounds: 3 Short I + 2 E-vs-I pairs + 3 Short U = 8 rounds
+  var shortI = shuffle(A1_SHORT_I).slice(0, 3);
   var shortU = shuffle(A1_SHORT_U).slice(0, 3);
+  var eiPairs = shuffle(A1_EI_PAIRS).slice(0, 2);
 
   a1Words = [];
 
-  // Short E rounds
-  shortE.forEach(function(w) {
+  // Short I rounds — standard listen & match
+  shortI.forEach(function(w) {
     var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
     var dist = others[Math.floor(Math.random() * others.length)];
     a1Words.push({ target: w, distractor: dist });
   });
 
-  // Short O rounds
-  shortO.forEach(function(w) {
-    var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
-    var dist = others[Math.floor(Math.random() * others.length)];
-    a1Words.push({ target: w, distractor: dist });
+  // E vs I contrast rounds
+  eiPairs.forEach(function(pair) {
+    var flip = Math.random() < 0.5;
+    a1Words.push({ target: pair[flip ? 1 : 0], distractor: pair[flip ? 0 : 1] });
   });
 
   // Short U rounds
@@ -1165,7 +1182,7 @@ function a2Tap(letter, btn, w) {
 }
 
 // ════════════════════════════════════════════════════════════
-// ACT 3 — Build a Word (Short E, O & U)
+// ACT 3 — Build a Word (Short I & O)
 // ════════════════════════════════════════════════════════════
 
 var a3Words, a3Idx, a3Stars, a3Dia, a3Pos, a3TriedWrong, a3Waiting;
@@ -1291,8 +1308,8 @@ function a3Tap(letter, btn) {
 // ════════════════════════════════════════════════════════════
 
 var A4_PAIRS = [
-  [18, 25], [40, 12], [33, 33], [9, 6],   [27, 41],
-  [15, 15], [50, 47], [22, 8],  [36, 36], [5, 19],
+  [12, 8],  [5, 15],  [23, 23], [7, 42],  [30, 19],
+  [14, 14], [3, 9],   [45, 38], [16, 27], [50, 50],
 ];
 
 var a4Pairs, a4Idx, a4Stars, a4Dia, a4Answered;
@@ -1400,7 +1417,7 @@ function showSummary() {
 // PERSISTENCE
 // ════════════════════════════════════════════════════════════
 
-var SAVE_KEY = 'saba_class_upcoming';
+var SAVE_KEY = 'saba_class_2026-09-13';
 
 function saveProgress() {
   try {
@@ -1408,7 +1425,7 @@ function saveProgress() {
       totalStars: totalStars,
       totalDiamonds: totalDiamonds,
       actResults: actResults,
-      date: 'upcoming'
+      date: '2026-09-13'
     }));
   } catch (e) {}
 }

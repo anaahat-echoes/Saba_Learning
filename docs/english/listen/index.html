@@ -154,6 +154,7 @@ body {
 .act-btn.level-e  { border-left: 5px solid #2f9e44; }
 .act-btn.level-i  { border-left: 5px solid #1c7ed6; }
 .act-btn.level-u  { border-left: 5px solid #d6336c; }
+.act-btn.level-o  { border-left: 5px solid #e03131; }
 .act-btn.level-ae { border-left: 5px solid var(--purple); }
 .act-btn.level-ei { border-left: 5px solid #0ca678; }
 
@@ -431,6 +432,15 @@ body {
       <span class="act-best" id="best-short-u"></span>
     </button>
 
+    <button class="act-btn level-o" onclick="startGame('short-o')">
+      <span class="act-emoji">🍲</span>
+      <span class="act-info">
+        <span class="act-name">Short O</span>
+        <span class="act-words">pot · hot · mop ...</span>
+      </span>
+      <span class="act-best" id="best-short-o"></span>
+    </button>
+
     <div class="section-label">Hear the Difference</div>
 
     <button class="act-btn level-ae" onclick="startGame('a-vs-e')">
@@ -551,6 +561,15 @@ const WORDS = {
     { word: 'cup', pic: '☕' },
     { word: 'bus', pic: '🚌' },
   ],
+  'short-o': [
+    { word: 'pot', pic: '🍲' },
+    { word: 'hot', pic: '🔥' },
+    { word: 'cot', pic: '🛏️' },
+    { word: 'dot', pic: '⚫' },
+    { word: 'mop', pic: '🧹' },
+    { word: 'pop', pic: '🎈' },
+    { word: 'hop', pic: '🐇' },
+  ],
 };
 
 const AE_PAIRS = [
@@ -584,6 +603,7 @@ const SET_LABELS = {
   'short-e': 'SHORT E WORDS',
   'short-i': 'SHORT I WORDS',
   'short-u': 'SHORT U WORDS',
+  'short-o': 'SHORT O WORDS',
   'a-vs-e':  'A VS E — HEAR THE DIFFERENCE',
   'e-vs-i':  'E VS I — HEAR THE DIFFERENCE',
 };
@@ -668,7 +688,7 @@ function goToPicker() {
 }
 
 function loadBestScores() {
-  ['short-a', 'short-e', 'short-i', 'short-u', 'a-vs-e', 'e-vs-i'].forEach(k => {
+  ['short-a', 'short-e', 'short-i', 'short-u', 'short-o', 'a-vs-e', 'e-vs-i'].forEach(k => {
     const d  = JSON.parse(localStorage.getItem('saba_phonics_' + k) || '{}');
     const el = document.getElementById('best-' + k);
     if (el) el.textContent = d.bestScore > 0 ? `Best: ${d.bestScore}/${ROUNDS_PER_GAME}` : '';
