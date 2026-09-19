@@ -914,8 +914,11 @@ function refreshPlan() {
 }
 
 function goToReadStory() {
-  var nextUrl = '../../classes/upcoming/?next=4';
-  window.location.href = '../../english/read/?book=short-a&next=' + encodeURIComponent(nextUrl);
+  var classUrl = '../../classes/upcoming/';
+  var nextUrl  = classUrl + '?next=4';
+  window.location.href = '../../english/read/?book=short-a'
+    + '&next=' + encodeURIComponent(nextUrl)
+    + '&back=' + encodeURIComponent(classUrl);
 }
 
 function launchActivity(n) {

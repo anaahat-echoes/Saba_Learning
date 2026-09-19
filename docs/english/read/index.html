@@ -320,7 +320,7 @@ body {
 <!-- ── SCREEN 1: Book Picker ─────────────── -->
 <div id="screen-pick" class="screen active">
   <div class="page-header">
-    <a href="../" class="back-btn" aria-label="Back to Word World">←</a>
+    <button class="back-btn" onclick="goBack()" aria-label="Back">←</button>
     <span class="page-title">📖 Read a Story</span>
   </div>
 
@@ -362,7 +362,7 @@ body {
 <!-- ── SCREEN 2: Book / Page ─────────────── -->
 <div id="screen-book" class="screen">
   <div class="page-header">
-    <button class="back-btn" onclick="exitBook()" aria-label="Back to books">←</button>
+    <button class="back-btn" onclick="goBack()" aria-label="Back to books">←</button>
     <span class="page-title" id="book-title">Sam's Story</span>
   </div>
 
@@ -500,6 +500,12 @@ function exitBook() {
   window.speechSynthesis && window.speechSynthesis.cancel();
   loadBestScores();
   showScreen('screen-pick');
+}
+
+function goBack() {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  const backUrl = urlParams.get('back');
+  window.location.href = backUrl || '../';
 }
 
 // ── Book start ────────────────────────────────────────────
