@@ -347,6 +347,15 @@ body {
       </span>
       <span class="book-best" id="best-short-a-ran"></span>
     </button>
+
+    <button class="book-card" onclick="startBook('short-e')">
+      <span class="book-emoji">🐔</span>
+      <span class="book-info">
+        <span class="book-name">Ben's Story</span>
+        <span class="book-desc">A Short E book · 6 pages</span>
+      </span>
+      <span class="book-best" id="best-short-e"></span>
+    </button>
   </div>
 </div>
 
@@ -429,6 +438,17 @@ const BOOKS = {
       sentence('Sam ran.', '🧒🏃'),
       sentence('The cat ran.', '🐱🏃'),
       sentence('Sam and the cat ran.', '🧒🐱🏃'),
+    ],
+  },
+  'short-e': {
+    title: "Ben's Story",
+    pages: [
+      sentence('Ben.', '🧒'),
+      sentence('Ben has a hen.', '🐔'),
+      sentence('Ben has a pen.', '✏️'),
+      sentence('Ben has ten hens.', '🐔🔟'),
+      sentence('The men have a hen.', '👥🐔'),
+      sentence('Ben and the men have ten hens.', '🧒👥🐔🔟'),
     ],
   },
 };
