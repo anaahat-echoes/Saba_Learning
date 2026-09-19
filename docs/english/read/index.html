@@ -393,6 +393,7 @@ body {
   <div class="result-msg" id="result-msg"></div>
   <div class="result-stars" id="result-stars"></div>
   <div class="result-btns">
+    <button class="btn-primary" id="continue-btn" onclick="continueToNext()" style="display:none;">Continue →</button>
     <button class="btn-primary" onclick="startBook(currentBookKey)">Read again</button>
     <button class="btn-secondary" onclick="exitBook()">Choose a book</button>
   </div>
@@ -634,14 +635,23 @@ function finishBook() {
   const stars = '⭐⭐⭐';
   document.getElementById('result-stars').textContent = stars;
 
+  const continueBtn = document.getElementById('continue-btn');
+  const nextUrl = urlParams.get('next');
+  continueBtn.style.display = nextUrl ? '' : 'none';
+
   showScreen('screen-result');
+}
+
+function continueToNext() {
+  const nextUrl = urlParams.get('next');
+  if (nextUrl) window.location.href = nextUrl;
 }
 
 // ── Init ──────────────────────────────────────────────────
 
 loadBestScores();
-
 const urlParams = new URLSearchParams(location.search);
+
 const requestedBook = urlParams.get('book');
 if (requestedBook && BOOKS[requestedBook]) {
   startBook(requestedBook);

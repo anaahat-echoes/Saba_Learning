@@ -914,7 +914,8 @@ function refreshPlan() {
 }
 
 function goToReadStory() {
-  window.location.href = '../../english/read/?book=short-a';
+  var nextUrl = '../../classes/upcoming/?next=4';
+  window.location.href = '../../english/read/?book=short-a&next=' + encodeURIComponent(nextUrl);
 }
 
 function launchActivity(n) {
@@ -1443,6 +1444,11 @@ function loadProgress() {
 
 loadProgress();
 refreshPlan();
+
+var autoNext = new URLSearchParams(location.search).get('next');
+if (autoNext) {
+  launchActivity(Number(autoNext));
+}
 </script>
 
 </body>
