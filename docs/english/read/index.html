@@ -559,7 +559,7 @@ function readSentence() {
         if (event.charIndex >= offsets[i]) idx = i;
       }
       const el = document.getElementById('word-' + idx);
-      if (el) el.classList.add('highlight');
+      if (el && !page.words[idx].sight) el.classList.add('highlight');
     },
     () => {
       clearHighlights();
