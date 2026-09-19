@@ -387,7 +387,7 @@ body {
 const SIGHT_WORDS = new Set(['a', 'has', 'is', 'and', 'the', 'on']);
 
 function w(text) {
-  return { text: text, sight: SIGHT_WORDS.has(text.toLowerCase().replace(/[.!?]/g, '')) };
+  return { text: text, sight: SIGHT_WORDS.has(text.toLowerCase().replace(/[.,!?]/g, '')) };
 }
 
 function sentence(text, emoji) {
@@ -399,15 +399,15 @@ const BOOKS = {
     title: "Sam's Story",
     pages: [
       sentence('Sam.', '🧒'),
-      sentence('Sam has a cat.', '🐱'),
-      sentence('Sam has a hat.', '🎩'),
-      sentence('Sam has a bat.', '🏏'),
-      sentence('Sam has a pan.', '🍳'),
-      sentence('Sam has a fan.', '🪭'),
-      sentence('Sam sat.', '🪑'),
-      sentence('The cat sat on the hat.', '🐱🎩'),
-      sentence('Sam and the cat.', '🧒🐱'),
       sentence('Sam is a man.', '👨'),
+      sentence('Sam has a cat.', '🐱'),
+      sentence('Cat has a hat.', '🐱🎩'),
+      sentence('Sam has a bat.', '🏏'),
+      sentence('Cat has a rat.', '🐱🐀'),
+      sentence('Sam sat.', '🪑'),
+      sentence('The cat sat.', '🐱🪑'),
+      sentence('The rat sat.', '🐀🪑'),
+      sentence('Sam, the cat, and the rat sat.', '🧒🐱🐀'),
     ],
   },
 };
@@ -501,7 +501,7 @@ function renderPage() {
     tile.className = 'word-tile';
     tile.textContent = word.text;
     tile.id = 'word-' + i;
-    tile.onclick = () => speak(word.text.replace(/[.!?]/g, ''));
+    tile.onclick = () => speak(word.text.replace(/[.,!?]/g, ''));
     row.appendChild(tile);
   });
 
