@@ -143,6 +143,7 @@ body {
 .n1 { background: var(--purple); }
 .n2 { background: var(--orange); }
 .n3 { background: #1971c2; }
+.n-read { background: var(--gold); font-size: 1.1rem; }
 .n4 { background: #0ca678; }
 
 .act-card-info { flex: 1; }
@@ -590,7 +591,7 @@ body {
   <div class="class-hero">
     <div class="class-date">Upcoming</div>
     <div class="class-title">Let's keep learning!</div>
-    <div class="class-sub">4 activities — play in any order</div>
+    <div class="class-sub">5 activities — play in any order</div>
   </div>
 
   <div class="act-list">
@@ -617,6 +618,14 @@ body {
         <span class="act-card-desc">Short E, O &amp; U words</span>
       </div>
       <span class="act-card-status" id="status3">▶</span>
+    </div>
+    <div class="act-card" id="plan-read" onclick="goToReadStory()">
+      <div class="act-num n-read">📖</div>
+      <div class="act-card-info">
+        <span class="act-card-name">Read a Story</span>
+        <span class="act-card-desc">Sam's Story — read it together</span>
+      </div>
+      <span class="act-card-status" id="status-read">▶</span>
     </div>
     <div class="act-card" id="plan-act4" onclick="launchActivity(4)">
       <div class="act-num n4">4</div>
@@ -902,6 +911,20 @@ function refreshPlan() {
       stat.textContent = '▶';
     }
   }
+
+  var readData = JSON.parse(localStorage.getItem('saba_book_short-a') || '{}');
+  var readCard = document.getElementById('plan-read');
+  var readStat = document.getElementById('status-read');
+  if (readData.timesRead > 0) {
+    readCard.classList.add('done');
+    readStat.textContent = '✅';
+  } else {
+    readStat.textContent = '▶';
+  }
+}
+
+function goToReadStory() {
+  window.location.href = '../../english/read/?book=short-a';
 }
 
 function launchActivity(n) {

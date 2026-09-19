@@ -640,6 +640,13 @@ function finishBook() {
 // ── Init ──────────────────────────────────────────────────
 
 loadBestScores();
+
+const urlParams = new URLSearchParams(location.search);
+const requestedBook = urlParams.get('book');
+if (requestedBook && BOOKS[requestedBook]) {
+  startBook(requestedBook);
+}
+
 </script>
 
 </body>
