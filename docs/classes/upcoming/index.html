@@ -911,16 +911,6 @@ function refreshPlan() {
       stat.textContent = '▶';
     }
   }
-
-  var readData = JSON.parse(localStorage.getItem('saba_book_short-a') || '{}');
-  var readCard = document.getElementById('plan-read');
-  var readStat = document.getElementById('status-read');
-  if (readData.timesRead > 0) {
-    readCard.classList.add('done');
-    readStat.textContent = '✅';
-  } else {
-    readStat.textContent = '▶';
-  }
 }
 
 function goToReadStory() {

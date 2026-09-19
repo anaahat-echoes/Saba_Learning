@@ -631,7 +631,7 @@ function finishBook() {
 
   document.getElementById('result-msg').textContent =
     `You read "${currentBook.title}" all the way through!`;
-  const stars = '⭐'.repeat(Math.min(currentBook.pages.length, 10));
+  const stars = '⭐⭐⭐';
   document.getElementById('result-stars').textContent = stars;
 
   showScreen('screen-result');
