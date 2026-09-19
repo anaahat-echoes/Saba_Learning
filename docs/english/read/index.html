@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Read a Story</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple:      #7048e8;
+  --purple-dark: #5f3dc4;
+  --green:       #2f9e44;
+  --gold:        #f59f00;
+  --gold-dark:   #b57000;
+  --gray:        rgba(255,255,255,0.5);
+  --bg:          #1a1a2e;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  color: #fff;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── Header ──────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px 12px;
+  flex-shrink: 0;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: 50%;
+  width: 40px; height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+}
+
+.page-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  flex: 1;
+}
+
+/* ── Book Picker ──────────────────────────── */
+#screen-pick { padding: 0 20px 40px; }
+
+.pick-heading {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 6px;
+  padding: 0 4px;
+}
+
+.pick-sub {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 22px;
+  padding: 0 4px;
+}
+
+.book-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.book-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  cursor: pointer;
+  border-left: 5px solid var(--gold);
+  transition: transform 0.1s, box-shadow 0.1s;
+  color: #fff;
+}
+
+.book-card:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.book-emoji {
+  font-size: 2.6rem;
+  min-width: 50px;
+  text-align: center;
+}
+
+.book-info { flex: 1; }
+
+.book-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.book-desc {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.45);
+}
+
+.book-best {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── Book / Page screen ───────────────────── */
+#screen-book {
+  padding-bottom: 24px;
+}
+
+.page-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 20px 6px;
+  flex-wrap: wrap;
+}
+
+.page-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+
+.page-dot.done { background: var(--gold); }
+.page-dot.current { background: #fff; width: 10px; height: 10px; }
+
+.story-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px 8px;
+  min-height: 30vh;
+}
+
+.story-emoji {
+  font-size: 5.5rem;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.sentence-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 480px;
+}
+
+.word-tile {
+  font-family: 'Courier New', monospace;
+  font-size: 1.9rem;
+  font-weight: 800;
+  padding: 8px 16px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  color: #fff;
+}
+
+.word-tile:active { transform: scale(0.94); }
+
+.word-tile.sight {
+  background: rgba(245,159,0,0.18);
+  border: 2px solid rgba(245,159,0,0.4);
+  color: var(--gold);
+}
+
+.word-tile.highlight {
+  background: rgba(47,158,68,0.35);
+  border: 2px solid var(--green);
+  color: #fff;
+}
+
+.read-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 28px 20px 16px;
+}
+
+.read-btn {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 36px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--purple-dark);
+  transition: transform 0.1s, box-shadow 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.read-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--purple-dark);
+}
+
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 24px 8px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.nav-btn {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 22px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn:disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.nav-btn.primary {
+  background: var(--green);
+}
+
+/* ── Result screen ────────────────────────── */
+#screen-result {
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.result-emoji { font-size: 4rem; margin-bottom: 12px; }
+.result-title { font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; }
+.result-msg   { font-size: 0.95rem; color: var(--gray); margin-bottom: 8px; }
+.result-stars { font-size: 2.4rem; margin: 12px 0 28px; letter-spacing: 4px; }
+
+.result-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.btn-primary {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 32px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 var(--purple-dark);
+}
+
+.btn-primary:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--purple-dark); }
+
+.btn-secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- ── SCREEN 1: Book Picker ─────────────── -->
+<div id="screen-pick" class="screen active">
+  <div class="page-header">
+    <a href="../" class="back-btn" aria-label="Back to Word World">←</a>
+    <span class="page-title">📖 Read a Story</span>
+  </div>
+
+  <div style="padding: 8px 24px 0;">
+    <div class="pick-heading">Story Time</div>
+    <div class="pick-sub">Tap a book to start reading</div>
+  </div>
+
+  <div class="book-list" style="padding: 0 4px;">
+    <button class="book-card" onclick="startBook('short-a')">
+      <span class="book-emoji">🐱</span>
+      <span class="book-info">
+        <span class="book-name">Sam's Story</span>
+        <span class="book-desc">A Short A book · 10 pages</span>
+      </span>
+      <span class="book-best" id="best-short-a"></span>
+    </button>
+  </div>
+</div>
+
+<!-- ── SCREEN 2: Book / Page ─────────────── -->
+<div id="screen-book" class="screen">
+  <div class="page-header">
+    <button class="back-btn" onclick="exitBook()" aria-label="Back to books">←</button>
+    <span class="page-title" id="book-title">Sam's Story</span>
+  </div>
+
+  <div class="page-dots" id="page-dots"></div>
+
+  <div class="story-stage">
+    <div class="story-emoji" id="story-emoji"></div>
+    <div class="sentence-row" id="sentence-row"></div>
+  </div>
+
+  <div class="read-wrap">
+    <button class="read-btn" id="read-btn" onclick="readSentence()">
+      <span>🔊</span> <span id="read-text">Read it!</span>
+    </button>
+  </div>
+
+  <div class="nav-row">
+    <button class="nav-btn" id="prev-btn" onclick="prevPage()">← Back</button>
+    <button class="nav-btn primary" id="next-btn" onclick="nextPage()">Next →</button>
+  </div>
+</div>
+
+<!-- ── SCREEN 3: Result ──────────────────── -->
+<div id="screen-result" class="screen">
+  <div class="result-emoji">🏆</div>
+  <div class="result-title">You read the whole book!</div>
+  <div class="result-msg" id="result-msg"></div>
+  <div class="result-stars" id="result-stars"></div>
+  <div class="result-btns">
+    <button class="btn-primary" onclick="startBook(currentBookKey)">Read again</button>
+    <button class="btn-secondary" onclick="exitBook()">Choose a book</button>
+  </div>
+</div>
+
+<script>
+// ── Book data ─────────────────────────────────────────────
+// Words marked sight:true are memorized whole, not sounded out.
+
+const SIGHT_WORDS = new Set(['a', 'has', 'is', 'and', 'the', 'on']);
+
+function w(text) {
+  return { text: text, sight: SIGHT_WORDS.has(text.toLowerCase().replace(/[.!?]/g, '')) };
+}
+
+function sentence(text, emoji) {
+  return { emoji: emoji, words: text.split(' ').map(w) };
+}
+
+const BOOKS = {
+  'short-a': {
+    title: "Sam's Story",
+    pages: [
+      sentence('Sam.', '🧒'),
+      sentence('Sam has a cat.', '🐱'),
+      sentence('Sam has a hat.', '🎩'),
+      sentence('Sam has a bat.', '🏏'),
+      sentence('Sam has a pan.', '🍳'),
+      sentence('Sam has a fan.', '🪭'),
+      sentence('Sam sat.', '🪑'),
+      sentence('The cat sat on the hat.', '🐱🎩'),
+      sentence('Sam and the cat.', '🧒🐱'),
+      sentence('Sam is a man.', '👨'),
+    ],
+  },
+};
+
+// ── TTS ───────────────────────────────────────────────────
+
+function speak(text, onBoundary, onEnd) {
+  if (!window.speechSynthesis) { if (onEnd) onEnd(); return; }
+  window.speechSynthesis.cancel();
+  setTimeout(() => {
+    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang  = 'en-GB';
+    utt.rate  = 0.78;
+    utt.pitch = 1.05;
+    if (onBoundary) utt.onboundary = onBoundary;
+    if (onEnd) utt.onend = onEnd;
+    window.speechSynthesis.speak(utt);
+  }, 60);
+}
+
+// ── State ─────────────────────────────────────────────────
+
+let currentBookKey = null;
+let currentBook     = null;
+let pageIndex       = 0;
+let pagesRead       = new Set();
+
+// ── Screens ───────────────────────────────────────────────
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── Picker ────────────────────────────────────────────────
+
+function loadBestScores() {
+  Object.keys(BOOKS).forEach(key => {
+    const d  = JSON.parse(localStorage.getItem('saba_book_' + key) || '{}');
+    const el = document.getElementById('best-' + key);
+    if (el) el.textContent = d.timesRead > 0 ? `Read ${d.timesRead}×` : '';
+  });
+}
+
+function exitBook() {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+  loadBestScores();
+  showScreen('screen-pick');
+}
+
+// ── Book start ────────────────────────────────────────────
+
+function startBook(key) {
+  currentBookKey = key;
+  currentBook    = BOOKS[key];
+  pageIndex      = 0;
+  pagesRead      = new Set();
+
+  document.getElementById('book-title').textContent = currentBook.title;
+  renderDots();
+  renderPage();
+  showScreen('screen-book');
+}
+
+function renderDots() {
+  const wrap = document.getElementById('page-dots');
+  wrap.innerHTML = '';
+  currentBook.pages.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'page-dot';
+    if (pagesRead.has(i)) dot.classList.add('done');
+    if (i === pageIndex) dot.classList.add('current');
+    wrap.appendChild(dot);
+  });
+}
+
+// ── Page render ───────────────────────────────────────────
+
+function renderPage() {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+
+  const page = currentBook.pages[pageIndex];
+  document.getElementById('story-emoji').textContent = page.emoji;
+
+  const row = document.getElementById('sentence-row');
+  row.innerHTML = '';
+  page.words.forEach((word, i) => {
+    const tile = document.createElement('span');
+    tile.className = 'word-tile' + (word.sight ? ' sight' : '');
+    tile.textContent = word.text;
+    tile.id = 'word-' + i;
+    tile.onclick = () => speak(word.text.replace(/[.!?]/g, ''));
+    row.appendChild(tile);
+  });
+
+  document.getElementById('read-text').textContent = 'Read it!';
+
+  document.getElementById('prev-btn').disabled = pageIndex === 0;
+  document.getElementById('next-btn').textContent =
+    pageIndex === currentBook.pages.length - 1 ? 'Finish 🏆' : 'Next →';
+
+  pagesRead.add(pageIndex);
+  renderDots();
+}
+
+// ── Read whole sentence with word highlight ─────────────────
+
+function readSentence() {
+  const page = currentBook.pages[pageIndex];
+  const fullText = page.words.map(x => x.text).join(' ');
+
+  // Precompute character offsets for each word in fullText
+  const offsets = [];
+  let cursor = 0;
+  page.words.forEach(word => {
+    const start = fullText.indexOf(word.text, cursor);
+    offsets.push(start);
+    cursor = start + word.text.length;
+  });
+
+  document.getElementById('read-text').textContent = 'Reading...';
+
+  const clearHighlights = () => {
+    page.words.forEach((_, i) => {
+      const el = document.getElementById('word-' + i);
+      if (el) el.classList.remove('highlight');
+    });
+  };
+
+  speak(
+    fullText,
+    (event) => {
+      if (event.name && event.name !== 'word') return;
+      clearHighlights();
+      // Find which word this charIndex falls into
+      let idx = 0;
+      for (let i = 0; i < offsets.length; i++) {
+        if (event.charIndex >= offsets[i]) idx = i;
+      }
+      const el = document.getElementById('word-' + idx);
+      if (el) el.classList.add('highlight');
+    },
+    () => {
+      clearHighlights();
+      document.getElementById('read-text').textContent = 'Read it!';
+    }
+  );
+}
+
+// ── Navigation ────────────────────────────────────────────
+
+function prevPage() {
+  if (pageIndex === 0) return;
+  pageIndex--;
+  renderPage();
+}
+
+function nextPage() {
+  if (pageIndex < currentBook.pages.length - 1) {
+    pageIndex++;
+    renderPage();
+  } else {
+    finishBook();
+  }
+}
+
+function finishBook() {
+  window.speechSynthesis && window.speechSynthesis.cancel();
+
+  const key  = 'saba_book_' + currentBookKey;
+  const prev = JSON.parse(localStorage.getItem(key) || '{"timesRead":0}');
+  prev.timesRead = (prev.timesRead || 0) + 1;
+  prev.lastRead  = new Date().toISOString().slice(0, 10);
+  localStorage.setItem(key, JSON.stringify(prev));
+
+  document.getElementById('result-msg').textContent =
+    `You read "${currentBook.title}" all the way through!`;
+  const stars = '⭐'.repeat(Math.min(currentBook.pages.length, 10));
+  document.getElementById('result-stars').textContent = stars;
+
+  showScreen('screen-result');
+}
+
+// ── Init ──────────────────────────────────────────────────
+
+loadBestScores();
+</script>
+
+</body>
+</html>
