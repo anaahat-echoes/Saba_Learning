@@ -190,12 +190,6 @@ body {
 
 .word-tile:active { transform: scale(0.94); }
 
-.word-tile.sight {
-  background: rgba(245,159,0,0.18);
-  border: 2px solid rgba(245,159,0,0.4);
-  color: var(--gold);
-}
-
 .word-tile.highlight {
   background: rgba(47,158,68,0.35);
   border: 2px solid var(--green);
@@ -504,7 +498,7 @@ function renderPage() {
   row.innerHTML = '';
   page.words.forEach((word, i) => {
     const tile = document.createElement('span');
-    tile.className = 'word-tile' + (word.sight ? ' sight' : '');
+    tile.className = 'word-tile';
     tile.textContent = word.text;
     tile.id = 'word-' + i;
     tile.onclick = () => speak(word.text.replace(/[.!?]/g, ''));
@@ -559,7 +553,7 @@ function readSentence() {
         if (event.charIndex >= offsets[i]) idx = i;
       }
       const el = document.getElementById('word-' + idx);
-      if (el && !page.words[idx].sight) el.classList.add('highlight');
+      if (el) el.classList.add('highlight');
     },
     () => {
       clearHighlights();
