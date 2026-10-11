@@ -599,7 +599,7 @@ body {
       <div class="act-num n1">1</div>
       <div class="act-card-info">
         <span class="act-card-name">🔊 Listen &amp; Match</span>
-        <span class="act-card-desc">Short E → Short O → Short U</span>
+        <span class="act-card-desc">Short U → O vs U → Short O (+ A/E review)</span>
       </div>
       <span class="act-card-status" id="status1">▶</span>
     </div>
@@ -607,7 +607,7 @@ body {
       <div class="act-num n2">2</div>
       <div class="act-card-info">
         <span class="act-card-name">🪜 Word Ladder</span>
-        <span class="act-card-desc">-et -en · -ot -op · -ut -ug · -un -ub</span>
+        <span class="act-card-desc">-ut -ug -un -ub · -ot -op · -at -an</span>
       </div>
       <span class="act-card-status" id="status2">▶</span>
     </div>
@@ -615,7 +615,7 @@ body {
       <div class="act-num n3">3</div>
       <div class="act-card-info">
         <span class="act-card-name">🔨 Build a Word</span>
-        <span class="act-card-desc">Short E, O &amp; U words</span>
+        <span class="act-card-desc">Short U &amp; O words</span>
       </div>
       <span class="act-card-status" id="status3">▶</span>
     </div>
@@ -623,7 +623,7 @@ body {
       <div class="act-num n-read">📖</div>
       <div class="act-card-info">
         <span class="act-card-name">Read a Story</span>
-        <span class="act-card-desc">Sam's Story — read it together</span>
+        <span class="act-card-desc">Sam Ran — read it together</span>
       </div>
       <span class="act-card-status" id="status-read">▶</span>
     </div>
@@ -640,11 +640,11 @@ body {
   <div class="watch-section">
     <div class="watch-heading">Watch after class</div>
 
-    <a href="https://www.youtube.com/watch?v=Du-gphJHbPM" target="_blank" rel="noopener" class="video-card">
-      <span class="video-thumb">📧</span>
+    <a href="https://www.youtube.com/watch?v=LgLbumOrXMA" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">⬆️</span>
       <div class="video-info">
-        <span class="video-title">Alphablocks — E Words (Short E)</span>
-        <span class="video-desc">1 min</span>
+        <span class="video-title">Alphablocks — Up (Short U)</span>
+        <span class="video-desc">3 min</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -658,11 +658,11 @@ body {
       <span class="video-play">▶</span>
     </a>
 
-    <a href="https://www.youtube.com/watch?v=LgLbumOrXMA" target="_blank" rel="noopener" class="video-card">
-      <span class="video-thumb">⬆️</span>
+    <a href="https://www.youtube.com/watch?v=7myUvRHgu0g" target="_blank" rel="noopener" class="video-card">
+      <span class="video-thumb">🅰️</span>
       <div class="video-info">
-        <span class="video-title">Alphablocks — Up (Short U)</span>
-        <span class="video-desc">3 min</span>
+        <span class="video-title">Alphablocks — Taps (Short A)</span>
+        <span class="video-desc">3 min · quick review</span>
       </div>
       <span class="video-play">▶</span>
     </a>
@@ -818,9 +818,10 @@ var WORD_BANK = {
   bug: '🐛', jug: '🏺', hug: '🤗',
   bun: '🍔', fun: '🎉', gun: '🔫', sun: '☀️',
   cub: '🐻', rub: '🤲', tub: '🛁',
-  net: '🕸️', pet: '🐕', jet: '✈️', vet: '🐕🩺',
-  hen: '🐔', pen: '✏️', ten: '🔟', men: '👥',
   cup: '☕', bus: '🚌',
+  cat: '🐱', hat: '🎩', bat: '🏏', rat: '🐀',
+  pan: '🍳', man: '👨', fan: '🪭',
+  net: '🕸️', pet: '🐕', hen: '🐔', pen: '✏️',
 };
 
 function wb(word) { return { word: word, pic: WORD_BANK[word] }; }
@@ -832,27 +833,35 @@ function isDiamond(word) {
 }
 
 // ── Act 1: Listen & Match ────────────────────────────────
-// Short E, Short O, Short U — mixed together
-var A1_SHORT_E = [wb('net'), wb('pet'), wb('jet'), wb('hen'), wb('pen'), wb('ten')];
+// Short U (most), O vs U contrast, Short O, quick A/E review
+var A1_SHORT_U = [wb('cut'), wb('bug'), wb('jug'), wb('hug'), wb('bun'), wb('sun')];
 var A1_SHORT_O = [wb('pot'), wb('hot'), wb('cot'), wb('dot'), wb('mop'), wb('pop')];
-var A1_SHORT_U = [wb('bug'), wb('jug'), wb('hug'), wb('cut'), wb('bun'), wb('sun')];
+var A1_REVIEW  = [wb('cat'), wb('pet')];
+
+var A1_OU_PAIRS = [
+  [wb('cot'), wb('cut')],
+  [wb('hot'), wb('hut')],
+  [wb('pot'), wb('cup')],
+  [wb('dot'), wb('bun')],
+  [wb('mop'), wb('bug')],
+];
 
 var ALL_PICS = Object.keys(WORD_BANK).map(wb);
 
 // ── Act 2: Word Ladder families ─────────────────────────
 var A2_FAMILIES = [
-  { rime: 'et', words: ['net','pet','jet','vet'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'en', words: ['hen','pen','ten','men'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'ot', words: ['pot','hot','cot','dot'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'op', words: ['mop','pop','hop'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'ut', words: ['cut','hut','but'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'ug', words: ['bug','jug','hug'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'un', words: ['bun','fun','gun','sun'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'ub', words: ['cub','rub','tub'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'ot', words: ['pot','hot','cot','dot'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'op', words: ['mop','pop','hop'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'at', words: ['cat','hat','bat','rat'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'an', words: ['pan','man','fan'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
 ];
 
-// ── Act 3: Build a Word — Short E, O & U ────────────────
-var A3_WORDS = ['net','pet','hen','pen','pot','hot','mop','pop','cut','bug','bun','sun'].map(wb);
+// ── Act 3: Build a Word — Short U & O ───────────────────
+var A3_WORDS = ['cut','hug','bun','sun','cub','tub','pot','hot','mop','pop','cot','dot'].map(wb);
 
 // ════════════════════════════════════════════════════════════
 // GLOBAL STATE
@@ -916,7 +925,7 @@ function refreshPlan() {
 function goToReadStory() {
   var classUrl = '../../classes/upcoming/';
   var nextUrl  = classUrl + '?next=4';
-  window.location.href = '../../english/read/?book=short-a'
+  window.location.href = '../../english/read/?book=short-a-ran'
     + '&next=' + encodeURIComponent(nextUrl)
     + '&back=' + encodeURIComponent(classUrl);
 }
@@ -973,18 +982,25 @@ function showActResult(stars, diamonds, actNum) {
 var a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
 
 function startAct1() {
-  // Build rounds: 3 Short E + 3 Short O + 3 Short U = 9 rounds
-  var shortE = shuffle(A1_SHORT_E).slice(0, 3);
-  var shortO = shuffle(A1_SHORT_O).slice(0, 3);
+  // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + 1 A + 1 E review = 10 rounds
   var shortU = shuffle(A1_SHORT_U).slice(0, 3);
+  var shortO = shuffle(A1_SHORT_O).slice(0, 2);
+  var ouPairs = shuffle(A1_OU_PAIRS).slice(0, 3);
+  var review  = shuffle(A1_REVIEW);
 
   a1Words = [];
 
-  // Short E rounds
-  shortE.forEach(function(w) {
+  // Short U rounds
+  shortU.forEach(function(w) {
     var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
     var dist = others[Math.floor(Math.random() * others.length)];
     a1Words.push({ target: w, distractor: dist });
+  });
+
+  // O vs U contrast rounds
+  ouPairs.forEach(function(pair) {
+    var flip = Math.random() < 0.5;
+    a1Words.push({ target: pair[flip ? 1 : 0], distractor: pair[flip ? 0 : 1] });
   });
 
   // Short O rounds
@@ -994,8 +1010,8 @@ function startAct1() {
     a1Words.push({ target: w, distractor: dist });
   });
 
-  // Short U rounds
-  shortU.forEach(function(w) {
+  // Quick A/E review rounds
+  review.forEach(function(w) {
     var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
     var dist = others[Math.floor(Math.random() * others.length)];
     a1Words.push({ target: w, distractor: dist });
@@ -1417,7 +1433,7 @@ function showSummary() {
 // PERSISTENCE
 // ════════════════════════════════════════════════════════════
 
-var SAVE_KEY = 'saba_class_upcoming_v2';
+var SAVE_KEY = 'saba_class_upcoming_v3';
 
 function saveProgress() {
   try {
