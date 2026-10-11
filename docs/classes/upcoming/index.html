@@ -599,7 +599,7 @@ body {
       <div class="act-num n1">1</div>
       <div class="act-card-info">
         <span class="act-card-name">🔊 Listen &amp; Match</span>
-        <span class="act-card-desc">Short U → O vs U → Short O (+ A/E review)</span>
+        <span class="act-card-desc">Short U → O vs U → Short O (+ catch-up words)</span>
       </div>
       <span class="act-card-status" id="status1">▶</span>
     </div>
@@ -615,7 +615,7 @@ body {
       <div class="act-num n3">3</div>
       <div class="act-card-info">
         <span class="act-card-name">🔨 Build a Word</span>
-        <span class="act-card-desc">Even mix of all 5 vowels</span>
+        <span class="act-card-desc">All 5 vowels — catching up A &amp; I words</span>
       </div>
       <span class="act-card-status" id="status3">▶</span>
     </div>
@@ -820,9 +820,13 @@ var WORD_BANK = {
   cub: '🐻', rub: '🤲', tub: '🛁',
   cup: '☕', bus: '🚌',
   cat: '🐱', hat: '🎩', bat: '🏏', rat: '🐀',
-  pan: '🍳', man: '👨', fan: '🪭',
+  pan: '🍳', man: '👨', fan: '🪭', van: '🚐', ran: '🏃',
+  bag: '👜', cap: '🧢',
   net: '🕸️', pet: '🐕', jet: '✈️', hen: '🐔', pen: '✏️',
-  sit: '🪑', hit: '🥊', fit: '💪', pin: '📌', bin: '🗑️', win: '🏆',
+  peg: '🧷', beg: '🙏', gem: '💎', den: '🏠',
+  sit: '🪑', hit: '🥊', fit: '💪', kit: '🧰',
+  pin: '📌', bin: '🗑️', win: '🏆', fin: '🐟',
+  big: '🐘', dig: '⛏️',
 };
 
 function wb(word) { return { word: word, pic: WORD_BANK[word] }; }
@@ -834,10 +838,10 @@ function isDiamond(word) {
 }
 
 // ── Act 1: Listen & Match ────────────────────────────────
-// Short U (most), O vs U contrast, Short O, quick A/E/I review
+// Short U (most), O vs U contrast, Short O, A/E/I review (catching up gaps)
 var A1_SHORT_U = [wb('cut'), wb('bug'), wb('jug'), wb('hug'), wb('bun'), wb('sun')];
 var A1_SHORT_O = [wb('pot'), wb('hot'), wb('cot'), wb('dot'), wb('mop'), wb('pop')];
-var A1_REVIEW  = [wb('cat'), wb('pet'), wb('hit')];
+var A1_REVIEW  = [wb('van'), wb('bag'), wb('cap'), wb('gem'), wb('den'), wb('win'), wb('dig')];
 
 var A1_OU_PAIRS = [
   [wb('cot'), wb('cut')],
@@ -858,13 +862,16 @@ var A2_FAMILIES = [
   { rime: 'ot', words: ['pot','hot','cot','dot'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'op', words: ['mop','pop','hop'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'at', words: ['cat','hat','bat','rat'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'an', words: ['pan','man','fan'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'an', words: ['pan','man','fan','van','ran'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'et', words: ['net','pet','jet'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
-  { rime: 'it', words: ['sit','hit','fit'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'eg', words: ['peg','beg'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'it', words: ['sit','hit','fit','kit'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'in', words: ['pin','win','bin','fin'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'ig', words: ['big','dig'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
 ];
 
 // ── Act 3: Build a Word — even mix of all vowels ────────
-var A3_WORDS = ['cat','pan','pet','hen','hit','pin','pot','mop','cut','sun'].map(wb);
+var A3_WORDS = ['van','bag','gem','den','win','dig','pot','mop','cut','sun'].map(wb);
 
 // ════════════════════════════════════════════════════════════
 // GLOBAL STATE
@@ -983,11 +990,11 @@ function showActResult(stars, diamonds, actNum) {
 var a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
 
 function startAct1() {
-  // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + A/E/I review = 11 rounds
+  // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + 4 A/E/I review = 12 rounds
   var shortU = shuffle(A1_SHORT_U).slice(0, 3);
   var shortO = shuffle(A1_SHORT_O).slice(0, 2);
   var ouPairs = shuffle(A1_OU_PAIRS).slice(0, 3);
-  var review  = shuffle(A1_REVIEW);
+  var review  = shuffle(A1_REVIEW).slice(0, 4);
 
   a1Words = [];
 
