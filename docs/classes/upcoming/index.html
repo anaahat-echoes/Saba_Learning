@@ -473,62 +473,79 @@ body {
   0%{transform:scale(1)} 50%{transform:scale(1.1)} 100%{transform:scale(1)}
 }
 
-/* ── Compare game ────────────────────────── */
-.compare-area {
+/* ── Skip counting — ladder ───────────────── */
+.ladder-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 20px 4px;
+}
+
+.ladder-dir {
+  font-size: 1.4rem;
+  margin-bottom: 2px;
+  opacity: 0.6;
+}
+
+.ladder {
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+  border-left: 5px solid rgba(255,255,255,0.13);
+  border-right: 5px solid rgba(255,255,255,0.13);
+}
+
+.rung {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  padding: 32px 20px 24px;
+  gap: 6px;
+  height: 36px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  border-bottom: 3px solid rgba(255,255,255,0.13);
+  position: relative;
+  transition: background 0.3s, color 0.3s;
 }
 
-.compare-num {
-  font-size: 4rem;
-  font-weight: 900;
-  min-width: 80px;
-  text-align: center;
-  background: rgba(255,255,255,0.06);
-  border-radius: 20px;
-  padding: 16px 12px;
-  line-height: 1;
+.rung:first-child { border-top: 3px solid rgba(255,255,255,0.13); }
+.rung.dim { color: rgba(255,255,255,0.13); background: transparent; }
+.rung.lit { background: rgba(25,113,194,0.12); color: rgba(25,113,194,0.5); }
+.rung.given { background: rgba(25,113,194,0.25); color: #fff; }
+.rung.filled { background: rgba(47,158,68,0.2); color: var(--green); animation: pop 0.25s ease; }
+.rung.current {
+  background: rgba(245,159,0,0.18);
+  border-top-color: var(--gold);
+  border-bottom-color: var(--gold);
+  color: var(--gold);
 }
 
-.compare-vs {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.3);
-}
-
-.symbol-row {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  padding: 0 20px;
-  max-width: 400px;
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px 24px;
+  max-width: 480px;
   margin: 0 auto;
+  width: 100%;
 }
 
-.symbol-btn {
-  flex: 1;
+.num-btn {
   background: rgba(255,255,255,0.08);
   border: 3px solid transparent;
-  border-radius: 20px;
-  padding: 20px 8px;
-  font-size: 2.5rem;
+  border-radius: 18px;
+  padding: 18px 8px;
+  font-size: 1.5rem;
   font-weight: 900;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 4px 0 rgba(0,0,0,0.25);
-  transition: transform 0.08s, box-shadow 0.08s, background 0.2s;
+  transition: transform 0.08s, box-shadow 0.08s;
 }
 
-.symbol-btn:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
-}
-
-.symbol-btn.correct { border-color: var(--green); background: rgba(47,158,68,0.2); }
-.symbol-btn.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
+.num-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
+.num-btn.correct-flash { background: rgba(47,158,68,0.25); border-color: var(--green); }
+.num-btn.wrong-shake { animation: shake 0.35s ease; background: rgba(224,49,49,0.15); border-color: var(--red); }
 
 /* ── Result / Summary ────────────────────── */
 .result-emoji { font-size: 4rem; margin-bottom: 12px; text-align: center; padding-top: 40px; }
@@ -622,8 +639,8 @@ body {
     <div class="act-card" id="plan-act4" onclick="launchActivity(4)">
       <div class="act-num n4">4</div>
       <div class="act-card-info">
-        <span class="act-card-name">🔢 Bigger or Smaller?</span>
-        <span class="act-card-desc">Compare numbers 1–50</span>
+        <span class="act-card-name">📶 Skip the Steps!</span>
+        <span class="act-card-desc">Skip count by 2s and 3s</span>
       </div>
       <span class="act-card-status" id="status4">▶</span>
     </div>
@@ -747,11 +764,11 @@ body {
   <div class="feedback hidden" id="a3-fb"></div>
 </div>
 
-<!-- ── ACT 4: Bigger or Smaller ───────────── -->
+<!-- ── ACT 4: Skip Counting ────────────────── -->
 <div id="screen-act4" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
-    <span class="top-title">Bigger or Smaller?</span>
+    <span class="top-title">Skip the Steps!</span>
     <div class="score-badge">
       <span class="score-stars">⭐ <span id="a4-stars">0</span></span>
       <span class="score-diamonds">💎 <span id="a4-diamonds">0</span></span>
@@ -762,17 +779,8 @@ body {
     <div class="round-label" id="a4-round">1 / 10</div>
   </div>
 
-  <div class="compare-area">
-    <div class="compare-num" id="a4-left"></div>
-    <div class="compare-vs">?</div>
-    <div class="compare-num" id="a4-right"></div>
-  </div>
-
-  <div class="symbol-row" id="a4-symbols">
-    <button class="symbol-btn" onclick="a4Tap('&lt;')">&lt;</button>
-    <button class="symbol-btn" onclick="a4Tap('=')">=</button>
-    <button class="symbol-btn" onclick="a4Tap('&gt;')">&gt;</button>
-  </div>
+  <div class="ladder-wrap" id="a4-ladder"></div>
+  <div class="number-grid" id="a4-grid"></div>
 
   <div class="feedback hidden" id="a4-fb"></div>
 </div>
@@ -1339,89 +1347,173 @@ function a3Tap(letter, btn) {
 }
 
 // ════════════════════════════════════════════════════════════
-// ACT 4 — Bigger or Smaller? (Compare numbers 1–50)
+// ACT 4 — Skip the Steps! (skip counting by 2s and 3s)
 // ════════════════════════════════════════════════════════════
 
-var A4_PAIRS = [
-  [18, 25], [40, 12], [33, 33], [9, 6],   [27, 41],
-  [15, 15], [50, 47], [22, 8],  [36, 36], [5, 19],
+var A4_QUESTIONS = [
+  { skip: 2, dir: 'up', start: 2,  steps: 4 },
+  { skip: 2, dir: 'up', start: 4,  steps: 4 },
+  { skip: 2, dir: 'up', start: 6,  steps: 4 },
+  { skip: 2, dir: 'up', start: 8,  steps: 4 },
+  { skip: 2, dir: 'up', start: 10, steps: 4 },
+  { skip: 3, dir: 'up', start: 3,  steps: 4 },
+  { skip: 3, dir: 'up', start: 1,  steps: 4 },
+  { skip: 3, dir: 'up', start: 6,  steps: 4 },
+  { skip: 3, dir: 'up', start: 2,  steps: 4 },
+  { skip: 3, dir: 'up', start: 5,  steps: 4 },
 ];
 
-var a4Pairs, a4Idx, a4Stars, a4Dia, a4Answered;
+var a4Qs, a4Idx, a4Stars, a4Dia, a4Seq, a4BlankIdx, a4Waiting, a4TriedWrong;
 
 function startAct4() {
-  a4Pairs    = shuffle(A4_PAIRS);
-  a4Idx      = 0;
-  a4Stars    = 0;
-  a4Dia      = 0;
-  a4Answered = false;
+  a4Qs    = A4_QUESTIONS.slice();
+  a4Idx   = 0;
+  a4Stars = 0;
+  a4Dia   = 0;
   showScreen('screen-act4');
   renderA4();
 }
 
 function renderA4() {
-  a4Answered = false;
-  var pair = a4Pairs[a4Idx];
-  var tot  = a4Pairs.length;
+  a4Waiting    = false;
+  a4TriedWrong = false;
+
+  var q   = a4Qs[a4Idx];
+  var tot = a4Qs.length;
 
   document.getElementById('a4-progress').style.width = (a4Idx / tot * 100) + '%';
   document.getElementById('a4-round').textContent    = (a4Idx + 1) + ' / ' + tot;
   document.getElementById('a4-stars').textContent     = totalStars + a4Stars;
   document.getElementById('a4-diamonds').textContent  = totalDiamonds + a4Dia;
 
-  document.getElementById('a4-left').textContent  = pair[0];
-  document.getElementById('a4-right').textContent = pair[1];
-
-  var btns = document.querySelectorAll('#a4-symbols .symbol-btn');
-  for (var i = 0; i < btns.length; i++) {
-    btns[i].className = 'symbol-btn';
-    btns[i].style.pointerEvents = '';
+  a4Seq = [];
+  for (var i = 0; i < q.steps; i++) {
+    if (q.dir === 'up') a4Seq.push(q.start + i * q.skip);
+    else a4Seq.push(q.start - i * q.skip);
   }
+
+  a4BlankIdx = 1;
+
+  var seqMin = Math.min.apply(null, a4Seq);
+  var seqMax = Math.max.apply(null, a4Seq);
+  var seqSet = {};
+  a4Seq.forEach(function(n) { seqSet[n] = true; });
+
+  var wrap = document.getElementById('a4-ladder');
+  wrap.innerHTML = '';
+
+  var dirEl = document.createElement('div');
+  dirEl.className = 'ladder-dir';
+  dirEl.textContent = q.dir === 'up' ? '⬆' : '⬇';
+  wrap.appendChild(dirEl);
+
+  var ladder = document.createElement('div');
+  ladder.className = 'ladder';
+
+  for (var n = seqMax; n >= seqMin; n--) {
+    var rung = document.createElement('div');
+    rung.className = 'rung';
+    rung.id = 'a4-rung-' + n;
+
+    if (seqSet[n]) {
+      if (n === a4Seq[0]) {
+        rung.classList.add('given');
+        rung.textContent = n;
+      } else if (n === a4Seq[1]) {
+        rung.classList.add('lit', 'current');
+        rung.innerHTML = '?&nbsp;🧒';
+      } else {
+        rung.classList.add('lit');
+        rung.textContent = '?';
+      }
+    } else {
+      rung.classList.add('dim');
+      rung.textContent = n;
+    }
+
+    ladder.appendChild(rung);
+  }
+
+  wrap.appendChild(ladder);
+
+  renderA4Grid();
 
   var fb = document.getElementById('a4-fb');
   fb.textContent = ''; fb.className = 'feedback hidden';
 }
 
-function a4Tap(symbol) {
-  if (a4Answered) return;
-  a4Answered = true;
+function renderA4Grid() {
+  var correct = a4Seq[a4BlankIdx];
+  var q = a4Qs[a4Idx];
 
-  var pair = a4Pairs[a4Idx];
-  var correct;
-  if (pair[0] > pair[1])      correct = '>';
-  else if (pair[0] < pair[1]) correct = '<';
-  else                        correct = '=';
+  var candidates = [correct + 1, correct - 1, correct + q.skip + 1, correct - q.skip + 1];
+  candidates = candidates.filter(function(n) { return n !== correct && n > 0 && n <= 20; });
+  var seen = {};
+  candidates = candidates.filter(function(n) { if (seen[n]) return false; seen[n] = true; return true; });
+  var distractors = candidates.slice(0, 3);
 
-  var btns = document.querySelectorAll('#a4-symbols .symbol-btn');
-  for (var i = 0; i < btns.length; i++) btns[i].style.pointerEvents = 'none';
-
-  var tappedBtn = null, correctBtn = null;
-  for (var i = 0; i < btns.length; i++) {
-    var s = btns[i].textContent.trim();
-    if (s === symbol) tappedBtn = btns[i];
-    if (s === correct) correctBtn = btns[i];
+  while (distractors.length < 3) {
+    var r = Math.floor(Math.random() * 20) + 1;
+    if (r !== correct && distractors.indexOf(r) < 0) distractors.push(r);
   }
 
-  var fb = document.getElementById('a4-fb');
-  if (symbol === correct) {
-    a4Stars++;
-    tappedBtn.classList.add('correct');
-    fb.textContent = '✓ ' + pair[0] + ' ' + correct + ' ' + pair[1];
-    fb.className = 'feedback ok';
+  var options = shuffle([correct].concat(distractors));
+
+  var grid = document.getElementById('a4-grid');
+  grid.innerHTML = '';
+  options.forEach(function(n) {
+    var btn = document.createElement('button');
+    btn.className = 'num-btn';
+    btn.textContent = n;
+    btn.onclick = function() { a4Tap(n, btn); };
+    grid.appendChild(btn);
+  });
+}
+
+function a4Tap(n, btn) {
+  if (a4Waiting) return;
+
+  var correct = a4Seq[a4BlankIdx];
+
+  if (n === correct) {
+    a4Waiting = true;
+    btn.classList.add('correct-flash');
+
+    var rung = document.getElementById('a4-rung-' + correct);
+    rung.textContent = correct;
+    rung.className = 'rung filled';
+
+    a4BlankIdx++;
+
+    if (a4BlankIdx < a4Seq.length) {
+      var nextRung = document.getElementById('a4-rung-' + a4Seq[a4BlankIdx]);
+      nextRung.className = 'rung lit current';
+      nextRung.innerHTML = '?&nbsp;🧒';
+
+      setTimeout(function() {
+        a4Waiting = false;
+        renderA4Grid();
+      }, 600);
+    } else {
+      if (!a4TriedWrong) {
+        a4Stars++;
+      }
+      document.getElementById('a4-stars').textContent = totalStars + a4Stars;
+
+      var fb = document.getElementById('a4-fb');
+      fb.textContent = '✓ Well done!'; fb.className = 'feedback ok';
+
+      setTimeout(function() {
+        a4Idx++;
+        if (a4Idx >= a4Qs.length) showActResult(a4Stars, a4Dia, 4);
+        else renderA4();
+      }, 1500);
+    }
   } else {
-    tappedBtn.classList.add('wrong');
-    correctBtn.classList.add('correct');
-    fb.textContent = pair[0] + ' ' + correct + ' ' + pair[1];
-    fb.className = 'feedback no';
+    a4TriedWrong = true;
+    btn.classList.add('wrong-shake');
+    setTimeout(function() { btn.classList.remove('wrong-shake'); }, 400);
   }
-
-  document.getElementById('a4-stars').textContent = totalStars + a4Stars;
-
-  setTimeout(function() {
-    a4Idx++;
-    if (a4Idx >= a4Pairs.length) showActResult(a4Stars, a4Dia, 4);
-    else renderA4();
-  }, 1800);
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1432,7 +1524,7 @@ function showSummary() {
   document.getElementById('sum-stars').textContent    = totalStars;
   document.getElementById('sum-diamonds').textContent = totalDiamonds;
 
-  var names = { 1: '🔊 Listen & Match', 2: '🪜 Word Ladder', 3: '🔨 Build a Word', 4: '🔢 Bigger or Smaller?' };
+  var names = { 1: '🔊 Listen & Match', 2: '🪜 Word Ladder', 3: '🔨 Build a Word', 4: '📶 Skip the Steps!' };
   var bd = document.getElementById('sum-breakdown');
   bd.innerHTML = '';
   for (var i = 1; i <= 4; i++) {
