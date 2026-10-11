@@ -607,7 +607,7 @@ body {
       <div class="act-num n2">2</div>
       <div class="act-card-info">
         <span class="act-card-name">🪜 Word Ladder</span>
-        <span class="act-card-desc">-ut -ug -un -ub · -ot -op · -at -an</span>
+        <span class="act-card-desc">U &amp; O families, plus A, E &amp; I</span>
       </div>
       <span class="act-card-status" id="status2">▶</span>
     </div>
@@ -615,17 +615,9 @@ body {
       <div class="act-num n3">3</div>
       <div class="act-card-info">
         <span class="act-card-name">🔨 Build a Word</span>
-        <span class="act-card-desc">Short U &amp; O words</span>
+        <span class="act-card-desc">Even mix of all 5 vowels</span>
       </div>
       <span class="act-card-status" id="status3">▶</span>
-    </div>
-    <div class="act-card" id="plan-read" onclick="goToReadStory()">
-      <div class="act-num n-read">📖</div>
-      <div class="act-card-info">
-        <span class="act-card-name">Read a Story</span>
-        <span class="act-card-desc">Sam Ran — read it together</span>
-      </div>
-      <span class="act-card-status" id="status-read">▶</span>
     </div>
     <div class="act-card" id="plan-act4" onclick="launchActivity(4)">
       <div class="act-num n4">4</div>
@@ -634,6 +626,14 @@ body {
         <span class="act-card-desc">Compare numbers 1–50</span>
       </div>
       <span class="act-card-status" id="status4">▶</span>
+    </div>
+    <div class="act-card" id="plan-read" onclick="goToReadStory()">
+      <div class="act-num n-read">📖</div>
+      <div class="act-card-info">
+        <span class="act-card-name">Read a Story</span>
+        <span class="act-card-desc">Sam Ran — read it together</span>
+      </div>
+      <span class="act-card-status" id="status-read">▶</span>
     </div>
   </div>
 
@@ -821,7 +821,8 @@ var WORD_BANK = {
   cup: '☕', bus: '🚌',
   cat: '🐱', hat: '🎩', bat: '🏏', rat: '🐀',
   pan: '🍳', man: '👨', fan: '🪭',
-  net: '🕸️', pet: '🐕', hen: '🐔', pen: '✏️',
+  net: '🕸️', pet: '🐕', jet: '✈️', hen: '🐔', pen: '✏️',
+  sit: '🪑', hit: '🥊', fit: '💪', pin: '📌', bin: '🗑️', win: '🏆',
 };
 
 function wb(word) { return { word: word, pic: WORD_BANK[word] }; }
@@ -833,10 +834,10 @@ function isDiamond(word) {
 }
 
 // ── Act 1: Listen & Match ────────────────────────────────
-// Short U (most), O vs U contrast, Short O, quick A/E review
+// Short U (most), O vs U contrast, Short O, quick A/E/I review
 var A1_SHORT_U = [wb('cut'), wb('bug'), wb('jug'), wb('hug'), wb('bun'), wb('sun')];
 var A1_SHORT_O = [wb('pot'), wb('hot'), wb('cot'), wb('dot'), wb('mop'), wb('pop')];
-var A1_REVIEW  = [wb('cat'), wb('pet')];
+var A1_REVIEW  = [wb('cat'), wb('pet'), wb('hit')];
 
 var A1_OU_PAIRS = [
   [wb('cot'), wb('cut')],
@@ -858,10 +859,12 @@ var A2_FAMILIES = [
   { rime: 'op', words: ['mop','pop','hop'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'at', words: ['cat','hat','bat','rat'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
   { rime: 'an', words: ['pan','man','fan'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'et', words: ['net','pet','jet'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
+  { rime: 'it', words: ['sit','hit','fit'].map(function(w) { return { word: w, pic: WORD_BANK[w], onset: w[0] }; }) },
 ];
 
-// ── Act 3: Build a Word — Short U & O ───────────────────
-var A3_WORDS = ['cut','hug','bun','sun','cub','tub','pot','hot','mop','pop','cot','dot'].map(wb);
+// ── Act 3: Build a Word — even mix of all vowels ────────
+var A3_WORDS = ['cat','pan','pet','hen','hit','pin','pot','mop','cut','sun'].map(wb);
 
 // ════════════════════════════════════════════════════════════
 // GLOBAL STATE
@@ -924,9 +927,7 @@ function refreshPlan() {
 
 function goToReadStory() {
   var classUrl = '../../classes/upcoming/';
-  var nextUrl  = classUrl + '?next=4';
   window.location.href = '../../english/read/?book=short-a-ran'
-    + '&next=' + encodeURIComponent(nextUrl)
     + '&back=' + encodeURIComponent(classUrl);
 }
 
@@ -982,7 +983,7 @@ function showActResult(stars, diamonds, actNum) {
 var a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
 
 function startAct1() {
-  // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + 1 A + 1 E review = 10 rounds
+  // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + A/E/I review = 11 rounds
   var shortU = shuffle(A1_SHORT_U).slice(0, 3);
   var shortO = shuffle(A1_SHORT_O).slice(0, 2);
   var ouPairs = shuffle(A1_OU_PAIRS).slice(0, 3);
@@ -1095,14 +1096,26 @@ function a1Tap(correct, card, container) {
 }
 
 // ════════════════════════════════════════════════════════════
-// ACT 2 — Word Ladder (picks a random family each time)
+// ACT 2 — Word Ladder (combines 2 random families each time)
 // ════════════════════════════════════════════════════════════
 
-var a2Family, a2Words, a2Idx, a2Stars, a2Dia, a2TriedWrong, a2Waiting;
+var a2Words, a2Idx, a2Stars, a2Dia, a2TriedWrong, a2Waiting;
 
 function startAct2() {
-  a2Family     = A2_FAMILIES[Math.floor(Math.random() * A2_FAMILIES.length)];
-  a2Words      = shuffle(a2Family.words.slice());
+  var shuffledFamilies = shuffle(A2_FAMILIES);
+  var pickedFamilies   = shuffledFamilies.slice(0, 2);
+
+  a2Words = [];
+  pickedFamilies.forEach(function(family) {
+    family.words.forEach(function(w) {
+      a2Words.push({
+        word: w.word, pic: w.pic, onset: w.onset, rime: family.rime,
+        familyOnsets: family.words.map(function(x) { return x.onset; })
+      });
+    });
+  });
+  a2Words = shuffle(a2Words);
+
   a2Idx        = 0;
   a2Stars      = 0;
   a2Dia        = 0;
@@ -1125,7 +1138,7 @@ function renderA2() {
   document.getElementById('a2-diamonds').textContent  = totalDiamonds + a2Dia;
 
   document.getElementById('a2-pic').textContent  = w.pic;
-  document.getElementById('a2-rime').textContent = a2Family.rime;
+  document.getElementById('a2-rime').textContent = w.rime;
 
   var slot = document.getElementById('a2-slot');
   slot.textContent = '';
@@ -1134,8 +1147,7 @@ function renderA2() {
   document.getElementById('a2-hint').textContent = '';
 
   var otherOnsets = shuffle(
-    a2Family.words.map(function(x) { return x.onset; })
-      .filter(function(o) { return o !== w.onset; })
+    w.familyOnsets.filter(function(o) { return o !== w.onset; })
   ).slice(0, 3);
   var options = shuffle([w.onset].concat(otherOnsets));
 
