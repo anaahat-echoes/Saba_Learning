@@ -168,38 +168,39 @@ body {
   white-space: nowrap;
 }
 
-.round-kind {
-  text-align: center;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #a78bfa;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  padding: 4px 20px 8px;
-}
-
-.prompt-stage {
+/* ── Flashcard ─────────────────────────────── */
+.flashcard-stage {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px 20px 8px;
+  justify-content: center;
+  padding: 16px 20px;
 }
 
-.prompt-pic {
-  font-size: 5.5rem;
+.flashcard-pic {
+  font-size: 8rem;
   line-height: 1;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-.big-letter {
+.flashcard-letter {
   font-family: 'Courier New', monospace;
-  font-size: 6rem;
+  font-size: 1.8rem;
   font-weight: 900;
-  line-height: 1;
-  margin-bottom: 8px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 28px;
-  padding: 16px 40px;
+  color: var(--gold);
+  background: rgba(245,159,0,0.15);
+  border-radius: 16px;
+  padding: 4px 18px;
+  margin-bottom: 10px;
+}
+
+.flashcard-word {
+  font-family: 'Courier New', monospace;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 28px;
 }
 
 .hear-btn {
@@ -216,6 +217,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .hear-btn:active {
@@ -223,64 +225,61 @@ body {
   box-shadow: 0 1px 0 var(--purple-dark);
 }
 
-.letter-row {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  padding: 24px 20px;
-  flex-wrap: wrap;
-}
-
-.letter-tile {
-  width: 100px;
-  height: 100px;
-  border-radius: 24px;
-  background: rgba(255,255,255,0.08);
-  border: 4px solid transparent;
-  font-family: 'Courier New', monospace;
-  font-size: 3rem;
-  font-weight: 900;
+.next-btn {
+  background: var(--green);
   color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 40px;
+  font-size: 1.05rem;
+  font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 5px 0 rgba(0,0,0,0.25);
-  transition: transform 0.08s, box-shadow 0.08s, background 0.2s;
+  box-shadow: 0 5px 0 #1a7431;
 }
 
-.letter-tile:active {
-  transform: translateY(4px);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+.next-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #1a7431; }
+
+/* ── I Spy ─────────────────────────────────── */
+.ispy-prompt {
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 24px 20px 20px;
 }
 
-.letter-tile.correct { border-color: var(--green); background: rgba(47,158,68,0.25); }
-.letter-tile.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
+.ispy-prompt .target-letter {
+  font-family: 'Courier New', monospace;
+  color: var(--gold);
+  font-size: 1.4rem;
+}
 
-.picture-row {
+.ispy-grid {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  padding: 24px 20px;
+  gap: 18px;
+  padding: 0 20px 20px;
   flex-wrap: wrap;
 }
 
-.picture-tile {
-  width: 110px;
-  height: 110px;
+.ispy-tile {
+  width: 120px;
+  height: 120px;
   border-radius: 24px;
   background: rgba(255,255,255,0.08);
   border: 4px solid transparent;
-  font-size: 3.2rem;
+  font-size: 3.6rem;
   cursor: pointer;
   box-shadow: 0 5px 0 rgba(0,0,0,0.25);
-  transition: transform 0.08s, box-shadow 0.08s, background 0.2s;
+  transition: transform 0.08s, box-shadow 0.08s, background 0.2s, opacity 0.2s;
 }
 
-.picture-tile:active {
+.ispy-tile:active {
   transform: translateY(4px);
   box-shadow: 0 1px 0 rgba(0,0,0,0.25);
 }
 
-.picture-tile.correct { border-color: var(--green); background: rgba(47,158,68,0.25); }
-.picture-tile.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
+.ispy-tile.found { border-color: var(--green); background: rgba(47,158,68,0.3); opacity: 0.6; pointer-events: none; }
+.ispy-tile.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -289,49 +288,6 @@ body {
   60% { transform: translateX(-6px); }
   80% { transform: translateX(6px); }
 }
-
-/* ── I Spy scene ───────────────────────────── */
-.ispy-prompt {
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 800;
-  padding: 8px 20px 16px;
-}
-
-.ispy-prompt .target-letter {
-  font-family: 'Courier New', monospace;
-  color: var(--gold);
-  font-size: 1.3rem;
-}
-
-.ispy-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  padding: 0 20px 20px;
-  max-width: 420px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.ispy-tile {
-  aspect-ratio: 1;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.08);
-  border: 4px solid transparent;
-  font-size: 2.6rem;
-  cursor: pointer;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
-  transition: transform 0.08s, box-shadow 0.08s, background 0.2s, opacity 0.2s;
-}
-
-.ispy-tile:active {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
-}
-
-.ispy-tile.found { border-color: var(--green); background: rgba(47,158,68,0.3); opacity: 0.6; pointer-events: none; }
-.ispy-tile.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
 
 .ispy-counter {
   text-align: center;
@@ -350,7 +306,6 @@ body {
 }
 
 .feedback.ok { color: var(--green); }
-.feedback.no { color: var(--red); }
 .feedback.hidden { visibility: hidden; }
 
 /* ── Result ───────────────────────────────── */
@@ -362,8 +317,7 @@ body {
 }
 
 .result-stars { font-size: 3rem; margin-bottom: 16px; letter-spacing: 4px; }
-.result-score { font-size: 2rem; font-weight: 900; color: #a78bfa; margin-bottom: 8px; }
-.result-msg { font-size: 1rem; color: var(--gray); margin-bottom: 28px; }
+.result-msg { font-size: 1.1rem; color: var(--gray); margin-bottom: 28px; }
 
 .result-btns {
   display: flex;
@@ -410,7 +364,7 @@ body {
 
   <div style="padding: 8px 24px 0;">
     <div class="pick-heading">Letter Sounds</div>
-    <div class="pick-sub">Three ways to learn each letter, two letters per round</div>
+    <div class="pick-sub">Two words per letter, then spy them</div>
   </div>
 
   <div class="group-list" style="padding: 0 4px;">
@@ -418,7 +372,7 @@ body {
       <span class="group-emoji">s</span>
       <span class="group-info">
         <span class="group-name">S &amp; A</span>
-        <span class="group-desc">hear it · see it · spy it</span>
+        <span class="group-desc">sun · sock · ant · apple</span>
       </span>
       <span class="group-best" id="best-group1"></span>
     </button>
@@ -437,26 +391,18 @@ body {
     <div class="round-label" id="round-label">1 / 6</div>
   </div>
 
-  <div class="round-kind" id="round-kind"></div>
-
-  <!-- Sound → Letter -->
-  <div id="stage-sound-letter" hidden>
-    <div class="prompt-stage">
-      <div class="prompt-pic" id="prompt-pic"></div>
+  <!-- Flashcard -->
+  <div id="stage-flashcard" hidden>
+    <div class="flashcard-stage">
+      <div class="flashcard-pic" id="flashcard-pic"></div>
+      <div class="flashcard-letter" id="flashcard-letter"></div>
+      <div class="flashcard-word" id="flashcard-word"></div>
       <button class="hear-btn" id="hear-btn" onclick="playWord()">
         <span>🔊</span>
         <span id="hear-text">Tap to hear</span>
       </button>
+      <button class="next-btn" onclick="nextFlashcard()">Next →</button>
     </div>
-    <div class="letter-row" id="letter-row"></div>
-  </div>
-
-  <!-- Letter → Picture -->
-  <div id="stage-letter-pic" hidden>
-    <div class="prompt-stage">
-      <div class="big-letter" id="big-letter"></div>
-    </div>
-    <div class="picture-row" id="picture-row"></div>
   </div>
 
   <!-- I Spy -->
@@ -474,7 +420,6 @@ body {
 <!-- ── SCREEN 3: Result ────────────────────── -->
 <div id="screen-result" class="screen">
   <div class="result-stars" id="result-stars">⭐⭐⭐</div>
-  <div class="result-score" id="result-score"></div>
   <div class="result-msg" id="result-msg"></div>
   <div class="result-btns">
     <button class="btn-primary" onclick="playAgain()">Play again</button>
@@ -484,7 +429,6 @@ body {
 
 <script>
 // ── Letter group data ───────────────────────────────────────
-// Each letter has 2 words so there's enough variety for I Spy.
 
 const LETTER_GROUPS = {
   'group1': {
@@ -507,11 +451,10 @@ let currentGroup = null;
 let rounds       = [];
 let roundIndex   = 0;
 let score        = 0;
-let correctIdx   = 0;
-let answered     = false;
 let wordPlayed   = false;
 let ispyFound    = 0;
 let ispyNeeded   = 0;
+let answered     = false;
 
 // ── Utils ─────────────────────────────────────────────────
 
@@ -549,14 +492,15 @@ function speak(text) {
 }
 
 // ── Round building ────────────────────────────────────────
-// Per letter: Sound→Letter, then Letter→Picture, then I Spy.
+// Per letter: a flashcard for each of its 2 words, then I Spy.
 
 function buildRounds(groupKey) {
   const built = [];
   LETTER_GROUPS[groupKey].activeLetters.forEach(letter => {
-    built.push({ type: 'sound-letter', letter, word: randomWord(groupKey, letter) });
-    built.push({ type: 'letter-pic',   letter, word: randomWord(groupKey, letter) });
-    built.push({ type: 'ispy',         letter });
+    LETTER_GROUPS[groupKey].letters[letter].forEach(word => {
+      built.push({ type: 'flashcard', letter, word });
+    });
+    built.push({ type: 'ispy', letter });
   });
   return built;
 }
@@ -570,7 +514,7 @@ function showScreen(id) {
 }
 
 function showStage(id) {
-  ['stage-sound-letter', 'stage-letter-pic', 'stage-ispy'].forEach(s => {
+  ['stage-flashcard', 'stage-ispy'].forEach(s => {
     document.getElementById(s).hidden = (s !== id);
   });
 }
@@ -579,10 +523,9 @@ function showStage(id) {
 
 function loadBestScores() {
   Object.keys(LETTER_GROUPS).forEach(k => {
-    const d  = JSON.parse(localStorage.getItem('saba_letters_' + k) || '{}');
+    const d = JSON.parse(localStorage.getItem('saba_letters_' + k) || '{}');
     const el = document.getElementById('best-' + k);
-    const total = LETTER_GROUPS[k].activeLetters.length * 3;
-    if (el) el.textContent = d.bestScore > 0 ? `Best: ${d.bestScore}/${total}` : '';
+    if (el) el.textContent = d.played > 0 ? `Played ${d.played}×` : '';
   });
 }
 
@@ -603,7 +546,6 @@ function startGroup(groupKey) {
   rounds       = buildRounds(groupKey);
   roundIndex   = 0;
   score        = 0;
-  answered     = false;
   wordPlayed   = false;
 
   document.getElementById('game-title').textContent = LETTER_GROUPS[groupKey].title;
@@ -613,55 +555,33 @@ function startGroup(groupKey) {
 
 // ── Render round ──────────────────────────────────────────
 
-const KIND_LABELS = {
-  'sound-letter': 'Hear it',
-  'letter-pic':   'See it',
-  'ispy':         'Spy it',
-};
-
 function renderRound() {
-  answered   = false;
   wordPlayed = false;
+  answered   = false;
 
   const round = rounds[roundIndex];
   const total = rounds.length;
 
   document.getElementById('progress-fill').style.width = `${(roundIndex / total) * 100}%`;
   document.getElementById('round-label').textContent = `${roundIndex + 1} / ${total}`;
-  document.getElementById('round-kind').textContent = KIND_LABELS[round.type];
 
   const fb = document.getElementById('feedback');
   fb.textContent = '';
   fb.className = 'feedback hidden';
 
-  if (round.type === 'sound-letter') renderSoundToLetter(round);
-  else if (round.type === 'letter-pic') renderLetterToPicture(round);
+  if (round.type === 'flashcard') renderFlashcard(round);
   else renderISpy(round);
 }
 
-// ── Sound → Letter ────────────────────────────────────────
+// ── Flashcard ─────────────────────────────────────────────
 
-function renderSoundToLetter(round) {
-  showStage('stage-sound-letter');
+function renderFlashcard(round) {
+  showStage('stage-flashcard');
 
-  document.getElementById('prompt-pic').textContent = round.word.pic;
+  document.getElementById('flashcard-pic').textContent = round.word.pic;
+  document.getElementById('flashcard-letter').textContent = round.letter;
+  document.getElementById('flashcard-word').textContent = round.word.word;
   document.getElementById('hear-text').textContent = 'Tap to hear';
-  document.getElementById('hear-btn').classList.remove('replaying');
-
-  const others = allLetters(currentGroup).filter(l => l !== round.letter);
-  const distractors = shuffle(others).slice(0, 2);
-  const options = shuffle([round.letter, ...distractors]);
-  correctIdx = options.indexOf(round.letter);
-
-  const row = document.getElementById('letter-row');
-  row.innerHTML = '';
-  options.forEach((letter, i) => {
-    const tile = document.createElement('button');
-    tile.className = 'letter-tile';
-    tile.textContent = letter;
-    tile.onclick = () => handleLetterTap(i, letter === round.letter);
-    row.appendChild(tile);
-  });
 
   setTimeout(() => playWord(), 400);
 }
@@ -671,82 +591,12 @@ function playWord() {
   if (!wordPlayed) {
     wordPlayed = true;
     document.getElementById('hear-text').textContent = 'Hear it again';
-    document.getElementById('hear-btn').classList.add('replaying');
   }
 }
 
-function handleLetterTap(tileIdx, correct) {
-  if (answered) return;
-  answered = true;
-
-  const tiles = document.querySelectorAll('#letter-row .letter-tile');
-  tiles.forEach(t => t.style.pointerEvents = 'none');
-
-  const fb = document.getElementById('feedback');
-  if (correct) {
-    tiles[tileIdx].classList.add('correct');
-    fb.textContent = '✓ Well done!';
-    fb.className = 'feedback ok';
-    score++;
-  } else {
-    tiles[tileIdx].classList.add('wrong');
-    tiles[correctIdx].classList.add('correct');
-    fb.textContent = 'Not quite — look at the green one!';
-    fb.className = 'feedback no';
-  }
-
-  advanceAfter(1800);
-}
-
-// ── Letter → Picture ──────────────────────────────────────
-
-function renderLetterToPicture(round) {
-  showStage('stage-letter-pic');
-
-  document.getElementById('big-letter').textContent = round.letter;
-
-  const others = allLetters(currentGroup).filter(l => l !== round.letter);
-  const distractorLetters = shuffle(others).slice(0, 2);
-  const options = shuffle([
-    round.word,
-    randomWord(currentGroup, distractorLetters[0]),
-    randomWord(currentGroup, distractorLetters[1]),
-  ]);
-  correctIdx = options.findIndex(o => o.word === round.word.word);
-
-  const row = document.getElementById('picture-row');
-  row.innerHTML = '';
-  options.forEach((opt, i) => {
-    const tile = document.createElement('button');
-    tile.className = 'picture-tile';
-    tile.textContent = opt.pic;
-    tile.onclick = () => handlePictureTap(i, opt.word === round.word.word);
-    row.appendChild(tile);
-  });
-}
-
-function handlePictureTap(tileIdx, correct) {
-  if (answered) return;
-  answered = true;
-
-  const tiles = document.querySelectorAll('#picture-row .picture-tile');
-  tiles.forEach(t => t.style.pointerEvents = 'none');
-
-  const fb = document.getElementById('feedback');
-  if (correct) {
-    tiles[tileIdx].classList.add('correct');
-    fb.textContent = '✓ Well done!';
-    fb.className = 'feedback ok';
-    score++;
-  } else {
-    tiles[tileIdx].classList.add('wrong');
-    tiles[correctIdx].classList.add('correct');
-    fb.textContent = 'Not quite — look at the green one!';
-    fb.className = 'feedback no';
-  }
-
-  speak(rounds[roundIndex].word.word);
-  advanceAfter(1800);
+function nextFlashcard() {
+  score++;
+  advanceAfter(0);
 }
 
 // ── I Spy ─────────────────────────────────────────────────
@@ -758,12 +608,12 @@ function renderISpy(round) {
 
   const matching = LETTER_GROUPS[currentGroup].letters[round.letter];
   const otherLetters = allLetters(currentGroup).filter(l => l !== round.letter);
-  const distractorPool = shuffle(otherLetters).slice(0, 4)
-    .map(l => randomWord(currentGroup, l));
+  const distractorLetter = shuffle(otherLetters)[0];
+  const distractor = randomWord(currentGroup, distractorLetter);
 
   const scene = shuffle([
     ...matching.map(w => ({ ...w, isMatch: true })),
-    ...distractorPool.map(w => ({ ...w, isMatch: false })),
+    { ...distractor, isMatch: false },
   ]);
 
   ispyFound  = 0;
@@ -818,9 +668,8 @@ function advanceAfter(ms) {
 
 function endGame() {
   const key  = 'saba_letters_' + currentGroup;
-  const prev = JSON.parse(localStorage.getItem(key) || '{"played":0,"bestScore":0}');
+  const prev = JSON.parse(localStorage.getItem(key) || '{"played":0}');
   prev.played++;
-  prev.bestScore  = Math.max(prev.bestScore || 0, score);
   prev.lastPlayed = new Date().toISOString().slice(0, 10);
   localStorage.setItem(key, JSON.stringify(prev));
 
@@ -831,21 +680,8 @@ function endGame() {
 
 function showResult() {
   showScreen('screen-result');
-
-  const total = rounds.length;
-  const pct   = score / total;
-  const tier  = pct >= 0.9 ? 0 : pct >= 0.7 ? 1 : pct >= 0.5 ? 2 : 3;
-  const MESSAGES = [
-    ['🌟 Amazing! Every single one!', '⭐⭐⭐'],
-    ['Great job — nearly there!',     '⭐⭐☆'],
-    ['Good try — keep practising!',   '⭐☆☆'],
-    ["Let's try again!",              '☆☆☆'],
-  ];
-  const [msg, stars] = MESSAGES[tier];
-
-  document.getElementById('result-stars').textContent = stars;
-  document.getElementById('result-score').textContent = `${score} out of ${total}`;
-  document.getElementById('result-msg').textContent   = msg;
+  document.getElementById('result-stars').textContent = '⭐⭐⭐';
+  document.getElementById('result-msg').textContent = '🌟 Great job learning letter sounds!';
 }
 
 function playAgain() { startGroup(currentGroup); }
