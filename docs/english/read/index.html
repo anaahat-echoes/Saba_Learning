@@ -356,6 +356,15 @@ body {
       </span>
       <span class="book-best" id="best-short-e"></span>
     </button>
+
+    <button class="book-card" onclick="startBook('short-o')">
+      <span class="book-emoji">🐇</span>
+      <span class="book-info">
+        <span class="book-name">Sam Hops</span>
+        <span class="book-desc">A Short O book · 8 pages</span>
+      </span>
+      <span class="book-best" id="best-short-o"></span>
+    </button>
   </div>
 </div>
 
@@ -403,7 +412,7 @@ body {
 // ── Book data ─────────────────────────────────────────────
 // Words marked sight:true are memorized whole, not sounded out.
 
-const SIGHT_WORDS = new Set(['a', 'has', 'is', 'and', 'the', 'on']);
+const SIGHT_WORDS = new Set(['a', 'has', 'is', 'and', 'the', 'on', 'too']);
 
 function w(text) {
   return { text: text, sight: SIGHT_WORDS.has(text.toLowerCase().replace(/[.,!?]/g, '')) };
@@ -450,6 +459,19 @@ const BOOKS = {
       sentence('Ben has ten hens.', '🐔🔟'),
       sentence('Sam has a hen.', '🧒🐔'),
       sentence('Ben and Sam have hens.', '🧒🧒🐔'),
+    ],
+  },
+  'short-o': {
+    title: 'Sam Hops',
+    pages: [
+      sentence('Sam.', '🧒'),
+      sentence('Sam has a pot.', '🍲'),
+      sentence('Sam has a mop.', '🧹'),
+      sentence('The pot is hot.', '🍲🔥'),
+      sentence('Sam hops.', '🧒🐇'),
+      sentence('Sam hops on the dot.', '⚫🐇'),
+      sentence('The cat hops too.', '🐱🐇'),
+      sentence('Sam and the cat hop.', '🧒🐱🐇'),
     ],
   },
 };
