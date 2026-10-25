@@ -1209,10 +1209,32 @@ var a2Words, a2Idx, a2Stars, a2Dia, a2Answered;
 
 function startAct2() {
   // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + 4 A/E/I review = 12 rounds
-  var shortU = shuffle(A1_SHORT_U).slice(0, 3);
-  var shortO = shuffle(A1_SHORT_O).slice(0, 2);
-  var ouPairs = shuffle(A1_OU_PAIRS).slice(0, 3);
-  var review  = shuffle(A1_REVIEW).slice(0, 4);
+  // Draw the most-overlapping pools first so no word repeats across rounds.
+  var used = new Set();
+
+  function pickWords(pool, n) {
+    var available = pool.filter(function(w) { return !used.has(w.word); });
+    var picked = shuffle(available).slice(0, n);
+    picked.forEach(function(w) { used.add(w.word); });
+    return picked;
+  }
+
+  function pickPairs(pool, n) {
+    var available = pool.filter(function(pair) {
+      return !used.has(pair[0].word) && !used.has(pair[1].word);
+    });
+    var picked = shuffle(available).slice(0, n);
+    picked.forEach(function(pair) {
+      used.add(pair[0].word);
+      used.add(pair[1].word);
+    });
+    return picked;
+  }
+
+  var ouPairs = pickPairs(A1_OU_PAIRS, 3);
+  var shortU  = pickWords(A1_SHORT_U, 3);
+  var shortO  = pickWords(A1_SHORT_O, 2);
+  var review  = pickWords(A1_REVIEW, 4);
 
   a2Words = [];
 
@@ -1236,7 +1258,7 @@ function startAct2() {
     a2Words.push({ target: w, distractor: dist });
   });
 
-  // Quick A/E review rounds
+  // Quick A/E/I review rounds
   review.forEach(function(w) {
     var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
     var dist = others[Math.floor(Math.random() * others.length)];
