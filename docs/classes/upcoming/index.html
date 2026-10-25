@@ -143,8 +143,9 @@ body {
 .n1 { background: var(--purple); }
 .n2 { background: var(--orange); }
 .n3 { background: #1971c2; }
+.n4 { background: #e03131; }
+.n5 { background: #0ca678; }
 .n-read { background: var(--gold); font-size: 1.1rem; }
-.n4 { background: #0ca678; }
 
 .act-card-info { flex: 1; }
 
@@ -473,6 +474,63 @@ body {
   0%{transform:scale(1)} 50%{transform:scale(1.1)} 100%{transform:scale(1)}
 }
 
+/* ── Compare game ─────────────────────────── */
+.compare-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px 20px 24px;
+}
+
+.compare-num {
+  font-size: 4rem;
+  font-weight: 900;
+  min-width: 80px;
+  text-align: center;
+  background: rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 16px 12px;
+  line-height: 1;
+}
+
+.compare-vs {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+}
+
+.symbol-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 0 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.symbol-btn {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border: 3px solid transparent;
+  border-radius: 20px;
+  padding: 20px 8px;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.2s;
+}
+
+.symbol-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.symbol-btn.correct { border-color: var(--green); background: rgba(47,158,68,0.2); }
+.symbol-btn.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
+
 /* ── Skip counting — ladder ───────────────── */
 .ladder-wrap {
   display: flex;
@@ -608,23 +666,23 @@ body {
   <div class="class-hero">
     <div class="class-date">Upcoming</div>
     <div class="class-title">Let's keep learning!</div>
-    <div class="class-sub">5 activities — play in any order</div>
+    <div class="class-sub">6 activities — play in any order</div>
   </div>
 
   <div class="act-list">
     <div class="act-card" id="plan-act1" onclick="launchActivity(1)">
       <div class="act-num n1">1</div>
       <div class="act-card-info">
-        <span class="act-card-name">🔊 Listen &amp; Match</span>
-        <span class="act-card-desc">Short U → O vs U → Short O (+ catch-up words)</span>
+        <span class="act-card-name">🪜 Word Ladder</span>
+        <span class="act-card-desc">U &amp; O families, plus A, E &amp; I</span>
       </div>
       <span class="act-card-status" id="status1">▶</span>
     </div>
     <div class="act-card" id="plan-act2" onclick="launchActivity(2)">
       <div class="act-num n2">2</div>
       <div class="act-card-info">
-        <span class="act-card-name">🪜 Word Ladder</span>
-        <span class="act-card-desc">U &amp; O families, plus A, E &amp; I</span>
+        <span class="act-card-name">🔊 Listen &amp; Match</span>
+        <span class="act-card-desc">Short U → O vs U → Short O (+ catch-up words)</span>
       </div>
       <span class="act-card-status" id="status2">▶</span>
     </div>
@@ -639,10 +697,18 @@ body {
     <div class="act-card" id="plan-act4" onclick="launchActivity(4)">
       <div class="act-num n4">4</div>
       <div class="act-card-info">
-        <span class="act-card-name">📶 Skip the Steps!</span>
-        <span class="act-card-desc">Skip count by 2s and 3s</span>
+        <span class="act-card-name">🔢 Bigger or Smaller?</span>
+        <span class="act-card-desc">Compare numbers 1–50</span>
       </div>
       <span class="act-card-status" id="status4">▶</span>
+    </div>
+    <div class="act-card" id="plan-act5" onclick="launchActivity(5)">
+      <div class="act-num n5">5</div>
+      <div class="act-card-info">
+        <span class="act-card-name">📶 Skip the Steps!</span>
+        <span class="act-card-desc">3 skip by 2s, 2 skip by 3s</span>
+      </div>
+      <span class="act-card-status" id="status5">▶</span>
     </div>
     <div class="act-card" id="plan-read" onclick="goToReadStory()">
       <div class="act-num n-read">📖</div>
@@ -690,7 +756,7 @@ body {
 <div id="screen-act1" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
-    <span class="top-title">Listen &amp; Match</span>
+    <span class="top-title">Word Ladder</span>
     <div class="score-badge">
       <span class="score-stars">⭐ <span id="a1-stars">0</span></span>
       <span class="score-diamonds">💎 <span id="a1-diamonds">0</span></span>
@@ -698,23 +764,24 @@ body {
   </div>
   <div class="game-progress">
     <div class="progress-track"><div class="progress-fill" id="a1-progress" style="background:var(--purple)"></div></div>
-    <div class="round-label" id="a1-round">1 / 10</div>
+    <div class="round-label" id="a1-round">1 / 4</div>
   </div>
-  <div class="hear-wrap">
-    <button class="hear-btn" id="a1-hear" onclick="a1PlayWord()">
-      <span>🔊</span> <span id="a1-hear-text">Tap to hear</span>
-    </button>
+  <div class="word-display">
+    <span class="word-pic" id="a1-pic"></span>
+    <div class="onset-slot" id="a1-slot"></div>
+    <div class="rime-part" id="a1-rime"></div>
   </div>
-  <div class="cards-row" id="a1-cards"></div>
+  <div class="hint-text" id="a1-hint"></div>
+  <div class="letter-grid" id="a1-grid"></div>
   <div class="diamond-flash" id="a1-diamond">💎 Bonus letter!</div>
   <div class="feedback hidden" id="a1-fb"></div>
 </div>
 
-<!-- ── ACT 2: Word Ladder ────────────────── -->
+<!-- ── ACT 2: Listen & Match ────────────────── -->
 <div id="screen-act2" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
-    <span class="top-title">Word Ladder</span>
+    <span class="top-title">Listen &amp; Match</span>
     <div class="score-badge">
       <span class="score-stars">⭐ <span id="a2-stars">0</span></span>
       <span class="score-diamonds">💎 <span id="a2-diamonds">0</span></span>
@@ -722,15 +789,14 @@ body {
   </div>
   <div class="game-progress">
     <div class="progress-track"><div class="progress-fill" id="a2-progress" style="background:var(--orange)"></div></div>
-    <div class="round-label" id="a2-round">1 / 4</div>
+    <div class="round-label" id="a2-round">1 / 10</div>
   </div>
-  <div class="word-display">
-    <span class="word-pic" id="a2-pic"></span>
-    <div class="onset-slot" id="a2-slot"></div>
-    <div class="rime-part" id="a2-rime"></div>
+  <div class="hear-wrap">
+    <button class="hear-btn" id="a2-hear" onclick="a2PlayWord()">
+      <span>🔊</span> <span id="a2-hear-text">Tap to hear</span>
+    </button>
   </div>
-  <div class="hint-text" id="a2-hint"></div>
-  <div class="letter-grid" id="a2-grid"></div>
+  <div class="cards-row" id="a2-cards"></div>
   <div class="diamond-flash" id="a2-diamond">💎 Bonus letter!</div>
   <div class="feedback hidden" id="a2-fb"></div>
 </div>
@@ -764,25 +830,55 @@ body {
   <div class="feedback hidden" id="a3-fb"></div>
 </div>
 
-<!-- ── ACT 4: Skip Counting ────────────────── -->
+<!-- ── ACT 4: Bigger or Smaller ───────────── -->
 <div id="screen-act4" class="screen">
   <div class="top-bar">
     <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
-    <span class="top-title">Skip the Steps!</span>
+    <span class="top-title">Bigger or Smaller?</span>
     <div class="score-badge">
       <span class="score-stars">⭐ <span id="a4-stars">0</span></span>
       <span class="score-diamonds">💎 <span id="a4-diamonds">0</span></span>
     </div>
   </div>
   <div class="game-progress">
-    <div class="progress-track"><div class="progress-fill" id="a4-progress" style="background:#0ca678"></div></div>
-    <div class="round-label" id="a4-round">1 / 10</div>
+    <div class="progress-track"><div class="progress-fill" id="a4-progress" style="background:#e03131"></div></div>
+    <div class="round-label" id="a4-round">1 / 5</div>
   </div>
 
-  <div class="ladder-wrap" id="a4-ladder"></div>
-  <div class="number-grid" id="a4-grid"></div>
+  <div class="compare-area">
+    <div class="compare-num" id="a4-left"></div>
+    <div class="compare-vs">?</div>
+    <div class="compare-num" id="a4-right"></div>
+  </div>
+
+  <div class="symbol-row" id="a4-symbols">
+    <button class="symbol-btn" onclick="a4Tap('&lt;')">&lt;</button>
+    <button class="symbol-btn" onclick="a4Tap('=')">=</button>
+    <button class="symbol-btn" onclick="a4Tap('&gt;')">&gt;</button>
+  </div>
 
   <div class="feedback hidden" id="a4-fb"></div>
+</div>
+
+<!-- ── ACT 5: Skip the Steps! ───────────────── -->
+<div id="screen-act5" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="backToPlan()" aria-label="Back">←</button>
+    <span class="top-title">Skip the Steps!</span>
+    <div class="score-badge">
+      <span class="score-stars">⭐ <span id="a5-stars">0</span></span>
+      <span class="score-diamonds">💎 <span id="a5-diamonds">0</span></span>
+    </div>
+  </div>
+  <div class="game-progress">
+    <div class="progress-track"><div class="progress-fill" id="a5-progress" style="background:#0ca678"></div></div>
+    <div class="round-label" id="a5-round">1 / 5</div>
+  </div>
+
+  <div class="ladder-wrap" id="a5-ladder"></div>
+  <div class="number-grid" id="a5-grid"></div>
+
+  <div class="feedback hidden" id="a5-fb"></div>
 </div>
 
 <!-- ── Activity result ───────────────────── -->
@@ -887,7 +983,7 @@ var A3_WORDS = ['van','bag','gem','den','win','dig','pot','mop','cut','sun'].map
 
 var totalStars    = 0;
 var totalDiamonds = 0;
-var actResults    = { 1: null, 2: null, 3: null, 4: null };
+var actResults    = { 1: null, 2: null, 3: null, 4: null, 5: null };
 var currentAct    = 0;
 
 function shuffle(arr) {
@@ -928,7 +1024,7 @@ function updatePlanScores() {
 
 function refreshPlan() {
   updatePlanScores();
-  for (var i = 1; i <= 4; i++) {
+  for (var i = 1; i <= 5; i++) {
     var card = document.getElementById('plan-act' + i);
     var stat = document.getElementById('status' + i);
     if (actResults[i]) {
@@ -952,6 +1048,7 @@ function launchActivity(n) {
   else if (n === 2) startAct2();
   else if (n === 3) startAct3();
   else if (n === 4) startAct4();
+  else if (n === 5) startAct5();
 }
 
 function backToPlan() {
@@ -960,8 +1057,8 @@ function backToPlan() {
 }
 
 function nextFromResult() {
-  if (currentAct < 4) launchActivity(currentAct + 1);
-  else showSummary();
+  if (currentAct < 5) launchActivity(currentAct + 1);
+  else goToReadStory();
 }
 
 // ════════════════════════════════════════════════════════════
@@ -976,8 +1073,7 @@ function showActResult(stars, diamonds, actNum) {
 
   var emoji = diamonds > 0 ? '💎' : stars >= 5 ? '🌟' : '👍';
   document.getElementById('res-emoji').textContent = emoji;
-  document.getElementById('res-title').textContent =
-    actNum === 4 ? 'All done!' : 'Activity complete!';
+  document.getElementById('res-title').textContent = 'Activity complete!';
   document.getElementById('res-stars').textContent    = stars;
   document.getElementById('res-diamonds').textContent = diamonds;
 
@@ -986,82 +1082,75 @@ function showActResult(stars, diamonds, actNum) {
     : stars >= 5 ? 'Brilliant work!' : 'Keep practising!';
   document.getElementById('res-detail').textContent = detail;
   document.getElementById('res-next').textContent =
-    actNum < 4 ? 'Next activity →' : 'See results 🏆';
+    actNum < 5 ? 'Next activity →' : 'Read a story 📖';
 
   showScreen('screen-result');
 }
 
 // ════════════════════════════════════════════════════════════
-// ACT 1 — Listen & Match (Short E, Short O, Short U)
+// ACT 1 — Word Ladder (combines 2 random families each time)
 // ════════════════════════════════════════════════════════════
 
-var a1Words, a1Idx, a1Stars, a1Dia, a1Answered;
+var a1Words, a1Idx, a1Stars, a1Dia, a1TriedWrong, a1Waiting;
 
 function startAct1() {
-  // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + 4 A/E/I review = 12 rounds
-  var shortU = shuffle(A1_SHORT_U).slice(0, 3);
-  var shortO = shuffle(A1_SHORT_O).slice(0, 2);
-  var ouPairs = shuffle(A1_OU_PAIRS).slice(0, 3);
-  var review  = shuffle(A1_REVIEW).slice(0, 4);
+  var shuffledFamilies = shuffle(A2_FAMILIES);
+  var pickedFamilies   = shuffledFamilies.slice(0, 2);
 
   a1Words = [];
-
-  // Short U rounds
-  shortU.forEach(function(w) {
-    var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
-    var dist = others[Math.floor(Math.random() * others.length)];
-    a1Words.push({ target: w, distractor: dist });
+  pickedFamilies.forEach(function(family) {
+    family.words.forEach(function(w) {
+      a1Words.push({
+        word: w.word, pic: w.pic, onset: w.onset, rime: family.rime,
+        familyOnsets: family.words.map(function(x) { return x.onset; })
+      });
+    });
   });
+  a1Words = shuffle(a1Words);
 
-  // O vs U contrast rounds
-  ouPairs.forEach(function(pair) {
-    var flip = Math.random() < 0.5;
-    a1Words.push({ target: pair[flip ? 1 : 0], distractor: pair[flip ? 0 : 1] });
-  });
-
-  // Short O rounds
-  shortO.forEach(function(w) {
-    var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
-    var dist = others[Math.floor(Math.random() * others.length)];
-    a1Words.push({ target: w, distractor: dist });
-  });
-
-  // Quick A/E review rounds
-  review.forEach(function(w) {
-    var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
-    var dist = others[Math.floor(Math.random() * others.length)];
-    a1Words.push({ target: w, distractor: dist });
-  });
-
-  a1Idx      = 0;
-  a1Stars    = 0;
-  a1Dia      = 0;
-  a1Answered = false;
+  a1Idx        = 0;
+  a1Stars      = 0;
+  a1Dia        = 0;
+  a1TriedWrong = false;
+  a1Waiting    = false;
   showScreen('screen-act1');
   renderA1();
 }
 
 function renderA1() {
-  a1Answered = false;
-  var r   = a1Words[a1Idx];
+  a1TriedWrong = false;
+  a1Waiting    = false;
+
+  var w   = a1Words[a1Idx];
   var tot = a1Words.length;
 
   document.getElementById('a1-progress').style.width = (a1Idx / tot * 100) + '%';
   document.getElementById('a1-round').textContent    = (a1Idx + 1) + ' / ' + tot;
   document.getElementById('a1-stars').textContent     = totalStars + a1Stars;
   document.getElementById('a1-diamonds').textContent  = totalDiamonds + a1Dia;
-  document.getElementById('a1-hear-text').textContent = 'Tap to hear';
 
-  var items = Math.random() < 0.5 ? [r.target, r.distractor] : [r.distractor, r.target];
-  var container = document.getElementById('a1-cards');
-  container.innerHTML = '';
+  document.getElementById('a1-pic').textContent  = w.pic;
+  document.getElementById('a1-rime').textContent = w.rime;
 
-  items.forEach(function(item) {
-    var card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = '<div class="card-pic">' + item.pic + '</div><div class="card-word">' + item.word + '</div>';
-    card.onclick = function() { a1Tap(item.word === r.target.word, card, container); };
-    container.appendChild(card);
+  var slot = document.getElementById('a1-slot');
+  slot.textContent = '';
+  slot.className   = 'onset-slot';
+
+  document.getElementById('a1-hint').textContent = '';
+
+  var otherOnsets = shuffle(
+    w.familyOnsets.filter(function(o) { return o !== w.onset; })
+  ).slice(0, 3);
+  var options = shuffle([w.onset].concat(otherOnsets));
+
+  var grid = document.getElementById('a1-grid');
+  grid.innerHTML = '';
+  options.forEach(function(letter) {
+    var btn = document.createElement('button');
+    btn.className   = 'letter-btn';
+    btn.textContent = letter;
+    btn.onclick = function() { a1Tap(letter, btn, w); };
+    grid.appendChild(btn);
   });
 
   var fb = document.getElementById('a1-fb');
@@ -1069,27 +1158,148 @@ function renderA1() {
   document.getElementById('a1-diamond').classList.remove('show');
 }
 
-function a1PlayWord() {
-  speak(a1Words[a1Idx].target.word);
-  document.getElementById('a1-hear-text').textContent = 'Hear it again';
+function a1Tap(letter, btn, w) {
+  if (a1Waiting) return;
+
+  if (letter === w.onset) {
+    a1Waiting = true;
+    if (!a1TriedWrong) {
+      if (isDiamond(w.word)) {
+        a1Dia++;
+        document.getElementById('a1-diamond').classList.add('show');
+      } else {
+        a1Stars++;
+      }
+    }
+
+    btn.classList.add('correct-flash');
+    var slot = document.getElementById('a1-slot');
+    slot.textContent = letter;
+    slot.classList.add('filled');
+    document.getElementById('a1-hint').textContent = '';
+
+    var btns = document.querySelectorAll('#a1-grid .letter-btn');
+    for (var i = 0; i < btns.length; i++) btns[i].style.pointerEvents = 'none';
+
+    document.getElementById('a1-stars').textContent    = totalStars + a1Stars;
+    document.getElementById('a1-diamonds').textContent = totalDiamonds + a1Dia;
+
+    speak(w.word);
+
+    setTimeout(function() {
+      a1Idx++;
+      if (a1Idx >= a1Words.length) showActResult(a1Stars, a1Dia, 1);
+      else renderA1();
+    }, 1700);
+  } else {
+    a1TriedWrong = true;
+    btn.classList.add('wrong-shake', 'dimmed');
+    document.getElementById('a1-hint').textContent = 'Try another letter!';
+    setTimeout(function() {
+      btn.classList.remove('wrong-shake');
+    }, 400);
+  }
 }
 
-function a1Tap(correct, card, container) {
-  if (a1Answered) return;
-  a1Answered = true;
+// ════════════════════════════════════════════════════════════
+// ACT 2 — Listen & Match (Short E, Short O, Short U)
+// ════════════════════════════════════════════════════════════
+
+var a2Words, a2Idx, a2Stars, a2Dia, a2Answered;
+
+function startAct2() {
+  // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + 4 A/E/I review = 12 rounds
+  var shortU = shuffle(A1_SHORT_U).slice(0, 3);
+  var shortO = shuffle(A1_SHORT_O).slice(0, 2);
+  var ouPairs = shuffle(A1_OU_PAIRS).slice(0, 3);
+  var review  = shuffle(A1_REVIEW).slice(0, 4);
+
+  a2Words = [];
+
+  // Short U rounds
+  shortU.forEach(function(w) {
+    var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
+    var dist = others[Math.floor(Math.random() * others.length)];
+    a2Words.push({ target: w, distractor: dist });
+  });
+
+  // O vs U contrast rounds
+  ouPairs.forEach(function(pair) {
+    var flip = Math.random() < 0.5;
+    a2Words.push({ target: pair[flip ? 1 : 0], distractor: pair[flip ? 0 : 1] });
+  });
+
+  // Short O rounds
+  shortO.forEach(function(w) {
+    var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
+    var dist = others[Math.floor(Math.random() * others.length)];
+    a2Words.push({ target: w, distractor: dist });
+  });
+
+  // Quick A/E review rounds
+  review.forEach(function(w) {
+    var others = ALL_PICS.filter(function(x) { return x.word !== w.word; });
+    var dist = others[Math.floor(Math.random() * others.length)];
+    a2Words.push({ target: w, distractor: dist });
+  });
+
+  a2Idx      = 0;
+  a2Stars    = 0;
+  a2Dia      = 0;
+  a2Answered = false;
+  showScreen('screen-act2');
+  renderA2();
+}
+
+function renderA2() {
+  a2Answered = false;
+  var r   = a2Words[a2Idx];
+  var tot = a2Words.length;
+
+  document.getElementById('a2-progress').style.width = (a2Idx / tot * 100) + '%';
+  document.getElementById('a2-round').textContent    = (a2Idx + 1) + ' / ' + tot;
+  document.getElementById('a2-stars').textContent     = totalStars + a2Stars;
+  document.getElementById('a2-diamonds').textContent  = totalDiamonds + a2Dia;
+  document.getElementById('a2-hear-text').textContent = 'Tap to hear';
+
+  var items = Math.random() < 0.5 ? [r.target, r.distractor] : [r.distractor, r.target];
+  var container = document.getElementById('a2-cards');
+  container.innerHTML = '';
+
+  items.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<div class="card-pic">' + item.pic + '</div><div class="card-word">' + item.word + '</div>';
+    card.onclick = function() { a2Tap(item.word === r.target.word, card, container); };
+    container.appendChild(card);
+  });
+
+  var fb = document.getElementById('a2-fb');
+  fb.textContent = ''; fb.className = 'feedback hidden';
+  document.getElementById('a2-diamond').classList.remove('show');
+}
+
+function a2PlayWord() {
+  speak(a2Words[a2Idx].target.word);
+  document.getElementById('a2-hear-text').textContent = 'Hear it again';
+}
+
+function a2Tap(correct, card, container) {
+  if (a2Answered) return;
+  a2Answered = true;
   var cards = container.querySelectorAll('.card');
   for (var i = 0; i < cards.length; i++) cards[i].style.pointerEvents = 'none';
 
-  var fb = document.getElementById('a1-fb');
+  var fb = document.getElementById('a2-fb');
   if (correct) {
     card.classList.add('correct');
     fb.textContent = '✓ Well done!'; fb.className = 'feedback ok';
-    var w = a1Words[a1Idx].target;
+    var w = a2Words[a2Idx].target;
     if (isDiamond(w.word)) {
-      a1Dia++;
-      document.getElementById('a1-diamond').classList.add('show');
+      a2Dia++;
+      document.getElementById('a2-diamond').classList.add('show');
     } else {
-      a1Stars++;
+      a2Stars++;
     }
   } else {
     card.classList.add('wrong');
@@ -1100,128 +1310,14 @@ function a1Tap(correct, card, container) {
     fb.textContent = 'Not quite — look at the green one!'; fb.className = 'feedback no';
   }
 
-  document.getElementById('a1-stars').textContent    = totalStars + a1Stars;
-  document.getElementById('a1-diamonds').textContent = totalDiamonds + a1Dia;
+  document.getElementById('a2-stars').textContent    = totalStars + a2Stars;
+  document.getElementById('a2-diamonds').textContent = totalDiamonds + a2Dia;
 
   setTimeout(function() {
-    a1Idx++;
-    if (a1Idx >= a1Words.length) showActResult(a1Stars, a1Dia, 1);
-    else renderA1();
+    a2Idx++;
+    if (a2Idx >= a2Words.length) showActResult(a2Stars, a2Dia, 2);
+    else renderA2();
   }, 1800);
-}
-
-// ════════════════════════════════════════════════════════════
-// ACT 2 — Word Ladder (combines 2 random families each time)
-// ════════════════════════════════════════════════════════════
-
-var a2Words, a2Idx, a2Stars, a2Dia, a2TriedWrong, a2Waiting;
-
-function startAct2() {
-  var shuffledFamilies = shuffle(A2_FAMILIES);
-  var pickedFamilies   = shuffledFamilies.slice(0, 2);
-
-  a2Words = [];
-  pickedFamilies.forEach(function(family) {
-    family.words.forEach(function(w) {
-      a2Words.push({
-        word: w.word, pic: w.pic, onset: w.onset, rime: family.rime,
-        familyOnsets: family.words.map(function(x) { return x.onset; })
-      });
-    });
-  });
-  a2Words = shuffle(a2Words);
-
-  a2Idx        = 0;
-  a2Stars      = 0;
-  a2Dia        = 0;
-  a2TriedWrong = false;
-  a2Waiting    = false;
-  showScreen('screen-act2');
-  renderA2();
-}
-
-function renderA2() {
-  a2TriedWrong = false;
-  a2Waiting    = false;
-
-  var w   = a2Words[a2Idx];
-  var tot = a2Words.length;
-
-  document.getElementById('a2-progress').style.width = (a2Idx / tot * 100) + '%';
-  document.getElementById('a2-round').textContent    = (a2Idx + 1) + ' / ' + tot;
-  document.getElementById('a2-stars').textContent     = totalStars + a2Stars;
-  document.getElementById('a2-diamonds').textContent  = totalDiamonds + a2Dia;
-
-  document.getElementById('a2-pic').textContent  = w.pic;
-  document.getElementById('a2-rime').textContent = w.rime;
-
-  var slot = document.getElementById('a2-slot');
-  slot.textContent = '';
-  slot.className   = 'onset-slot';
-
-  document.getElementById('a2-hint').textContent = '';
-
-  var otherOnsets = shuffle(
-    w.familyOnsets.filter(function(o) { return o !== w.onset; })
-  ).slice(0, 3);
-  var options = shuffle([w.onset].concat(otherOnsets));
-
-  var grid = document.getElementById('a2-grid');
-  grid.innerHTML = '';
-  options.forEach(function(letter) {
-    var btn = document.createElement('button');
-    btn.className   = 'letter-btn';
-    btn.textContent = letter;
-    btn.onclick = function() { a2Tap(letter, btn, w); };
-    grid.appendChild(btn);
-  });
-
-  var fb = document.getElementById('a2-fb');
-  fb.textContent = ''; fb.className = 'feedback hidden';
-  document.getElementById('a2-diamond').classList.remove('show');
-}
-
-function a2Tap(letter, btn, w) {
-  if (a2Waiting) return;
-
-  if (letter === w.onset) {
-    a2Waiting = true;
-    if (!a2TriedWrong) {
-      if (isDiamond(w.word)) {
-        a2Dia++;
-        document.getElementById('a2-diamond').classList.add('show');
-      } else {
-        a2Stars++;
-      }
-    }
-
-    btn.classList.add('correct-flash');
-    var slot = document.getElementById('a2-slot');
-    slot.textContent = letter;
-    slot.classList.add('filled');
-    document.getElementById('a2-hint').textContent = '';
-
-    var btns = document.querySelectorAll('#a2-grid .letter-btn');
-    for (var i = 0; i < btns.length; i++) btns[i].style.pointerEvents = 'none';
-
-    document.getElementById('a2-stars').textContent    = totalStars + a2Stars;
-    document.getElementById('a2-diamonds').textContent = totalDiamonds + a2Dia;
-
-    speak(w.word);
-
-    setTimeout(function() {
-      a2Idx++;
-      if (a2Idx >= a2Words.length) showActResult(a2Stars, a2Dia, 2);
-      else renderA2();
-    }, 1700);
-  } else {
-    a2TriedWrong = true;
-    btn.classList.add('wrong-shake', 'dimmed');
-    document.getElementById('a2-hint').textContent = 'Try another letter!';
-    setTimeout(function() {
-      btn.classList.remove('wrong-shake');
-    }, 400);
-  }
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1347,59 +1443,139 @@ function a3Tap(letter, btn) {
 }
 
 // ════════════════════════════════════════════════════════════
-// ACT 4 — Skip the Steps! (skip counting by 2s and 3s)
+// ACT 4 — Bigger or Smaller? (Compare numbers 1–50)
 // ════════════════════════════════════════════════════════════
 
-var A4_QUESTIONS = [
-  { skip: 2, dir: 'up', start: 2,  steps: 4 },
-  { skip: 2, dir: 'up', start: 4,  steps: 4 },
-  { skip: 2, dir: 'up', start: 6,  steps: 4 },
-  { skip: 2, dir: 'up', start: 8,  steps: 4 },
-  { skip: 2, dir: 'up', start: 10, steps: 4 },
-  { skip: 3, dir: 'up', start: 3,  steps: 4 },
-  { skip: 3, dir: 'up', start: 1,  steps: 4 },
-  { skip: 3, dir: 'up', start: 6,  steps: 4 },
-  { skip: 3, dir: 'up', start: 2,  steps: 4 },
-  { skip: 3, dir: 'up', start: 5,  steps: 4 },
+var A4_PAIRS = [
+  [18, 25], [40, 12], [33, 33], [27, 41], [5, 19],
 ];
 
-var a4Qs, a4Idx, a4Stars, a4Dia, a4Seq, a4BlankIdx, a4Waiting, a4TriedWrong;
+var a4Pairs, a4Idx, a4Stars, a4Dia, a4Answered;
 
 function startAct4() {
-  a4Qs    = A4_QUESTIONS.slice();
-  a4Idx   = 0;
-  a4Stars = 0;
-  a4Dia   = 0;
+  a4Pairs    = shuffle(A4_PAIRS);
+  a4Idx      = 0;
+  a4Stars    = 0;
+  a4Dia      = 0;
+  a4Answered = false;
   showScreen('screen-act4');
   renderA4();
 }
 
 function renderA4() {
-  a4Waiting    = false;
-  a4TriedWrong = false;
-
-  var q   = a4Qs[a4Idx];
-  var tot = a4Qs.length;
+  a4Answered = false;
+  var pair = a4Pairs[a4Idx];
+  var tot  = a4Pairs.length;
 
   document.getElementById('a4-progress').style.width = (a4Idx / tot * 100) + '%';
   document.getElementById('a4-round').textContent    = (a4Idx + 1) + ' / ' + tot;
   document.getElementById('a4-stars').textContent     = totalStars + a4Stars;
   document.getElementById('a4-diamonds').textContent  = totalDiamonds + a4Dia;
 
-  a4Seq = [];
-  for (var i = 0; i < q.steps; i++) {
-    if (q.dir === 'up') a4Seq.push(q.start + i * q.skip);
-    else a4Seq.push(q.start - i * q.skip);
+  document.getElementById('a4-left').textContent  = pair[0];
+  document.getElementById('a4-right').textContent = pair[1];
+
+  var btns = document.querySelectorAll('#a4-symbols .symbol-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].className = 'symbol-btn';
+    btns[i].style.pointerEvents = '';
   }
 
-  a4BlankIdx = 1;
+  var fb = document.getElementById('a4-fb');
+  fb.textContent = ''; fb.className = 'feedback hidden';
+}
 
-  var seqMin = Math.min.apply(null, a4Seq);
-  var seqMax = Math.max.apply(null, a4Seq);
+function a4Tap(symbol) {
+  if (a4Answered) return;
+  a4Answered = true;
+
+  var pair = a4Pairs[a4Idx];
+  var correct;
+  if (pair[0] > pair[1])      correct = '>';
+  else if (pair[0] < pair[1]) correct = '<';
+  else                        correct = '=';
+
+  var btns = document.querySelectorAll('#a4-symbols .symbol-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].style.pointerEvents = 'none';
+
+  var tappedBtn = null, correctBtn = null;
+  for (var i = 0; i < btns.length; i++) {
+    var s = btns[i].textContent.trim();
+    if (s === symbol) tappedBtn = btns[i];
+    if (s === correct) correctBtn = btns[i];
+  }
+
+  var fb = document.getElementById('a4-fb');
+  if (symbol === correct) {
+    a4Stars++;
+    tappedBtn.classList.add('correct');
+    fb.textContent = '✓ ' + pair[0] + ' ' + correct + ' ' + pair[1];
+    fb.className = 'feedback ok';
+  } else {
+    tappedBtn.classList.add('wrong');
+    correctBtn.classList.add('correct');
+    fb.textContent = pair[0] + ' ' + correct + ' ' + pair[1];
+    fb.className = 'feedback no';
+  }
+
+  document.getElementById('a4-stars').textContent = totalStars + a4Stars;
+
+  setTimeout(function() {
+    a4Idx++;
+    if (a4Idx >= a4Pairs.length) showActResult(a4Stars, a4Dia, 4);
+    else renderA4();
+  }, 1800);
+}
+
+// ════════════════════════════════════════════════════════════
+// ACT 5 — Skip the Steps! (3 skip by 2s, 2 skip by 3s)
+// ════════════════════════════════════════════════════════════
+
+var A5_QUESTIONS = [
+  { skip: 2, dir: 'up', start: 2,  steps: 4 },
+  { skip: 2, dir: 'up', start: 6,  steps: 4 },
+  { skip: 2, dir: 'up', start: 10, steps: 4 },
+  { skip: 3, dir: 'up', start: 3,  steps: 4 },
+  { skip: 3, dir: 'up', start: 1,  steps: 4 },
+];
+
+var a5Qs, a5Idx, a5Stars, a5Dia, a5Seq, a5BlankIdx, a5Waiting, a5TriedWrong;
+
+function startAct5() {
+  a5Qs    = A5_QUESTIONS.slice();
+  a5Idx   = 0;
+  a5Stars = 0;
+  a5Dia   = 0;
+  showScreen('screen-act5');
+  renderA5();
+}
+
+function renderA5() {
+  a5Waiting    = false;
+  a5TriedWrong = false;
+
+  var q   = a5Qs[a5Idx];
+  var tot = a5Qs.length;
+
+  document.getElementById('a5-progress').style.width = (a5Idx / tot * 100) + '%';
+  document.getElementById('a5-round').textContent    = (a5Idx + 1) + ' / ' + tot;
+  document.getElementById('a5-stars').textContent     = totalStars + a5Stars;
+  document.getElementById('a5-diamonds').textContent  = totalDiamonds + a5Dia;
+
+  a5Seq = [];
+  for (var i = 0; i < q.steps; i++) {
+    if (q.dir === 'up') a5Seq.push(q.start + i * q.skip);
+    else a5Seq.push(q.start - i * q.skip);
+  }
+
+  a5BlankIdx = 1;
+
+  var seqMin = Math.min.apply(null, a5Seq);
+  var seqMax = Math.max.apply(null, a5Seq);
   var seqSet = {};
-  a4Seq.forEach(function(n) { seqSet[n] = true; });
+  a5Seq.forEach(function(n) { seqSet[n] = true; });
 
-  var wrap = document.getElementById('a4-ladder');
+  var wrap = document.getElementById('a5-ladder');
   wrap.innerHTML = '';
 
   var dirEl = document.createElement('div');
@@ -1413,13 +1589,13 @@ function renderA4() {
   for (var n = seqMax; n >= seqMin; n--) {
     var rung = document.createElement('div');
     rung.className = 'rung';
-    rung.id = 'a4-rung-' + n;
+    rung.id = 'a5-rung-' + n;
 
     if (seqSet[n]) {
-      if (n === a4Seq[0]) {
+      if (n === a5Seq[0]) {
         rung.classList.add('given');
         rung.textContent = n;
-      } else if (n === a4Seq[1]) {
+      } else if (n === a5Seq[1]) {
         rung.classList.add('lit', 'current');
         rung.innerHTML = '?&nbsp;🧒';
       } else {
@@ -1436,15 +1612,15 @@ function renderA4() {
 
   wrap.appendChild(ladder);
 
-  renderA4Grid();
+  renderA5Grid();
 
-  var fb = document.getElementById('a4-fb');
+  var fb = document.getElementById('a5-fb');
   fb.textContent = ''; fb.className = 'feedback hidden';
 }
 
-function renderA4Grid() {
-  var correct = a4Seq[a4BlankIdx];
-  var q = a4Qs[a4Idx];
+function renderA5Grid() {
+  var correct = a5Seq[a5BlankIdx];
+  var q = a5Qs[a5Idx];
 
   var candidates = [correct + 1, correct - 1, correct + q.skip + 1, correct - q.skip + 1];
   candidates = candidates.filter(function(n) { return n !== correct && n > 0 && n <= 20; });
@@ -1459,58 +1635,58 @@ function renderA4Grid() {
 
   var options = shuffle([correct].concat(distractors));
 
-  var grid = document.getElementById('a4-grid');
+  var grid = document.getElementById('a5-grid');
   grid.innerHTML = '';
   options.forEach(function(n) {
     var btn = document.createElement('button');
     btn.className = 'num-btn';
     btn.textContent = n;
-    btn.onclick = function() { a4Tap(n, btn); };
+    btn.onclick = function() { a5Tap(n, btn); };
     grid.appendChild(btn);
   });
 }
 
-function a4Tap(n, btn) {
-  if (a4Waiting) return;
+function a5Tap(n, btn) {
+  if (a5Waiting) return;
 
-  var correct = a4Seq[a4BlankIdx];
+  var correct = a5Seq[a5BlankIdx];
 
   if (n === correct) {
-    a4Waiting = true;
+    a5Waiting = true;
     btn.classList.add('correct-flash');
 
-    var rung = document.getElementById('a4-rung-' + correct);
+    var rung = document.getElementById('a5-rung-' + correct);
     rung.textContent = correct;
     rung.className = 'rung filled';
 
-    a4BlankIdx++;
+    a5BlankIdx++;
 
-    if (a4BlankIdx < a4Seq.length) {
-      var nextRung = document.getElementById('a4-rung-' + a4Seq[a4BlankIdx]);
+    if (a5BlankIdx < a5Seq.length) {
+      var nextRung = document.getElementById('a5-rung-' + a5Seq[a5BlankIdx]);
       nextRung.className = 'rung lit current';
       nextRung.innerHTML = '?&nbsp;🧒';
 
       setTimeout(function() {
-        a4Waiting = false;
-        renderA4Grid();
+        a5Waiting = false;
+        renderA5Grid();
       }, 600);
     } else {
-      if (!a4TriedWrong) {
-        a4Stars++;
+      if (!a5TriedWrong) {
+        a5Stars++;
       }
-      document.getElementById('a4-stars').textContent = totalStars + a4Stars;
+      document.getElementById('a5-stars').textContent = totalStars + a5Stars;
 
-      var fb = document.getElementById('a4-fb');
+      var fb = document.getElementById('a5-fb');
       fb.textContent = '✓ Well done!'; fb.className = 'feedback ok';
 
       setTimeout(function() {
-        a4Idx++;
-        if (a4Idx >= a4Qs.length) showActResult(a4Stars, a4Dia, 4);
-        else renderA4();
+        a5Idx++;
+        if (a5Idx >= a5Qs.length) showActResult(a5Stars, a5Dia, 5);
+        else renderA5();
       }, 1500);
     }
   } else {
-    a4TriedWrong = true;
+    a5TriedWrong = true;
     btn.classList.add('wrong-shake');
     setTimeout(function() { btn.classList.remove('wrong-shake'); }, 400);
   }
@@ -1524,10 +1700,10 @@ function showSummary() {
   document.getElementById('sum-stars').textContent    = totalStars;
   document.getElementById('sum-diamonds').textContent = totalDiamonds;
 
-  var names = { 1: '🔊 Listen & Match', 2: '🪜 Word Ladder', 3: '🔨 Build a Word', 4: '📶 Skip the Steps!' };
+  var names = { 1: '🪜 Word Ladder', 2: '🔊 Listen & Match', 3: '🔨 Build a Word', 4: '🔢 Bigger or Smaller?', 5: '📶 Skip the Steps!' };
   var bd = document.getElementById('sum-breakdown');
   bd.innerHTML = '';
-  for (var i = 1; i <= 4; i++) {
+  for (var i = 1; i <= 5; i++) {
     var r = actResults[i] || { stars: 0, diamonds: 0 };
     var row = document.createElement('div');
     row.className = 'sb-row';
@@ -1544,7 +1720,7 @@ function showSummary() {
 // PERSISTENCE
 // ════════════════════════════════════════════════════════════
 
-var SAVE_KEY = 'saba_class_upcoming_v3';
+var SAVE_KEY = 'saba_class_upcoming_v4';
 
 function saveProgress() {
   try {
