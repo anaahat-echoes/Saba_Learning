@@ -671,6 +671,14 @@ body {
   </div>
 
   <div class="act-list">
+    <div class="act-card" id="plan-letters" onclick="goToLetterSounds()">
+      <div class="act-num n-letters">🔤</div>
+      <div class="act-card-info">
+        <span class="act-card-name">Letter Sounds</span>
+        <span class="act-card-desc">Start here — for her brother (S &amp; A)</span>
+      </div>
+      <span class="act-card-status" id="status-letters">▶</span>
+    </div>
     <div class="act-card" id="plan-act1" onclick="launchActivity(1)">
       <div class="act-num n1">1</div>
       <div class="act-card-info">
@@ -719,16 +727,7 @@ body {
       </div>
       <span class="act-card-status" id="status-read">▶</span>
     </div>
-    <div class="act-card" id="plan-letters" onclick="goToLetterSounds()">
-      <div class="act-num n-letters">🔤</div>
-      <div class="act-card-info">
-        <span class="act-card-name">Letter Sounds</span>
-        <span class="act-card-desc">For her brother — s, a, t, p, i, n</span>
-      </div>
-      <span class="act-card-status" id="status-letters">▶</span>
-    </div>
   </div>
-
   <div class="watch-section">
     <div class="watch-heading">Watch after class</div>
 
@@ -1223,7 +1222,7 @@ function a1Tap(letter, btn, w) {
 var a2Words, a2Idx, a2Stars, a2Dia, a2Answered;
 
 function startAct2() {
-  // Build rounds: 3 Short U + 3 O-vs-U contrast + 2 Short O + 4 A/E/I review = 12 rounds
+  // Build rounds: 2 Short U + 3 O-vs-U contrast + 2 Short O + 2 A/E/I review = 9 rounds
   // Draw the most-overlapping pools first so no word repeats across rounds.
   var used = new Set();
 
@@ -1247,9 +1246,9 @@ function startAct2() {
   }
 
   var ouPairs = pickPairs(A1_OU_PAIRS, 3);
-  var shortU  = pickWords(A1_SHORT_U, 3);
+  var shortU  = pickWords(A1_SHORT_U, 2);
   var shortO  = pickWords(A1_SHORT_O, 2);
-  var review  = pickWords(A1_REVIEW, 4);
+  var review  = pickWords(A1_REVIEW, 2);
 
   a2Words = [];
 
