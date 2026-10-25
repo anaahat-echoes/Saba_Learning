@@ -146,6 +146,7 @@ body {
 .n4 { background: #e03131; }
 .n5 { background: #0ca678; }
 .n-read { background: var(--gold); font-size: 1.1rem; }
+.n-letters { background: #9c36b5; font-size: 1.1rem; }
 
 .act-card-info { flex: 1; }
 
@@ -666,7 +667,7 @@ body {
   <div class="class-hero">
     <div class="class-date">Upcoming</div>
     <div class="class-title">Let's keep learning!</div>
-    <div class="class-sub">6 activities — play in any order</div>
+    <div class="class-sub">6 activities for Saba, plus 1 for her brother</div>
   </div>
 
   <div class="act-list">
@@ -717,6 +718,14 @@ body {
         <span class="act-card-desc">Sam Ran — read it together</span>
       </div>
       <span class="act-card-status" id="status-read">▶</span>
+    </div>
+    <div class="act-card" id="plan-letters" onclick="goToLetterSounds()">
+      <div class="act-num n-letters">🔤</div>
+      <div class="act-card-info">
+        <span class="act-card-name">Letter Sounds</span>
+        <span class="act-card-desc">For her brother — s, a, t, p, i, n</span>
+      </div>
+      <span class="act-card-status" id="status-letters">▶</span>
     </div>
   </div>
 
@@ -1039,6 +1048,12 @@ function refreshPlan() {
 function goToReadStory() {
   var classUrl = '../../classes/upcoming/';
   window.location.href = '../../english/read/?book=short-a-ran'
+    + '&back=' + encodeURIComponent(classUrl);
+}
+
+function goToLetterSounds() {
+  var classUrl = '../../classes/upcoming/';
+  window.location.href = '../../english/letters/?group=group1'
     + '&back=' + encodeURIComponent(classUrl);
 }
 
