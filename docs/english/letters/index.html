@@ -27,6 +27,7 @@ body {
 
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: flex; flex-direction: column; }
+[hidden] { display: none !important; }
 
 /* ── Header ──────────────────────────────── */
 .page-header {
@@ -167,17 +168,38 @@ body {
   white-space: nowrap;
 }
 
+.round-kind {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #a78bfa;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 20px 8px;
+}
+
 .prompt-stage {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 20px 12px;
+  padding: 16px 20px 8px;
 }
 
 .prompt-pic {
   font-size: 5.5rem;
   line-height: 1;
   margin-bottom: 16px;
+}
+
+.big-letter {
+  font-family: 'Courier New', monospace;
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 28px;
+  padding: 16px 40px;
 }
 
 .hear-btn {
@@ -205,7 +227,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 16px;
-  padding: 28px 20px;
+  padding: 24px 20px;
   flex-wrap: wrap;
 }
 
@@ -232,12 +254,91 @@ body {
 .letter-tile.correct { border-color: var(--green); background: rgba(47,158,68,0.25); }
 .letter-tile.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
 
+.picture-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 20px;
+  flex-wrap: wrap;
+}
+
+.picture-tile {
+  width: 110px;
+  height: 110px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.08);
+  border: 4px solid transparent;
+  font-size: 3.2rem;
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0,0,0,0.25);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.2s;
+}
+
+.picture-tile:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.picture-tile.correct { border-color: var(--green); background: rgba(47,158,68,0.25); }
+.picture-tile.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
+
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   20% { transform: translateX(-8px); }
   40% { transform: translateX(8px); }
   60% { transform: translateX(-6px); }
   80% { transform: translateX(6px); }
+}
+
+/* ── I Spy scene ───────────────────────────── */
+.ispy-prompt {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  padding: 8px 20px 16px;
+}
+
+.ispy-prompt .target-letter {
+  font-family: 'Courier New', monospace;
+  color: var(--gold);
+  font-size: 1.3rem;
+}
+
+.ispy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 0 20px 20px;
+  max-width: 420px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.ispy-tile {
+  aspect-ratio: 1;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  border: 4px solid transparent;
+  font-size: 2.6rem;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  transition: transform 0.08s, box-shadow 0.08s, background 0.2s, opacity 0.2s;
+}
+
+.ispy-tile:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
+
+.ispy-tile.found { border-color: var(--green); background: rgba(47,158,68,0.3); opacity: 0.6; pointer-events: none; }
+.ispy-tile.wrong { border-color: var(--red); background: rgba(224,49,49,0.15); animation: shake 0.4s ease; }
+
+.ispy-counter {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--gray);
+  font-weight: 700;
+  padding-bottom: 8px;
 }
 
 .feedback {
@@ -309,15 +410,15 @@ body {
 
   <div style="padding: 8px 24px 0;">
     <div class="pick-heading">Letter Sounds</div>
-    <div class="pick-sub">Hear a word, tap the letter it starts with</div>
+    <div class="pick-sub">Three ways to learn each letter, two letters per round</div>
   </div>
 
   <div class="group-list" style="padding: 0 4px;">
     <button class="group-card" onclick="startGroup('group1')">
       <span class="group-emoji">s</span>
       <span class="group-info">
-        <span class="group-name">Group 1</span>
-        <span class="group-desc">s · a · t · p · i · n</span>
+        <span class="group-name">S &amp; A</span>
+        <span class="group-desc">hear it · see it · spy it</span>
       </span>
       <span class="group-best" id="best-group1"></span>
     </button>
@@ -327,24 +428,45 @@ body {
 <!-- ── SCREEN 2: Game ──────────────────────── -->
 <div id="screen-game" class="screen">
   <div class="page-header">
-    <button class="back-btn" onclick="goBack()" aria-label="Back to picker">←</button>
-    <span class="page-title" id="game-title">Group 1</span>
+    <button class="back-btn" onclick="goBack()" aria-label="Back">←</button>
+    <span class="page-title" id="game-title">Letter Sounds</span>
   </div>
 
   <div class="game-progress">
     <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-    <div class="round-label" id="round-label">1 / 12</div>
+    <div class="round-label" id="round-label">1 / 6</div>
   </div>
 
-  <div class="prompt-stage">
-    <div class="prompt-pic" id="prompt-pic"></div>
-    <button class="hear-btn" id="hear-btn" onclick="playWord()">
-      <span>🔊</span>
-      <span id="hear-text">Tap to hear</span>
-    </button>
+  <div class="round-kind" id="round-kind"></div>
+
+  <!-- Sound → Letter -->
+  <div id="stage-sound-letter" hidden>
+    <div class="prompt-stage">
+      <div class="prompt-pic" id="prompt-pic"></div>
+      <button class="hear-btn" id="hear-btn" onclick="playWord()">
+        <span>🔊</span>
+        <span id="hear-text">Tap to hear</span>
+      </button>
+    </div>
+    <div class="letter-row" id="letter-row"></div>
   </div>
 
-  <div class="letter-row" id="letter-row"></div>
+  <!-- Letter → Picture -->
+  <div id="stage-letter-pic" hidden>
+    <div class="prompt-stage">
+      <div class="big-letter" id="big-letter"></div>
+    </div>
+    <div class="picture-row" id="picture-row"></div>
+  </div>
+
+  <!-- I Spy -->
+  <div id="stage-ispy" hidden>
+    <div class="ispy-prompt">
+      Find everything that starts with <span class="target-letter" id="ispy-letter"></span>
+    </div>
+    <div class="ispy-counter" id="ispy-counter"></div>
+    <div class="ispy-grid" id="ispy-grid"></div>
+  </div>
 
   <div class="feedback hidden" id="feedback"></div>
 </div>
@@ -356,28 +478,28 @@ body {
   <div class="result-msg" id="result-msg"></div>
   <div class="result-btns">
     <button class="btn-primary" onclick="playAgain()">Play again</button>
-    <button class="btn-secondary" onclick="goToPicker()">Choose a group</button>
+    <button class="btn-secondary" onclick="goToPicker()">Choose letters</button>
   </div>
 </div>
 
 <script>
 // ── Letter group data ───────────────────────────────────────
+// Each letter has 2 words so there's enough variety for I Spy.
 
 const LETTER_GROUPS = {
   'group1': {
-    title: 'Group 1',
-    letters: [
-      { letter: 's', word: 'sun', pic: '☀️' },
-      { letter: 'a', word: 'ant', pic: '🐜' },
-      { letter: 't', word: 'ten', pic: '🔟' },
-      { letter: 'p', word: 'pig', pic: '🐷' },
-      { letter: 'i', word: 'ink', pic: '🖋️' },
-      { letter: 'n', word: 'net', pic: '🕸️' },
-    ],
+    title: 'S & A',
+    activeLetters: ['s', 'a'],
+    letters: {
+      s: [{ word: 'sun',   pic: '☀️' }, { word: 'sock',  pic: '🧦' }],
+      a: [{ word: 'ant',   pic: '🐜' }, { word: 'apple', pic: '🍎' }],
+      t: [{ word: 'ten',   pic: '🔟' }, { word: 'tap',   pic: '👆' }],
+      p: [{ word: 'pig',   pic: '🐷' }, { word: 'pot',   pic: '🍲' }],
+      i: [{ word: 'ink',   pic: '🖋️' }, { word: 'igloo', pic: '🧊' }],
+      n: [{ word: 'net',   pic: '🕸️' }, { word: 'nut',   pic: '🥜' }],
+    },
   },
 };
-
-const ROUNDS_PER_GAME = 12;
 
 // ── Game state ────────────────────────────────────────────
 
@@ -388,6 +510,8 @@ let score        = 0;
 let correctIdx   = 0;
 let answered     = false;
 let wordPlayed   = false;
+let ispyFound    = 0;
+let ispyNeeded   = 0;
 
 // ── Utils ─────────────────────────────────────────────────
 
@@ -398,6 +522,15 @@ function shuffle(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function allLetters(groupKey) {
+  return Object.keys(LETTER_GROUPS[groupKey].letters);
+}
+
+function randomWord(groupKey, letter) {
+  const words = LETTER_GROUPS[groupKey].letters[letter];
+  return words[Math.floor(Math.random() * words.length)];
 }
 
 // ── TTS ───────────────────────────────────────────────────
@@ -416,12 +549,16 @@ function speak(text) {
 }
 
 // ── Round building ────────────────────────────────────────
+// Per letter: Sound→Letter, then Letter→Picture, then I Spy.
 
 function buildRounds(groupKey) {
-  const letters = LETTER_GROUPS[groupKey].letters;
-  // Two passes through the group, each pass shuffled, so letters
-  // repeat but never appear twice in a row.
-  return shuffle(letters).concat(shuffle(letters)).slice(0, ROUNDS_PER_GAME);
+  const built = [];
+  LETTER_GROUPS[groupKey].activeLetters.forEach(letter => {
+    built.push({ type: 'sound-letter', letter, word: randomWord(groupKey, letter) });
+    built.push({ type: 'letter-pic',   letter, word: randomWord(groupKey, letter) });
+    built.push({ type: 'ispy',         letter });
+  });
+  return built;
 }
 
 // ── Screens ───────────────────────────────────────────────
@@ -432,13 +569,20 @@ function showScreen(id) {
   window.scrollTo(0, 0);
 }
 
+function showStage(id) {
+  ['stage-sound-letter', 'stage-letter-pic', 'stage-ispy'].forEach(s => {
+    document.getElementById(s).hidden = (s !== id);
+  });
+}
+
 // ── Picker ────────────────────────────────────────────────
 
 function loadBestScores() {
   Object.keys(LETTER_GROUPS).forEach(k => {
     const d  = JSON.parse(localStorage.getItem('saba_letters_' + k) || '{}');
     const el = document.getElementById('best-' + k);
-    if (el) el.textContent = d.bestScore > 0 ? `Best: ${d.bestScore}/${ROUNDS_PER_GAME}` : '';
+    const total = LETTER_GROUPS[k].activeLetters.length * 3;
+    if (el) el.textContent = d.bestScore > 0 ? `Best: ${d.bestScore}/${total}` : '';
   });
 }
 
@@ -469,48 +613,61 @@ function startGroup(groupKey) {
 
 // ── Render round ──────────────────────────────────────────
 
+const KIND_LABELS = {
+  'sound-letter': 'Hear it',
+  'letter-pic':   'See it',
+  'ispy':         'Spy it',
+};
+
 function renderRound() {
   answered   = false;
   wordPlayed = false;
 
-  const target = rounds[roundIndex];
-  const total  = rounds.length;
+  const round = rounds[roundIndex];
+  const total = rounds.length;
 
   document.getElementById('progress-fill').style.width = `${(roundIndex / total) * 100}%`;
   document.getElementById('round-label').textContent = `${roundIndex + 1} / ${total}`;
-
-  document.getElementById('prompt-pic').textContent = target.pic;
-  document.getElementById('hear-text').textContent  = 'Tap to hear';
-  document.getElementById('hear-btn').classList.remove('replaying');
-
-  const allLetters = LETTER_GROUPS[currentGroup].letters;
-  const others = allLetters.filter(l => l.letter !== target.letter);
-  const distractors = shuffle(others).slice(0, 2);
-  const options = shuffle([target, ...distractors]);
-  correctIdx = options.findIndex(o => o.letter === target.letter);
-
-  const row = document.getElementById('letter-row');
-  row.innerHTML = '';
-  options.forEach((opt, i) => {
-    const tile = document.createElement('button');
-    tile.className = 'letter-tile';
-    tile.textContent = opt.letter;
-    tile.onclick = () => handleTap(i, opt.letter === target.letter);
-    row.appendChild(tile);
-  });
+  document.getElementById('round-kind').textContent = KIND_LABELS[round.type];
 
   const fb = document.getElementById('feedback');
   fb.textContent = '';
   fb.className = 'feedback hidden';
 
-  // Auto-play the word once per round to support early readers.
+  if (round.type === 'sound-letter') renderSoundToLetter(round);
+  else if (round.type === 'letter-pic') renderLetterToPicture(round);
+  else renderISpy(round);
+}
+
+// ── Sound → Letter ────────────────────────────────────────
+
+function renderSoundToLetter(round) {
+  showStage('stage-sound-letter');
+
+  document.getElementById('prompt-pic').textContent = round.word.pic;
+  document.getElementById('hear-text').textContent = 'Tap to hear';
+  document.getElementById('hear-btn').classList.remove('replaying');
+
+  const others = allLetters(currentGroup).filter(l => l !== round.letter);
+  const distractors = shuffle(others).slice(0, 2);
+  const options = shuffle([round.letter, ...distractors]);
+  correctIdx = options.indexOf(round.letter);
+
+  const row = document.getElementById('letter-row');
+  row.innerHTML = '';
+  options.forEach((letter, i) => {
+    const tile = document.createElement('button');
+    tile.className = 'letter-tile';
+    tile.textContent = letter;
+    tile.onclick = () => handleLetterTap(i, letter === round.letter);
+    row.appendChild(tile);
+  });
+
   setTimeout(() => playWord(), 400);
 }
 
-// ── Hear button ───────────────────────────────────────────
-
 function playWord() {
-  speak(rounds[roundIndex].word);
+  speak(rounds[roundIndex].word.word);
   if (!wordPlayed) {
     wordPlayed = true;
     document.getElementById('hear-text').textContent = 'Hear it again';
@@ -518,13 +675,11 @@ function playWord() {
   }
 }
 
-// ── Tile tap ──────────────────────────────────────────────
-
-function handleTap(tileIdx, correct) {
+function handleLetterTap(tileIdx, correct) {
   if (answered) return;
   answered = true;
 
-  const tiles = document.querySelectorAll('.letter-tile');
+  const tiles = document.querySelectorAll('#letter-row .letter-tile');
   tiles.forEach(t => t.style.pointerEvents = 'none');
 
   const fb = document.getElementById('feedback');
@@ -540,11 +695,123 @@ function handleTap(tileIdx, correct) {
     fb.className = 'feedback no';
   }
 
+  advanceAfter(1800);
+}
+
+// ── Letter → Picture ──────────────────────────────────────
+
+function renderLetterToPicture(round) {
+  showStage('stage-letter-pic');
+
+  document.getElementById('big-letter').textContent = round.letter;
+
+  const others = allLetters(currentGroup).filter(l => l !== round.letter);
+  const distractorLetters = shuffle(others).slice(0, 2);
+  const options = shuffle([
+    round.word,
+    randomWord(currentGroup, distractorLetters[0]),
+    randomWord(currentGroup, distractorLetters[1]),
+  ]);
+  correctIdx = options.findIndex(o => o.word === round.word.word);
+
+  const row = document.getElementById('picture-row');
+  row.innerHTML = '';
+  options.forEach((opt, i) => {
+    const tile = document.createElement('button');
+    tile.className = 'picture-tile';
+    tile.textContent = opt.pic;
+    tile.onclick = () => handlePictureTap(i, opt.word === round.word.word);
+    row.appendChild(tile);
+  });
+}
+
+function handlePictureTap(tileIdx, correct) {
+  if (answered) return;
+  answered = true;
+
+  const tiles = document.querySelectorAll('#picture-row .picture-tile');
+  tiles.forEach(t => t.style.pointerEvents = 'none');
+
+  const fb = document.getElementById('feedback');
+  if (correct) {
+    tiles[tileIdx].classList.add('correct');
+    fb.textContent = '✓ Well done!';
+    fb.className = 'feedback ok';
+    score++;
+  } else {
+    tiles[tileIdx].classList.add('wrong');
+    tiles[correctIdx].classList.add('correct');
+    fb.textContent = 'Not quite — look at the green one!';
+    fb.className = 'feedback no';
+  }
+
+  speak(rounds[roundIndex].word.word);
+  advanceAfter(1800);
+}
+
+// ── I Spy ─────────────────────────────────────────────────
+
+function renderISpy(round) {
+  showStage('stage-ispy');
+
+  document.getElementById('ispy-letter').textContent = round.letter;
+
+  const matching = LETTER_GROUPS[currentGroup].letters[round.letter];
+  const otherLetters = allLetters(currentGroup).filter(l => l !== round.letter);
+  const distractorPool = shuffle(otherLetters).slice(0, 4)
+    .map(l => randomWord(currentGroup, l));
+
+  const scene = shuffle([
+    ...matching.map(w => ({ ...w, isMatch: true })),
+    ...distractorPool.map(w => ({ ...w, isMatch: false })),
+  ]);
+
+  ispyFound  = 0;
+  ispyNeeded = matching.length;
+  document.getElementById('ispy-counter').textContent = `Found 0 of ${ispyNeeded}`;
+
+  const grid = document.getElementById('ispy-grid');
+  grid.innerHTML = '';
+  scene.forEach(item => {
+    const tile = document.createElement('button');
+    tile.className = 'ispy-tile';
+    tile.textContent = item.pic;
+    tile.onclick = () => handleISpyTap(tile, item.isMatch, item.word);
+    grid.appendChild(tile);
+  });
+}
+
+function handleISpyTap(tile, isMatch, word) {
+  if (answered) return;
+
+  if (isMatch) {
+    tile.classList.add('found');
+    speak(word);
+    ispyFound++;
+    document.getElementById('ispy-counter').textContent = `Found ${ispyFound} of ${ispyNeeded}`;
+
+    if (ispyFound >= ispyNeeded) {
+      answered = true;
+      score++;
+      const fb = document.getElementById('feedback');
+      fb.textContent = '✓ Found them all!';
+      fb.className = 'feedback ok';
+      advanceAfter(1500);
+    }
+  } else {
+    tile.classList.add('wrong');
+    setTimeout(() => tile.classList.remove('wrong'), 400);
+  }
+}
+
+// ── Advance ───────────────────────────────────────────────
+
+function advanceAfter(ms) {
   setTimeout(() => {
     roundIndex++;
     if (roundIndex >= rounds.length) endGame();
     else renderRound();
-  }, 1800);
+  }, ms);
 }
 
 // ── End of game ───────────────────────────────────────────
@@ -562,22 +829,22 @@ function endGame() {
 
 // ── Result ────────────────────────────────────────────────
 
-const MESSAGES = [
-  ['🌟 Amazing! Every single one!', '⭐⭐⭐'],
-  ['Great job — nearly there!',     '⭐⭐☆'],
-  ['Good try — keep practising!',   '⭐☆☆'],
-  ["Let's try again!",              '☆☆☆'],
-];
-
 function showResult() {
   showScreen('screen-result');
 
-  const pct  = score / ROUNDS_PER_GAME;
-  const tier = pct >= 0.9 ? 0 : pct >= 0.7 ? 1 : pct >= 0.5 ? 2 : 3;
+  const total = rounds.length;
+  const pct   = score / total;
+  const tier  = pct >= 0.9 ? 0 : pct >= 0.7 ? 1 : pct >= 0.5 ? 2 : 3;
+  const MESSAGES = [
+    ['🌟 Amazing! Every single one!', '⭐⭐⭐'],
+    ['Great job — nearly there!',     '⭐⭐☆'],
+    ['Good try — keep practising!',   '⭐☆☆'],
+    ["Let's try again!",              '☆☆☆'],
+  ];
   const [msg, stars] = MESSAGES[tier];
 
   document.getElementById('result-stars').textContent = stars;
-  document.getElementById('result-score').textContent = `${score} out of ${ROUNDS_PER_GAME}`;
+  document.getElementById('result-score').textContent = `${score} out of ${total}`;
   document.getElementById('result-msg').textContent   = msg;
 }
 
