@@ -667,7 +667,7 @@ body {
   <div class="class-hero">
     <div class="class-date">Upcoming</div>
     <div class="class-title">Let's keep learning!</div>
-    <div class="class-sub">6 activities for Saba, plus 1 for her brother</div>
+    <div class="class-sub">7 activities for Saba, plus 1 for her brother</div>
   </div>
 
   <div class="act-list">
@@ -723,9 +723,17 @@ body {
       <div class="act-num n-read">📖</div>
       <div class="act-card-info">
         <span class="act-card-name">Read a Story</span>
-        <span class="act-card-desc">Sam Ran — read it together</span>
+        <span class="act-card-desc">Sam Hops — read it together</span>
       </div>
       <span class="act-card-status" id="status-read">▶</span>
+    </div>
+    <div class="act-card" id="plan-read2" onclick="goToReadAnother()">
+      <div class="act-num n-read">📚</div>
+      <div class="act-card-info">
+        <span class="act-card-name">Read Another Story</span>
+        <span class="act-card-desc">Her pick — any book, extra reading practice</span>
+      </div>
+      <span class="act-card-status" id="status-read2">▶</span>
     </div>
   </div>
   <div class="watch-section">
@@ -1046,8 +1054,14 @@ function refreshPlan() {
 
 function goToReadStory() {
   var classUrl = '../../classes/upcoming/';
-  window.location.href = '../../english/read/?book=short-a-ran'
+  window.location.href = '../../english/read/?book=short-o'
     + '&back=' + encodeURIComponent(classUrl);
+}
+
+function goToReadAnother() {
+  var classUrl = '../../classes/upcoming/';
+  window.location.href = '../../english/read/'
+    + '?back=' + encodeURIComponent(classUrl);
 }
 
 function goToLetterSounds() {
@@ -1109,7 +1123,7 @@ var a1Words, a1Idx, a1Stars, a1Dia, a1TriedWrong, a1Waiting;
 
 function startAct1() {
   var shuffledFamilies = shuffle(A2_FAMILIES);
-  var pickedFamilies   = shuffledFamilies.slice(0, 2);
+  var pickedFamilies   = shuffledFamilies.slice(0, 1);
 
   a1Words = [];
   pickedFamilies.forEach(function(family) {
@@ -1222,7 +1236,7 @@ function a1Tap(letter, btn, w) {
 var a2Words, a2Idx, a2Stars, a2Dia, a2Answered;
 
 function startAct2() {
-  // Build rounds: 2 Short U + 3 O-vs-U contrast + 2 Short O + 2 A/E/I review = 9 rounds
+  // Build rounds: 1 Short U + 2 O-vs-U contrast + 1 Short O + 2 A/E/I review = 6 rounds
   // Draw the most-overlapping pools first so no word repeats across rounds.
   var used = new Set();
 
@@ -1245,9 +1259,9 @@ function startAct2() {
     return picked;
   }
 
-  var ouPairs = pickPairs(A1_OU_PAIRS, 3);
-  var shortU  = pickWords(A1_SHORT_U, 2);
-  var shortO  = pickWords(A1_SHORT_O, 2);
+  var ouPairs = pickPairs(A1_OU_PAIRS, 2);
+  var shortU  = pickWords(A1_SHORT_U, 1);
+  var shortO  = pickWords(A1_SHORT_O, 1);
   var review  = pickWords(A1_REVIEW, 2);
 
   a2Words = [];
@@ -1363,7 +1377,7 @@ function a2Tap(correct, card, container) {
 var a3Words, a3Idx, a3Stars, a3Dia, a3Pos, a3TriedWrong, a3Waiting;
 
 function startAct3() {
-  a3Words = shuffle(A3_WORDS).slice(0, 6);
+  a3Words = shuffle(A3_WORDS).slice(0, 4);
   a3Idx   = 0;
   a3Stars = 0;
   a3Dia   = 0;
@@ -1756,7 +1770,7 @@ function showSummary() {
 // PERSISTENCE
 // ════════════════════════════════════════════════════════════
 
-var SAVE_KEY = 'saba_class_upcoming_v4';
+var SAVE_KEY = 'saba_class_upcoming_v5';
 
 function saveProgress() {
   try {
